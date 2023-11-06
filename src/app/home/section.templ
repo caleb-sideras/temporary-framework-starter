@@ -4,7 +4,7 @@ templ Section(section HomeSection, cards []HomeCard) {
 	<div class="lg:min-h-screen flex flex-col items-center justify-center gap-4 px-2 lg:px-8 pt-4 lg:pt-0" id="{{.Id}}">
 		<div class="flex items-center justify-center w-full">
 			<div
- 				class={"lg:hidden bg-no-repeat bg-cover rounded-xl w-full h-auto m-0 pb-32 bg-center bg-cover", templ.SafeClass(section.ImageHor)}			></div>
+ 				class={"bg-no-repeat bg-cover rounded-xl w-full h-auto m-0 pb-32 bg-center bg-cover", templ.SafeClass(section.ImageHor), templ.SafeClass("lg:hidden")}></div>
 		</div>
 		<span class="text-4xl sm:text-6xl font-bold" id={ section.Title }>
 			{ section.Title }

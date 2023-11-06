@@ -11,6 +11,14 @@
   background-image: url('https://lh3.googleusercontent.com/7wuUlEFgaFEA075w4_OLDilE1vwTPGX7_G5_tiF9iARu8xXu1b-K27vD4cA3KLdhXdwABG1_I6YxvPjeUfzaYe1oVkuIJ0wTvh4ng6k7pEKAQVJzzw=w2400');
 }
 
+.bg-gox-ver {
+  background-image: url('/static/assets/gox-mascot-vert.png');
+}
+
+.bg-gox-hor {
+  background-image: url('/static/assets/gox-mascot-hor.png');
+}
+
 @font-face {
   font-family: 'Google';
   src: url("https://fonts.gstatic.com/s/googlesanstext/v21/5aUu9-KzpRiLCAt4Unrc-xIKmCU5qEp2i0VBuxM.woff2");

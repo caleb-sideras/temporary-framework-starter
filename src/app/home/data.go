@@ -30,8 +30,8 @@ var VarHomeSections []HomeSection = []HomeSection{
 		Id:          "what-is-gox",
 		Section:     1,
 		Cards:       cards1,
-		ImageVer:    "/static/assets/gox-mascot-vert.png",
-		ImageHor:    "/static/assets/gox-mascot-hor.png",
+		ImageVer:    "bg-gox-ver",
+		ImageHor:    "bg-gox-hor",
 	},
 	{
 		Title:       "Using GoX",

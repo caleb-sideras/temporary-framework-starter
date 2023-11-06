@@ -1,6 +1,8 @@
 package home
 
-import "fmt"
+import (
+"fmt"
+)
 
 type HomeSection struct {
 	Title       string
@@ -12,7 +14,7 @@ type HomeSection struct {
 	ImageHor    string
 }
 
-templ Home(HomeCards []HomeCard, HomeSections []HomeSection) {
+templ (t Temp) Home(HomeCards []HomeCard, HomeSections []HomeSection) {
 	<div
  		class="flex flex-col text-center justify-center items-center bg-surface-1 text-neutral-10 m-2 p-8 sm:p-32 rounded-3xl overflow-hidden bg-no-repeat bg-cover bg-audiover"
 	>
@@ -26,13 +28,13 @@ templ Home(HomeCards []HomeCard, HomeSections []HomeSection) {
 		<div class="text-lg sm:text-2xl">Supercharge your Go and HTMX workflow</div>
 		<div class="hidden lg:grid grid-cols-2 gap-2 w-full mt-16">
 			for _, card := range HomeCards {
-				@Card(card)
+				@t.Test(card)
 			}
 		</div>
 	</div>
 	<div class="flex flex-col gap-2 lg:hidden w-full mt-10 px-2">
 		for _, card := range HomeCards {
-			@Card(card)
+			@t.Test(card)
 		}
 	</div>
 	<div class="lg:hidden my-20 lg:my-10">
@@ -63,7 +65,7 @@ templ Home(HomeCards []HomeCard, HomeSections []HomeSection) {
  						x-transition:leave="transition ease-in duration-300"
  						x-transition:leave-start="opacity-100"
  						x-transition:leave-end="opacity-0 "
- 						class={"bg-no-repeat bg-cover rounded-3xl w-full h-full bg-center", section.ImageVer}
+ 						class={"bg-no-repeat bg-cover rounded-3xl w-full h-full bg-center", templ.SafeClass(section.ImageVer)}
 					></div>
 				}
 			</div>
