@@ -55,11 +55,11 @@ func Suspense(skeleton ...templ.Component) templ.Component {
 
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) (w_Err error) {
 
-		// templ render removes children from context. so we save them here
 		childCmp := templ.GetChildren(ctx)
 		if childCmp == nil {
 			childCmp = templ.NopComponent
 		}
+		ctx = templ.ClearChildren(ctx)
 
 		http.HandleFunc(throwawayURL, func(res http.ResponseWriter, req *http.Request) {
 			err := renderSuspense(childCmp).Render(req.Context(), res)
