@@ -38,3 +38,15 @@ func (*LifelineContext) Err() error                  { return nil }
 func (l *LifelineContext) Value(key interface{}) interface{} {
 	return l.Ctx.Value(key)
 }
+
+type contextWithoutDeadline struct {
+	ctx context.Context
+}
+
+func (*contextWithoutDeadline) Deadline() (time.Time, bool) { return time.Time{}, false }
+func (*contextWithoutDeadline) Done() <-chan struct{}       { return nil }
+func (*contextWithoutDeadline) Err() error                  { return nil }
+
+func (l *contextWithoutDeadline) Value(key interface{}) interface{} {
+	return l.ctx.Value(key)
+}

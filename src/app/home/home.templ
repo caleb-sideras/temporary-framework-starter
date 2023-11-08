@@ -27,11 +27,15 @@ templ (t Temp) Home(HomeCards []HomeCard, HomeSections []HomeSection) {
 		<h1 class="text-6xl sm:text-8xl font-bold">GoX</h1>
 		<div class="text-lg sm:text-2xl">Supercharge your Go and HTMX workflow</div>
 		<div class="hidden lg:grid grid-cols-2 gap-2 w-full mt-16">
-			// for _, card := range HomeCards {
-				@t.Suspense() {
-					@Card(HomeCards[0])
+			for _, card := range HomeCards {
+				@Suspense() {
+					@t.Test(card)
 				}
-			// }
+			}
+			@t.Test2()
+			@t.Test2()
+			@t.Test(HomeCards[0])
+			@t.Test(HomeCards[0])
 		</div>
 	</div>
 	<div class="flex flex-col gap-2 lg:hidden w-full mt-10 px-2">
