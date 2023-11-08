@@ -28,19 +28,17 @@ templ (t Temp) Home(HomeCards []HomeCard, HomeSections []HomeSection) {
 		<div class="text-lg sm:text-2xl">Supercharge your Go and HTMX workflow</div>
 		<div class="hidden lg:grid grid-cols-2 gap-2 w-full mt-16">
 			for _, card := range HomeCards {
-				@Suspense() {
-					@t.Test(card)
+				@Suspense(LoadingSpinner()) {
+					@Test(card)
 				}
 			}
-			@t.Test2()
-			@t.Test2()
-			@t.Test(HomeCards[0])
-			@t.Test(HomeCards[0])
 		</div>
 	</div>
 	<div class="flex flex-col gap-2 lg:hidden w-full mt-10 px-2">
 		for _, card := range HomeCards {
-			@t.Test(card)
+			@Suspense(LoadingSpinner()) {
+				@Test(card)
+			}
 		}
 	</div>
 	<div class="lg:hidden my-20 lg:my-10">
@@ -57,7 +55,9 @@ templ (t Temp) Home(HomeCards []HomeCard, HomeSections []HomeSection) {
 	<div x-data="{ section: 1 }" class="grid grid-cols-1 lg:grid-cols-2">
 		<div class="lg:max-w-2xl w-full m-auto">
 			for _, section := range HomeSections {
-				@Section(section, HomeCards)
+				@Suspense(LoadingSpinner()) {
+					@Section(section, HomeCards)
+				}
 			}
 		</div>
 		<div class="hidden lg:grid w-full sticky top-0 h-[500px] lg:h-screen overflow-hidden">

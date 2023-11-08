@@ -45,9 +45,13 @@ func renderSuspense(childCmp templ.Component) templ.Component {
 	})
 }
 
-func Suspense() templ.Component {
+func Suspense(skeleton ...templ.Component) templ.Component {
 
 	throwawayURL := fmt.Sprintf("/%s", uuid.New().String())
+	var renderSkeleton templ.Component
+	if len(skeleton) > 1 {
+		renderSkeleton = skeleton[0]
+	}
 
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) (w_Err error) {
 
@@ -62,24 +66,11 @@ func Suspense() templ.Component {
 			if err != nil {
 				panic(err)
 			}
-
-			// ctx.Done()
-			// err := ctx.Err()
-			// fmt.Print("Context:")
-			// if err != nil {
-			// 	if err == context.DeadlineExceeded {
-			// 		fmt.Print("deadline exceeded\n")
-			// 	} else if err == context.Canceled {
-			// 		fmt.Print("canceled\n")
-			// 	} else {
-			// 		fmt.Print("An error occurred:", err)
-			// 	}
-			// } else {
-			// 	fmt.Print("is good!\n")
-			// }
-
 		})
 
+		if renderSkeleton != nil {
+			return StreamComponent(throwawayURL).Render(templ.WithChildren(ctx, LoadingSpinner()), w)
+		}
 		return StreamComponent(throwawayURL).Render(ctx, w)
 	})
 }
@@ -133,7 +124,7 @@ type Number struct {
 // 	})
 // }
 
-func (t Temp) Test(card HomeCard) templ.Component {
+func Test(card HomeCard) templ.Component {
 
 	randomNumber, err := fetchRandomNumber()
 	if err != nil {
@@ -144,7 +135,7 @@ func (t Temp) Test(card HomeCard) templ.Component {
 	return Card(card)
 }
 
-func (t Temp) Test2() templ.Component {
+func Test2() templ.Component {
 
 	randomNumber, err := fetchRandomNumber()
 	if err != nil {
