@@ -1,0 +1,19 @@
+package home
+
+templ StreamComponent(url string){
+	<div hx-get={url} hx-trigger="load" hx-swap="outerHTML"></div>	
+}
+
+templ Temporary(){
+  @Temporary2(){
+    @Temporary3()
+  }
+}
+
+templ Temporary2(){
+  {children...}
+}
+
+templ Temporary3(){
+ <div>Hello world</div> 
+}

@@ -18,8 +18,7 @@ func main() {
 			Res: res,
 		}
 
-		homePage := t.HomePage()
-
+		// home.Temporary()
 		// ctx := context.WithValue(context.Background(), "request", req)
 		// ctx = context.WithValue(ctx, "response", res)
 		// ctx = templ.InitializeContext(ctx)
@@ -30,7 +29,7 @@ func main() {
 		// panic("request not found in context")
 		// }
 
-		err := index.Index().Render(templ.WithChildren(req.Context(), homePage), res)
+		err := index.Index().Render(templ.WithChildren(req.Context(), t.HomePage()), res)
 
 		if err != nil {
 			panic(err)
