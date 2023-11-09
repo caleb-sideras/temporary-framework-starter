@@ -3,8 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/a-h/templ"
-	index "github.com/caleb-sideras/gox2/src/app"
-	// "context"
+	root "github.com/caleb-sideras/gox2/src/app"
 	home "github.com/caleb-sideras/gox2/src/app/home"
 	"net/http"
 )
@@ -13,23 +12,8 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
 	http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
-		t := home.Temp{
-			Req: req,
-			Res: res,
-		}
 
-		// home.Temporary()
-		// ctx := context.WithValue(context.Background(), "request", req)
-		// ctx = context.WithValue(ctx, "response", res)
-		// ctx = templ.InitializeContext(ctx)
-
-		// req := ctx.Value("request")
-		// req, ok := ctx.Value("request").(*http.Request)
-		// if !ok {
-		// panic("request not found in context")
-		// }
-
-		err := index.Index().Render(templ.WithChildren(req.Context(), t.HomePage()), res)
+		err := root.Index().Render(templ.WithChildren(req.Context(), home.Home()), res)
 
 		if err != nil {
 			panic(err)

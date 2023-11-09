@@ -1,6 +1,8 @@
 package home
 
-var VarHomeCards []HomeCard = []HomeCard{
+import comp "github.com/caleb-sideras/gox2/src/app/home/components"
+
+var VarHomeCards []comp.HomeCard = []comp.HomeCard{
 	{
 		Title:       "What is GoX?",
 		Description: "Understand what GoX solves",
@@ -23,7 +25,7 @@ var VarHomeCards []HomeCard = []HomeCard{
 	},
 }
 
-var VarHomeSections []HomeSection = []HomeSection{
+var VarHomeSections []comp.HomeSection = []comp.HomeSection{
 	{
 		Title:       "What's GoX?",
 		Description: "While Go and HTMX are a joy to work with, there is no established way of using these technologies together in a way that scales; resulting in complexity in your codecase. GoX structures your code and hides this complexity behind certain primitives.",
@@ -62,7 +64,7 @@ var VarHomeSections []HomeSection = []HomeSection{
 	},
 }
 
-var cards1 []HomeCard = []HomeCard{
+var cards1 []comp.HomeCard = []comp.HomeCard{
 	{
 		Title:       "Pages",
 		Description: "Pages are a simple way to define and handle route specific UI",
@@ -84,7 +86,7 @@ var cards1 []HomeCard = []HomeCard{
 		Link:        "/docs/handle",
 	},
 }
-var cards3 []HomeCard = []HomeCard{
+var cards3 []comp.HomeCard = []comp.HomeCard{
 	{
 		Title:       "Alpine",
 		Description: "Alpine is a rugged, minimal tool for composing behavior directly in your markup.",
@@ -102,7 +104,7 @@ var cards3 []HomeCard = []HomeCard{
 	},
 }
 
-var cards2 []HomeCard = []HomeCard{
+var cards2 []comp.HomeCard = []comp.HomeCard{
 	{
 		Title:       "Todo",
 		Description: "Shows you how to return static and dynamic HTML",
@@ -125,7 +127,7 @@ var cards2 []HomeCard = []HomeCard{
 	},
 }
 
-var cards4 []HomeCard = []HomeCard{
+var cards4 []comp.HomeCard = []comp.HomeCard{
 	{
 		Title:       "gox-starter",
 		Description: "GoX is an open-source project and far from production ready. Feel free to contribute!",

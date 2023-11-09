@@ -1,4 +1,15 @@
-package home
+package components
+
+type HomeSection struct {
+	Title       string
+	Description string
+	Section     int
+	Cards       []HomeCard
+	Id          string
+	ImageVer    string
+	ImageHor    string
+}
+
 
 templ Section(section HomeSection, cards []HomeCard) {
 	<div class="lg:min-h-screen flex flex-col items-center justify-center gap-4 px-2 lg:px-8 pt-4 lg:pt-0" id="{{.Id}}">

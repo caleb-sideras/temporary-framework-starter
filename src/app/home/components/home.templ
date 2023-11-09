@@ -1,20 +1,11 @@
-package home
+package components
 
 import (
 	"fmt"
+	temp "github.com/caleb-sideras/gox2/temporary"
 )
 
-type HomeSection struct {
-	Title       string
-	Description string
-	Section     int
-	Cards       []HomeCard
-	Id          string
-	ImageVer    string
-	ImageHor    string
-}
-
-templ (t Temp) Home(HomeCards []HomeCard, HomeSections []HomeSection) {
+templ  HomeTempl(HomeCards []HomeCard, HomeSections []HomeSection) {
 	<div
  		class="flex flex-col text-center justify-center items-center bg-surface-1 text-neutral-10 m-2 p-8 sm:p-32 rounded-3xl overflow-hidden bg-no-repeat bg-cover bg-audiover"
 	>
@@ -27,18 +18,17 @@ templ (t Temp) Home(HomeCards []HomeCard, HomeSections []HomeSection) {
 		<h1 class="text-6xl sm:text-8xl font-bold">GoX</h1>
 		<div class="text-lg sm:text-2xl">Supercharge your Go and HTMX workflow</div>
 		<div class="hidden lg:grid grid-cols-2 gap-2 w-full mt-16">
-			for _, card := range HomeCards {
-				@Suspense(LoadingSpinner()) {
-					@Test(card)
-				}
+			// for _, card := range HomeCards {
+			// 		@Card(card)
+			// }
+			@temp.Suspense(LoadingSpinner()) {
+				@RandomNumber()
 			}
 		</div>
 	</div>
 	<div class="flex flex-col gap-2 lg:hidden w-full mt-10 px-2">
 		for _, card := range HomeCards {
-			@Suspense(LoadingSpinner()) {
-				@Test(card)
-			}
+			@Card(card)
 		}
 	</div>
 	<div class="lg:hidden my-20 lg:my-10">
@@ -55,9 +45,7 @@ templ (t Temp) Home(HomeCards []HomeCard, HomeSections []HomeSection) {
 	<div x-data="{ section: 1 }" class="grid grid-cols-1 lg:grid-cols-2">
 		<div class="lg:max-w-2xl w-full m-auto">
 			for _, section := range HomeSections {
-				@Suspense(LoadingSpinner()) {
-					@Section(section, HomeCards)
-				}
+				@Section(section, HomeCards)
 			}
 		</div>
 		<div class="hidden lg:grid w-full sticky top-0 h-[500px] lg:h-screen overflow-hidden">
@@ -77,11 +65,6 @@ templ (t Temp) Home(HomeCards []HomeCard, HomeSections []HomeSection) {
 			</div>
 		</div>
 	</div>
-}
-
-func formatImageString(imageURL string) string {
-	tmp := "background-image: url(&#39;" + imageURL + "&#39;);"
-	return tmp
 }
 
 func alpineSectionChecker(section int) string {
