@@ -6,7 +6,7 @@ import (
 )
 
 // Server Component
-func Home() templ.Component {
+func Page_() templ.Component {
 	// perform server-side logic -> fetch data, mutations, etc
 
 	return components.HomeTempl(VarHomeCards, VarHomeSections)
