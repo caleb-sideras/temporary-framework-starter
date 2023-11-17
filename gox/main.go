@@ -3,39 +3,23 @@ package gox
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"errors"
 	"fmt"
-	"go/ast"
-	"go/parser"
-	"go/token"
-	"reflect"
-	// "html/template"
-	"context"
-	"github.com/caleb-sideras/gox2/gox/data"
-	// "github.com/caleb-sideras/gox2/gox/render"
 	"github.com/a-h/templ"
 	"github.com/caleb-sideras/gox2/gox/utils"
 	"github.com/gorilla/mux"
+	"go/ast"
+	"go/parser"
+	"go/token"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 )
-
-type RequestType int64
-
-type FnType struct {
-	Recv   string   // Receiver type
-	Rtn    string   // Return type
-	Params []string // Param types
-}
-
-type HttpParams struct {
-	Res bool
-	Req bool
-}
 
 const (
 	NormalRequest RequestType = iota
@@ -44,6 +28,11 @@ const (
 	HxBoost_Page
 	HxBoost_Index
 	ErrorRequest
+)
+
+const (
+	DefaultHandler HandleType = iota // no params
+	ResReqHandler                    // Response and Request
 )
 
 const (
@@ -61,22 +50,14 @@ const (
 
 	PAGE  = "page"
 	INDEX = "index"
-	// METADATA = "metadata"
 	ROUTE = "route"
-	// DATA     = "data"
-	// RENDER = "render"
-	// HANDLE = "handle"
-	ETAG = "etag_file"
-	BODY = "-body"
+	ETAG  = "etag_file"
+	BODY  = "-body"
 
-	PAGE_BODY  = PAGE + BODY
-	PAGE_FILE  = PAGE + GO_EXT
-	INDEX_FILE = INDEX + GO_EXT
-	ROUTE_FILE = ROUTE + GO_EXT
-	// METADATA_FILE = METADATA + HTML_EXT
-	// DATA_FILE      = DATA + GO_EXT
-	// RENDER_FILE    = RENDER + GO_EXT
-	// HANDLE_FILE    = HANDLE + GO_EXT
+	PAGE_BODY          = PAGE + BODY
+	PAGE_FILE          = PAGE + GO_EXT
+	INDEX_FILE         = INDEX + GO_EXT
+	ROUTE_FILE         = ROUTE + GO_EXT
 	PAGE_OUT_FILE      = PAGE + HTML_EXT
 	PAGE_BODY_OUT_FILE = PAGE_BODY + HTML_EXT
 	ROUTE_OUT_FILE     = ROUTE + HTML_EXT
@@ -84,40 +65,15 @@ const (
 )
 
 var FILE_CHECK_LIST = map[string]bool{
-	// DATA_FILE:   true,
-	// RENDER_FILE: true,
-	// HANDLE_FILE: true,
 	INDEX_FILE: true,
 	PAGE_FILE:  true,
 	ROUTE_FILE: true,
-	// METADATA_FILE: true,
-}
-
-var FILE_HTML_CHECK_LIST = map[string]bool{
-	// INDEX_FILE: true,
-	// PAGE_FILE:  true,
-	// METADATA_FILE: true,
 }
 
 var FILE_GO_CHECK_LIST = map[string]bool{
-	// DATA_FILE:   true,
 	INDEX_FILE: true,
 	PAGE_FILE:  true,
 	ROUTE_FILE: true,
-}
-
-type GoxDir struct {
-	FileType string
-	FilePath string
-}
-
-var EmptyPageData data.Page = data.Page{
-	Content:   struct{}{},
-	Templates: []string{},
-}
-
-type Gox struct {
-	OutputDir string
 }
 
 func NewGox(outputDir string) *Gox {
@@ -330,7 +286,8 @@ func (g *Gox) handleRoutes(r *mux.Router, eTags map[string]string) {
 
 					formatRequest(w, r, handlePage, handleBoostPage, handleIndex, handleIndex)
 
-					// Note - Since this is re-rendering per request, even if page content &/or skeleton is static, @Suspense will generate a new UUID per request, creating a unique ETAG everytime
+					// Note for all ETAGs - Since this is re-rendering per request, even if page content &/or skeleton is static, @Suspense will generate a new UUID per request, creating a unique ETAG everytime
+
 					// eTag := utils.GenerateETag(buffer.String())
 
 					// if rEtag := r.Header.Get("If-None-Match"); rEtag == eTag {
@@ -350,7 +307,6 @@ func (g *Gox) handleRoutes(r *mux.Router, eTags map[string]string) {
 
 	log.Println("---------------------Route - Handle-----------------------")
 	for _, route := range RouteHandleList {
-		// loop variable capture
 		currRoute := route.Path
 		log.Println(currRoute)
 
@@ -496,10 +452,6 @@ func determineRequest(w http.ResponseWriter, r *http.Request) RequestType {
 		return HxBoost_Index
 	}
 
-	// serve page if has an index group
-	// if IndexList[htmxUrl] == IndexList[r.URL.Path] {
-	// 	return HxBoost_Page
-	// }
 	if reflect.ValueOf(IndexList[htmxUrl]).Pointer() == reflect.ValueOf(IndexList[r.URL.Path]).Pointer() {
 		return HxBoost_Page
 	}
@@ -903,56 +855,6 @@ func formatCustomFunction(pkName string, fnName string) string {
 	return `{` + pkName + `.` + fnName + `},`
 }
 
-func formatData(pkName string, leafPath string, dirHtmlFiles []GoxDir) string {
-	// root case
-	if leafPath == "" {
-		leafPath = "/"
-	}
-
-	var page string
-	var index string
-	for _, file := range dirHtmlFiles {
-		switch file.FileType {
-		case INDEX_FILE:
-			index = file.FilePath
-		case PAGE_FILE:
-			page = file.FilePath
-		}
-	}
-
-	// duplicate check
-	if page == "" || index == "" {
-		log.Fatalf("No page.html or index.html present in path: %s", leafPath)
-	}
-
-	return `"` + leafPath + `": {Data:` + pkName + `.` + "Data" + `, Index: "` + index + `", Page: "` + page + `"},`
-}
-
-func formatPage(leafPath string, dirHtmlFiles []GoxDir) string {
-	// root case
-	if leafPath == "" {
-		leafPath = "/"
-	}
-
-	var page string
-	var index string
-	for _, file := range dirHtmlFiles {
-		switch file.FileType {
-		case INDEX_FILE:
-			index = file.FilePath
-		case PAGE_FILE:
-			page = file.FilePath
-		}
-	}
-
-	// duplicate check
-	if page == "" || index == "" {
-		log.Fatalf("No page.html or index.html present in path: %s", leafPath)
-	}
-
-	return `"` + leafPath + `": {Data: EmptyPageData, Index: "` + index + `", Page: "` + page + `"},`
-}
-
 func getAstVals(path string) (*ast.File, error) {
 	_, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -1078,58 +980,6 @@ func getExportedFuctions(path string) (map[string]FnType, string, error) {
 	return expFns, pkName, nil
 }
 
-func hasExportedFuction(path string, funcName string) (bool, string, error) {
-
-	node, err := getAstVals(path)
-	if err != nil {
-		return false, "", err
-	}
-
-	var pkName string
-	var expFn bool
-	ast.Inspect(node, func(n ast.Node) bool {
-		switch x := n.(type) {
-		case *ast.File:
-			pkName = x.Name.Name
-		case *ast.FuncDecl:
-			if x.Name.IsExported() && x.Name.Name == funcName {
-				expFn = true
-			}
-		}
-		return true
-	})
-	return expFn, pkName, nil
-}
-
-func hasExportedVariable(path string, varName string) (bool, string, error) {
-
-	node, err := getAstVals(path)
-	if err != nil {
-		return false, "", err
-	}
-
-	hasVar := false
-	var pkName string
-	ast.Inspect(node, func(n ast.Node) bool {
-		switch x := n.(type) {
-		case *ast.File:
-			pkName = x.Name.Name
-		case *ast.GenDecl:
-			if x.Tok == token.VAR {
-				for _, spec := range x.Specs {
-					vspec := spec.(*ast.ValueSpec)
-					if vspec.Names[0].Name == varName {
-						hasVar = true
-						break
-					}
-				}
-			}
-		}
-		return true
-	})
-	return hasVar, pkName, nil
-}
-
 func renderSortedFunctions(imports utils.StringSet, indexGroup []string, pageRenderFunctions []string, pageHandleFunctions []string, routeRenderFunctions []string, routeHandleFunctions []string) (string, error) {
 
 	code := `
@@ -1179,12 +1029,4 @@ func removeDirWithUnderscorePostfix(path string) string {
 	}
 
 	return filepath.Join(output...)
-}
-
-func MapKeysToSlice(m []GoxDir) []string {
-	keys := make([]string, 0, len(m))
-	for _, gd := range m {
-		keys = append(keys, gd.FilePath)
-	}
-	return keys
 }

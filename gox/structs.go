@@ -1,11 +1,32 @@
 package gox
 
 import (
-	// "net/http"
-
 	"github.com/a-h/templ"
 	"github.com/caleb-sideras/gox2/gox/data"
 )
+
+type GoxDir struct {
+	FileType string
+	FilePath string
+}
+
+type Gox struct {
+	OutputDir string
+}
+
+type RequestType int64
+type HandleType int64
+
+type FnType struct {
+	Recv   string   // Receiver type
+	Rtn    string   // Return type
+	Params []string // Param types
+}
+
+type HttpParams struct {
+	Res bool
+	Req bool
+}
 
 type IndexDefaultFunc func() templ.Component
 
@@ -26,12 +47,6 @@ type Handler struct {
 	Handler interface{}
 	HandleType
 }
-type HandleType int64
-
-const (
-	DefaultHandler HandleType = iota // no params
-	ResReqHandler                    // Response and Request
-)
 
 type RenderCustomFunc func() error
 type RenderCustom struct {
