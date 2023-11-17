@@ -127,24 +127,24 @@ func NewGox(outputDir string) *Gox {
 
 func (g *Gox) Build(startDir string, packageDir string) {
 
-	fmt.Println("---------------------WALKING DIRECTORY---------------------")
+	fmt.Println("--------------------------WALKING DIRECTORY--------------------------")
 	dirFiles, err := walkDirectoryStructure(startDir)
 	if err != nil {
 		log.Fatalf("error walking the path %v: %v", startDir, err)
 	}
 	printDirectoryStructure(dirFiles)
 
-	fmt.Println("--------------------EXTRACTING YOUR CODE--------------------")
+	fmt.Println("-------------------------EXTRACTING YOUR CODE-------------------------")
 	imports, indexGroup, pageRenderFunctions, pageHandleFunctions, routeRenderFunctions, routeHandleFunctions := getRelativeFunctions(dirFiles, packageDir)
 
-	fmt.Println("-----------------------GENERATING CODE----------------------")
+	fmt.Println("-----------------------RENDERING SORTED FUNCTIONS----------------------")
 	code, err := renderSortedFunctions(imports, indexGroup, pageRenderFunctions, pageHandleFunctions, routeRenderFunctions, routeHandleFunctions)
 	if err != nil {
 		panic(err)
 	}
 	fmt.Println(code)
 
-	fmt.Println("-------------------RENDERING STATIC FILES--------------------")
+	fmt.Println("------------------------RENDERING STATIC FILES-------------------------")
 	err = g.renderStaticFiles()
 	if err != nil {
 		panic(err)
