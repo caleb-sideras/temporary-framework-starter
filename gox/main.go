@@ -2,6 +2,7 @@ package gox
 
 import (
 	"bufio"
+	"reflect"
 	// "bytes"
 	"errors"
 	"fmt"
@@ -183,56 +184,56 @@ func (g *Gox) getETags() map[string]string {
 // handleRoutes() binds Mux handlers to user defined functions, and creates default handlers to serve static pages
 func (g *Gox) handleRoutes(r *mux.Router, eTags map[string]string) {
 	log.Println("---------------------PAGES HANDLERS-----------------------")
-	// for route := range PagesList {
-	// 	// loop variable capture
-	// 	currRoute := route
-	// 	log.Println(currRoute)
-	// 	r.HandleFunc(currRoute+"{slash:/?}",
-	// 		func(w http.ResponseWriter, r *http.Request) {
-	// 			log.Println("- - - - - - - - - - - -")
+	for _, route := range PageRenderList {
+		// loop variable capture
+		currRoute := route.Path
+		log.Println(currRoute)
+		r.HandleFunc(currRoute+"{slash:/?}",
+			func(w http.ResponseWriter, r *http.Request) {
+				log.Println("- - - - - - - - - - - -")
 
-	// 			eStr := ""
-	// 			pStr := ""
-	// 			eTagPath := &eStr
-	// 			pagePath := &pStr
+				eStr := ""
+				pStr := ""
+				eTagPath := &eStr
+				pagePath := &pStr
 
-	// 			handlePage := func() {
-	// 				log.Println("Partial")
-	// 				*eTagPath = filepath.Join(r.URL.Path, PAGE_BODY_FILE)
-	// 				*pagePath = filepath.Join(g.OutputDir, *eTagPath)
-	// 			}
+				handlePage := func() {
+					log.Println("Partial")
+					*eTagPath = filepath.Join(r.URL.Path, PAGE_BODY_OUT_FILE)
+					*pagePath = filepath.Join(g.OutputDir, *eTagPath)
+				}
 
-	// 			handleBPage := func() {
-	// 				handlePage()
-	// 				w.Header().Set("HX-Retarget", "main")
-	// 				w.Header().Set("HX-Reswap", "innerHTML transition:true")
-	// 			}
+				handleBPage := func() {
+					handlePage()
+					w.Header().Set("HX-Retarget", "main")
+					w.Header().Set("HX-Reswap", "innerHTML transition:true")
+				}
 
-	// 			handleIndex := func() {
-	// 				log.Println("Full-Page")
-	// 				*eTagPath = filepath.Join(r.URL.Path, PAGE_FILE)
-	// 				*pagePath = filepath.Join(g.OutputDir, *eTagPath)
-	// 			}
+				handleIndex := func() {
+					log.Println("Full-Page")
+					*eTagPath = filepath.Join(r.URL.Path, PAGE_OUT_FILE)
+					*pagePath = filepath.Join(g.OutputDir, *eTagPath)
+				}
 
-	// 			formatRequest(w, r, handlePage, handleBPage, handleIndex, handleIndex)
+				formatRequest(w, r, handlePage, handleBPage, handleIndex, handleIndex)
 
-	// 			log.Println("Path:", *pagePath)
-	// 			log.Println("ETag:", eTags[*eTagPath])
+				log.Println("Path:", *pagePath)
+				log.Println("ETag:", eTags[*eTagPath])
 
-	// 			if eTag := r.Header.Get("If-None-Match"); eTag == eTags[*eTagPath] {
-	// 				log.Println("403: status not modified")
-	// 				w.WriteHeader(http.StatusNotModified)
-	// 				return
-	// 			}
+				if eTag := r.Header.Get("If-None-Match"); eTag == eTags[*eTagPath] {
+					log.Println("403: status not modified")
+					w.WriteHeader(http.StatusNotModified)
+					return
+				}
 
-	// 			w.Header().Set("Vary", "HX-Request")
-	// 			w.Header().Set("Cache-Control", "no-cache")
-	// 			w.Header().Set("ETag", eTags[*eTagPath])
+				w.Header().Set("Vary", "HX-Request")
+				w.Header().Set("Cache-Control", "no-cache")
+				w.Header().Set("ETag", eTags[*eTagPath])
 
-	// 			http.ServeFile(w, r, *pagePath)
-	// 		},
-	// 	)
-	// }
+				http.ServeFile(w, r, *pagePath)
+			},
+		)
+	}
 
 	log.Println("---------------------DATA HANDLERS-----------------------")
 	// dataTmpls := map[string]*template.Template{}
@@ -393,56 +394,63 @@ func (g *Gox) handleRoutes(r *mux.Router, eTags map[string]string) {
 }
 
 func formatRequest(w http.ResponseWriter, r *http.Request, ifPage func(), ifBPage func(), ifIndex func(), ifBIndex func()) {
-	// requestType := determineRequest(w, r)
-	// switch requestType {
-	// case ErrorRequest:
-	// 	// handle Error
-	// case HxGet_Page:
-	// 	ifPage()
-	// case HxBoost_Page:
-	// 	ifBPage()
-	// case HxGet_Index:
-	// 	ifIndex()
-	// case HxBoost_Index, NormalRequest:
-	// 	ifBIndex()
-	// }
+	requestType := determineRequest(w, r)
+	switch requestType {
+	case ErrorRequest:
+		// handle Error
+	case HxGet_Page:
+		log.Println("HxGet_Page")
+		ifPage()
+	case HxBoost_Page:
+		log.Println("HxBoost_Page")
+		ifBPage()
+	case HxGet_Index:
+		log.Println("HxGet_Index")
+		ifIndex()
+	case HxBoost_Index, NormalRequest:
+		log.Println("NormalRequest")
+		ifBIndex()
+	}
 }
 
-// func determineRequest(w http.ResponseWriter, r *http.Request) RequestType {
+func determineRequest(w http.ResponseWriter, r *http.Request) RequestType {
 
-// 	if !utils.IsHtmxRequest(r) {
-// 		return NormalRequest
-// 	}
+	if !utils.IsHtmxRequest(r) {
+		return NormalRequest
+	}
 
-// 	log.Println("HX-Request")
+	log.Println("HX-Request")
 
-// 	// if not hx-boosted we assume that its a hx-get
-// 	if !utils.IsHxBoosted(r) {
-// 		// allow the user to chose between page+index or page
-// 		if r.URL.Query().Get("index") == "true" {
-// 			return HxGet_Index
-// 		}
-// 		return HxGet_Page
-// 	}
+	// if not hx-boosted we assume that its a hx-get
+	if !utils.IsHxBoosted(r) {
+		// allow the user to chose between page+index or page
+		if r.URL.Query().Get("index") == "true" {
+			return HxGet_Index
+		}
+		return HxGet_Page
+	}
 
-// 	htmxUrl, err := utils.LastElementOfURL(utils.GetHtmxRequestURL(r))
-// 	if err != nil {
-// 		return ErrorRequest
-// 	}
+	htmxUrl, err := utils.LastElementOfURL(utils.GetHtmxRequestURL(r))
+	if err != nil {
+		return ErrorRequest
+	}
 
-// 	// serve page+index if page doesn't have an index group
-// 	if _, ok := IndexList[htmxUrl]; !ok {
-// 		return HxBoost_Index
-// 	}
+	// serve page+index if page doesn't have an index group
+	if _, ok := IndexList[htmxUrl]; !ok {
+		return HxBoost_Index
+	}
 
-// 	// serve page if has an index group
-// 	if IndexList[htmxUrl] == IndexList[r.URL.Path] {
-// 		return HxBoost_Page
-// 	}
+	// serve page if has an index group
+	// if IndexList[htmxUrl] == IndexList[r.URL.Path] {
+	// 	return HxBoost_Page
+	// }
+	if reflect.ValueOf(IndexList[htmxUrl]).Pointer() == reflect.ValueOf(IndexList[r.URL.Path]).Pointer() {
+		return HxBoost_Page
+	}
 
-// 	// serve page+index if not matching index group
-// 	return HxBoost_Index
-// }
+	// serve page+index if not matching index group
+	return HxBoost_Index
+}
 
 // RenderStaticFiles() renders all static files defined by the user
 func (g *Gox) renderStaticFiles() error {
