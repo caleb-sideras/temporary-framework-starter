@@ -2,13 +2,13 @@ package gox
 
 import (
 	"bufio"
-	"reflect"
-	// "bytes"
+	"bytes"
 	"errors"
 	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"reflect"
 	// "html/template"
 	"context"
 	"github.com/caleb-sideras/gox2/gox/data"
@@ -136,7 +136,7 @@ func (g *Gox) Build(startDir string, packageDir string) {
 	printDirectoryStructure(dirFiles)
 
 	fmt.Println("-------------------------EXTRACTING YOUR CODE-------------------------")
-	imports, indexGroup, pageRenderFunctions, pageHandleFunctions, routeRenderFunctions, routeHandleFunctions := getRelativeFunctions(dirFiles, packageDir)
+	imports, indexGroup, pageRenderFunctions, pageHandleFunctions, routeRenderFunctions, routeHandleFunctions := getSortedFunctions(dirFiles, packageDir)
 
 	fmt.Println("-----------------------RENDERING SORTED FUNCTIONS----------------------")
 	code, err := renderSortedFunctions(imports, indexGroup, pageRenderFunctions, pageHandleFunctions, routeRenderFunctions, routeHandleFunctions)
@@ -183,11 +183,12 @@ func (g *Gox) getETags() map[string]string {
 
 // handleRoutes() binds Mux handlers to user defined functions, and creates default handlers to serve static pages
 func (g *Gox) handleRoutes(r *mux.Router, eTags map[string]string) {
-	log.Println("---------------------PAGES HANDLERS-----------------------")
+	log.Println("---------------------Page - Render-----------------------")
 	for _, route := range PageRenderList {
 		// loop variable capture
 		currRoute := route.Path
 		log.Println(currRoute)
+
 		r.HandleFunc(currRoute+"{slash:/?}",
 			func(w http.ResponseWriter, r *http.Request) {
 				log.Println("- - - - - - - - - - - -")
@@ -235,155 +236,214 @@ func (g *Gox) handleRoutes(r *mux.Router, eTags map[string]string) {
 		)
 	}
 
-	log.Println("---------------------DATA HANDLERS-----------------------")
-	// dataTmpls := map[string]*template.Template{}
-	// for route, data := range DataList {
+	log.Println("---------------------Page - Handle-----------------------")
+	for _, route := range PageHandleList {
+		// loop variable capture
+		currRoute := route.Path
+		log.Println(currRoute)
 
-	// 	tmpl := template.Must(template.ParseFiles(data.Index))
-	// 	tmpl2 := template.Must(template.ParseFiles(data.Page))
-	// 	_, err := tmpl.New("page").Parse(tmpl2.Tree.Root.String())
+		switch route.HandleType {
+		case DefaultHandler:
+			currHandler := route.Handler.(func() templ.Component)
+			r.HandleFunc(currRoute+"{slash:/?}",
+				func(w http.ResponseWriter, r *http.Request) {
+					log.Println("- - - - - - - - - - - -")
 
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
-	// 	dataTmpls[route] = tmpl
+					var buffer bytes.Buffer
+					// write to a buffer, calculate etag, if its the same then 304
 
-	// 	// loop variable capture
-	// 	currRoute := route
-	// 	currData := data
+					handlePage := func() {
+						log.Println("Partial")
+						err := currHandler().Render(r.Context(), &buffer)
+						if err != nil {
+							log.Printf("500: Issue creating Page() at %s", currRoute)
+							w.WriteHeader(http.StatusInternalServerError)
+							return
+						}
+					}
 
-	// 	log.Println(currRoute)
-	// 	r.HandleFunc(currRoute+"{slash:/?}",
+					handleBoostPage := func() {
+						handlePage()
+						w.Header().Set("HX-Retarget", "main")
+						w.Header().Set("HX-Reswap", "innerHTML transition:true")
+					}
 
-	// 		func(w http.ResponseWriter, r *http.Request) {
+					handleIndex := func() {
+						log.Println("Full-Page")
+						err := IndexList[currRoute]().Render(templ.WithChildren(r.Context(), currHandler()), &buffer)
+						if err != nil {
+							log.Printf("500: Issue creating Index() at %s", currRoute)
+							w.WriteHeader(http.StatusInternalServerError)
+							return
+						}
+					}
 
-	// 			log.Println("- - - - - - - - - - - -")
-	// 			log.Println("Fetching Data...")
+					formatRequest(w, r, handlePage, handleBoostPage, handleIndex, handleIndex)
 
-	// 			tmpl := template.Must(dataTmpls[currRoute].Clone())
-	// 			funcReturn := currData.Data(w, r)
+					eTag := utils.GenerateETag(buffer.String())
 
-	// 			// cannot get ETag from data because we are sending full and partials
-	// 			if funcReturn.Error != nil {
-	// 				log.Println("Error Fetching Data", funcReturn.Error)
-	// 				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-	// 			}
+					if rEtag := r.Header.Get("If-None-Match"); rEtag == eTag {
+						log.Println("304: status not modified")
+						w.WriteHeader(http.StatusNotModified)
+						return
+					}
 
-	// 			if len(funcReturn.Templates) > 0 {
-	// 				_, err = tmpl.ParseFiles(funcReturn.Templates...)
-	// 				if err != nil {
-	// 					log.Println("Error Parsing Files", len(funcReturn.Templates), funcReturn.Templates)
-	// 					http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-	// 				}
-	// 			}
+					w.Header().Set("Vary", "HX-Request")
+					w.Header().Set("Cache-Control", "no-cache")
+					w.Header().Set("ETag", eTag)
+					w.Write(buffer.Bytes())
+				},
+			)
+		case ResReqHandler:
+			currHandler := route.Handler.(func(http.ResponseWriter, *http.Request) templ.Component)
+			r.HandleFunc(currRoute+"{slash:/?}",
+				func(w http.ResponseWriter, r *http.Request) {
+					log.Println("- - - - - - - - - - - -")
 
-	// 			buffer := &bytes.Buffer{}
+					var buffer bytes.Buffer
 
-	// 			handlePage := func() {
-	// 				log.Println("Partial")
-	// 				tmpl.ExecuteTemplate(buffer, "page", funcReturn.Content)
-	// 			}
+					handlePage := func() {
+						log.Println("Partial")
+						err := currHandler(w, r).Render(r.Context(), &buffer)
+						if err != nil {
+							log.Printf("500: Issue creating Page() at %s", currRoute)
+							w.WriteHeader(http.StatusInternalServerError)
+							return
+						}
+					}
 
-	// 			handleBPage := func() {
-	// 				handlePage()
-	// 				w.Header().Set("HX-Retarget", "main")
-	// 				w.Header().Set("HX-Reswap", "innerHTML")
-	// 			}
-	// 			handleIndex := func() {
-	// 				log.Println("Full-Page")
-	// 				tmpl.Execute(buffer, funcReturn.Content)
-	// 			}
+					handleBoostPage := func() {
+						handlePage()
+						w.Header().Set("HX-Retarget", "main")
+						w.Header().Set("HX-Reswap", "innerHTML transition:true")
+					}
 
-	// 			formatRequest(w, r, handlePage, handleBPage, handleIndex, handleIndex)
+					handleIndex := func() {
+						log.Println("Full-Page")
+						err := IndexList[currRoute]().Render(templ.WithChildren(r.Context(), currHandler(w, r)), &buffer)
+						if err != nil {
+							log.Printf("500: Issue creating Index() at %s", currRoute)
+							w.WriteHeader(http.StatusInternalServerError)
+							return
+						}
+					}
 
-	// 			currETag := utils.GenerateETag(buffer.String())
-	// 			log.Println("ETag:", currETag)
-	// 			if eTag := r.Header.Get("If-None-Match"); eTag == currETag {
-	// 				log.Println("403: status not modified")
-	// 				w.WriteHeader(http.StatusNotModified)
-	// 				return
-	// 			}
+					formatRequest(w, r, handlePage, handleBoostPage, handleIndex, handleIndex)
 
-	// 			w.Header().Set("Vary", "HX-Request")
-	// 			w.Header().Set("Cache-Control", "no-cache")
-	// 			w.Header().Set("ETag", currETag)
+					// Note - Since this is re-rendering per request, even if page content &/or skeleton is static, @Suspense will generate a new UUID per request, creating a unique ETAG everytime
+					// eTag := utils.GenerateETag(buffer.String())
 
-	// 			w.Write(buffer.Bytes())
-	// 		},
-	// 	)
-	// }
+					// if rEtag := r.Header.Get("If-None-Match"); rEtag == eTag {
+					// 	log.Println("304: status not modified")
+					// 	w.WriteHeader(http.StatusNotModified)
+					// 	return
+					// }
 
-	log.Println("---------------------RENDER HANDLERS-----------------------")
-	// for _, route := range RenderList {
-	// 	// loop variable capture
-	// 	currRoute := route
-	// 	log.Println(currRoute.Path + DIR)
+					w.Header().Set("Vary", "HX-Request")
+					w.Header().Set("Cache-Control", "no-cache")
+					// w.Header().Set("ETag", eTag)
+					w.Write(buffer.Bytes())
+				},
+			)
+		}
+	}
 
-	// 	switch currRoute.Handler.(type) {
-	// 	case func() render.StaticF, func() render.StaticT:
-	// 		r.HandleFunc(currRoute.Path+"{slash:/?}",
-	// 			func(w http.ResponseWriter, r *http.Request) {
+	log.Println("---------------------Route - Handle-----------------------")
+	for _, route := range RouteHandleList {
+		// loop variable capture
+		currRoute := route.Path
+		log.Println(currRoute)
 
-	// 				eTagPath := filepath.Join(r.URL.Path, PAGE_FILE)
-	// 				pagePath := filepath.Join(g.OutputDir, eTagPath)
+		switch route.HandleType {
+		case DefaultHandler:
+			currHandler := route.Handler.(func() templ.Component)
+			r.HandleFunc(currRoute+"{slash:/?}",
+				func(w http.ResponseWriter, r *http.Request) {
+					log.Println("- - - - - - - - - - - -")
 
-	// 				log.Println("- - - - - - - - - - - -")
-	// 				log.Println("Whole")
-	// 				log.Println("Path:", pagePath)
-	// 				log.Println("ETag:", eTags[eTagPath])
+					var buffer bytes.Buffer
 
-	// 				w.Header().Set("ETag", eTags[eTagPath])
-	// 				http.ServeFile(w, r, pagePath)
-	// 			},
-	// 		)
-	// 	case func() render.DynamicF, func() render.DynamicT:
-	// 		r.HandleFunc(currRoute.Path+"{slash:/?}",
-	// 			func(w http.ResponseWriter, r *http.Request) {
-	// 				log.Println("- - - - - - - - - - - -")
+					err := currHandler().Render(r.Context(), &buffer)
+					if err != nil {
+						log.Printf("500: Issue creating Page() at %s", currRoute)
+						w.WriteHeader(http.StatusInternalServerError)
+						return
+					}
 
-	// 				eStr := ""
-	// 				pStr := ""
-	// 				eTagPath := &eStr
-	// 				pagePath := &pStr
+					// eTag := utils.GenerateETag(buffer.String())
 
-	// 				handlePage := func() {
-	// 					log.Println("Partial")
-	// 					*eTagPath = filepath.Join(r.URL.Path, PAGE_BODY_FILE)
-	// 					*pagePath = filepath.Join(g.OutputDir, *eTagPath)
-	// 				}
-	// 				handleBPage := func() {
-	// 					handlePage()
-	// 					w.Header().Set("HX-Retarget", "main")
-	// 					w.Header().Set("HX-Reswap", "innerHTML")
-	// 				}
-	// 				handleIndex := func() {
-	// 					log.Println("Full-Page")
-	// 					*eTagPath = filepath.Join(r.URL.Path, PAGE_FILE)
-	// 					*pagePath = filepath.Join(g.OutputDir, *eTagPath)
-	// 				}
+					// if rEtag := r.Header.Get("If-None-Match"); rEtag == eTag {
+					// 	log.Println("304: status not modified")
+					// 	w.WriteHeader(http.StatusNotModified)
+					// 	return
+					// }
 
-	// 				formatRequest(w, r, handlePage, handleBPage, handleIndex, handleIndex)
+					w.Header().Set("Vary", "HX-Request")
+					w.Header().Set("Cache-Control", "no-cache")
+					// w.Header().Set("ETag", eTag)
+					w.Write(buffer.Bytes())
+				},
+			)
+		case ResReqHandler:
+			currHandler := route.Handler.(func(http.ResponseWriter, *http.Request) templ.Component)
+			r.HandleFunc(currRoute+"{slash:/?}",
+				func(w http.ResponseWriter, r *http.Request) {
+					log.Println("- - - - - - - - - - - -")
 
-	// 				log.Println("Path:", *pagePath)
-	// 				log.Println("ETag:", eTags[*eTagPath])
+					var buffer bytes.Buffer
 
-	// 				if eTag := r.Header.Get("If-None-Match"); eTag == eTags[*eTagPath] {
-	// 					log.Println("403: status not modified")
-	// 					w.WriteHeader(http.StatusNotModified)
-	// 					return
-	// 				}
+					err := currHandler(w, r).Render(r.Context(), &buffer)
+					if err != nil {
+						log.Printf("500: Issue creating Page() at %s", currRoute)
+						w.WriteHeader(http.StatusInternalServerError)
+						return
+					}
 
-	// 				w.Header().Set("Vary", "HX-Request")
-	// 				w.Header().Set("Cache-Control", "no-cache")
-	// 				w.Header().Set("ETag", eTags[*eTagPath])
+					// eTag := utils.GenerateETag(buffer.String())
 
-	// 				http.ServeFile(w, r, *pagePath)
-	// 			},
-	// 		)
-	// 	default:
-	// 		log.Printf("Unknown function type for: %T\n", route.Handler)
-	// 	}
-	// }
+					// if rEtag := r.Header.Get("If-None-Match"); rEtag == eTag {
+					// log.Println("304: status not modified")
+					// w.WriteHeader(http.StatusNotModified)
+					// return
+					// }
+
+					w.Header().Set("Vary", "HX-Request")
+					w.Header().Set("Cache-Control", "no-cache")
+					// w.Header().Set("ETag", eTag)
+					w.Write(buffer.Bytes())
+				},
+			)
+		}
+	}
+
+	log.Println("---------------------Route - Render-----------------------")
+	for _, route := range RouteRenderList {
+		currRoute := route.Path
+		log.Println(currRoute)
+
+		r.HandleFunc(currRoute+"{slash:/?}",
+			func(w http.ResponseWriter, r *http.Request) {
+				log.Println("- - - - - - - - - - - -")
+
+				eTagPath := filepath.Join(r.URL.Path, ROUTE_OUT_FILE)
+				pagePath := filepath.Join(g.OutputDir, eTagPath)
+
+				if eTag := r.Header.Get("If-None-Match"); eTag == eTags[eTagPath] {
+					log.Println("403: status not modified")
+					w.WriteHeader(http.StatusNotModified)
+					return
+				}
+
+				log.Println("Serving File:", pagePath)
+
+				w.Header().Set("Vary", "HX-Request")
+				w.Header().Set("Cache-Control", "no-cache")
+				w.Header().Set("ETag", eTags[eTagPath])
+
+				http.ServeFile(w, r, pagePath)
+			},
+		)
+	}
 	log.Println("----------------------CUSTOM HANDLERS----------------------")
 	// for _, route := range HandleList {
 	// 	// loop variable capture
@@ -399,16 +459,12 @@ func formatRequest(w http.ResponseWriter, r *http.Request, ifPage func(), ifBPag
 	case ErrorRequest:
 		// handle Error
 	case HxGet_Page:
-		log.Println("HxGet_Page")
 		ifPage()
 	case HxBoost_Page:
-		log.Println("HxBoost_Page")
 		ifBPage()
 	case HxGet_Index:
-		log.Println("HxGet_Index")
 		ifIndex()
 	case HxBoost_Index, NormalRequest:
-		log.Println("NormalRequest")
 		ifBIndex()
 	}
 }
@@ -612,7 +668,7 @@ func walkDirectoryStructure(startDir string) (map[string]map[string][]GoxDir, er
 
 	return result, err
 }
-func getRelativeFunctions(dirFiles map[string]map[string][]GoxDir, packageDir string) (utils.StringSet, []string, []string, []string, []string, []string) {
+func getSortedFunctions(dirFiles map[string]map[string][]GoxDir, packageDir string) (utils.StringSet, []string, []string, []string, []string, []string) {
 
 	var indexGroup map[string]string = make(map[string]string)
 	var routeRenderFunctions []string
@@ -1095,11 +1151,11 @@ var RouteRenderList = []RenderDefault{
 	` + strings.Join(routeRenderFunctions, "\n\t") + `
 }
 
-var PageHandleList = []HandlerDefault{
+var PageHandleList = []Handler{
 	` + strings.Join(pageHandleFunctions, "\n\t") + `
 }
 
-var RouteHandleList = []HandlerDefault{
+var RouteHandleList = []Handler{
 	` + strings.Join(routeHandleFunctions, "\n\t") + `
 }
 `

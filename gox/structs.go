@@ -1,7 +1,7 @@
 package gox
 
 import (
-	"net/http"
+	// "net/http"
 
 	"github.com/a-h/templ"
 	"github.com/caleb-sideras/gox2/gox/data"
@@ -21,8 +21,7 @@ type DataRender struct {
 	Page  string
 }
 
-type HandlerDefaultFunc func(http.ResponseWriter, *http.Request)
-type HandlerDefault struct {
+type Handler struct {
 	Path    string
 	Handler interface{}
 	HandleType
