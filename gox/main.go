@@ -2,31 +2,38 @@ package gox
 
 import (
 	"bufio"
-	"bytes"
+	// "bytes"
 	"errors"
 	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
-	"html/template"
+	// "html/template"
+	"context"
+	"github.com/caleb-sideras/gox2/gox/data"
+	// "github.com/caleb-sideras/gox2/gox/render"
+	"github.com/a-h/templ"
+	"github.com/caleb-sideras/gox2/gox/utils"
+	"github.com/gorilla/mux"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
-
-	"github.com/caleb-sideras/gox2/gox/data"
-	"github.com/caleb-sideras/gox2/gox/render"
-	"github.com/caleb-sideras/gox2/gox/utils"
-	"github.com/gorilla/mux"
 )
 
 type RequestType int64
 
 type FnType struct {
-	Recv string // Receiver type
-	Rtn  string // Return type
+	Recv   string   // Receiver type
+	Rtn    string   // Return type
+	Params []string // Param types
+}
+
+type HttpParams struct {
+	Res bool
+	Req bool
 }
 
 const (
@@ -69,8 +76,10 @@ const (
 	// DATA_FILE      = DATA + GO_EXT
 	// RENDER_FILE    = RENDER + GO_EXT
 	// HANDLE_FILE    = HANDLE + GO_EXT
-	PAGE_BODY_FILE = PAGE_BODY + HTML_EXT
-	ETAG_FILE      = ETAG + TXT_EXT
+	PAGE_OUT_FILE      = PAGE + HTML_EXT
+	PAGE_BODY_OUT_FILE = PAGE_BODY + HTML_EXT
+	ROUTE_OUT_FILE     = ROUTE + HTML_EXT
+	ETAG_FILE          = ETAG + TXT_EXT
 )
 
 var FILE_CHECK_LIST = map[string]bool{
@@ -126,19 +135,20 @@ func (g *Gox) Build(startDir string, packageDir string) {
 	printDirectoryStructure(dirFiles)
 
 	fmt.Println("--------------------EXTRACTING YOUR CODE--------------------")
-	imports, indexGroup, renderFunctions, handleFunctions := getRelativeFunctions(dirFiles, packageDir)
+	imports, indexGroup, pageRenderFunctions, pageHandleFunctions, routeRenderFunctions, routeHandleFunctions := getRelativeFunctions(dirFiles, packageDir)
 
 	fmt.Println("-----------------------GENERATING CODE----------------------")
-	code, err := generateCode(imports, indexGroup, renderFunctions, handleFunctions)
+	code, err := renderSortedFunctions(imports, indexGroup, pageRenderFunctions, pageHandleFunctions, routeRenderFunctions, routeHandleFunctions)
 	if err != nil {
 		panic(err)
 	}
 	fmt.Println(code)
 
-	// err = g.renderStaticFiles()
-	// if err != nil {
-	// panic(err)
-	// }
+	fmt.Println("-------------------RENDERING STATIC FILES--------------------")
+	err = g.renderStaticFiles()
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (g *Gox) Run(r *mux.Router, port string, servePath string) {
@@ -173,213 +183,213 @@ func (g *Gox) getETags() map[string]string {
 // handleRoutes() binds Mux handlers to user defined functions, and creates default handlers to serve static pages
 func (g *Gox) handleRoutes(r *mux.Router, eTags map[string]string) {
 	log.Println("---------------------PAGES HANDLERS-----------------------")
-	for route := range PagesList {
-		// loop variable capture
-		currRoute := route
-		log.Println(currRoute)
-		r.HandleFunc(currRoute+"{slash:/?}",
-			func(w http.ResponseWriter, r *http.Request) {
-				log.Println("- - - - - - - - - - - -")
+	// for route := range PagesList {
+	// 	// loop variable capture
+	// 	currRoute := route
+	// 	log.Println(currRoute)
+	// 	r.HandleFunc(currRoute+"{slash:/?}",
+	// 		func(w http.ResponseWriter, r *http.Request) {
+	// 			log.Println("- - - - - - - - - - - -")
 
-				eStr := ""
-				pStr := ""
-				eTagPath := &eStr
-				pagePath := &pStr
+	// 			eStr := ""
+	// 			pStr := ""
+	// 			eTagPath := &eStr
+	// 			pagePath := &pStr
 
-				handlePage := func() {
-					log.Println("Partial")
-					*eTagPath = filepath.Join(r.URL.Path, PAGE_BODY_FILE)
-					*pagePath = filepath.Join(g.OutputDir, *eTagPath)
-				}
+	// 			handlePage := func() {
+	// 				log.Println("Partial")
+	// 				*eTagPath = filepath.Join(r.URL.Path, PAGE_BODY_FILE)
+	// 				*pagePath = filepath.Join(g.OutputDir, *eTagPath)
+	// 			}
 
-				handleBPage := func() {
-					handlePage()
-					w.Header().Set("HX-Retarget", "main")
-					w.Header().Set("HX-Reswap", "innerHTML transition:true")
-				}
+	// 			handleBPage := func() {
+	// 				handlePage()
+	// 				w.Header().Set("HX-Retarget", "main")
+	// 				w.Header().Set("HX-Reswap", "innerHTML transition:true")
+	// 			}
 
-				handleIndex := func() {
-					log.Println("Full-Page")
-					*eTagPath = filepath.Join(r.URL.Path, PAGE_FILE)
-					*pagePath = filepath.Join(g.OutputDir, *eTagPath)
-				}
+	// 			handleIndex := func() {
+	// 				log.Println("Full-Page")
+	// 				*eTagPath = filepath.Join(r.URL.Path, PAGE_FILE)
+	// 				*pagePath = filepath.Join(g.OutputDir, *eTagPath)
+	// 			}
 
-				formatRequest(w, r, handlePage, handleBPage, handleIndex, handleIndex)
+	// 			formatRequest(w, r, handlePage, handleBPage, handleIndex, handleIndex)
 
-				log.Println("Path:", *pagePath)
-				log.Println("ETag:", eTags[*eTagPath])
+	// 			log.Println("Path:", *pagePath)
+	// 			log.Println("ETag:", eTags[*eTagPath])
 
-				if eTag := r.Header.Get("If-None-Match"); eTag == eTags[*eTagPath] {
-					log.Println("403: status not modified")
-					w.WriteHeader(http.StatusNotModified)
-					return
-				}
+	// 			if eTag := r.Header.Get("If-None-Match"); eTag == eTags[*eTagPath] {
+	// 				log.Println("403: status not modified")
+	// 				w.WriteHeader(http.StatusNotModified)
+	// 				return
+	// 			}
 
-				w.Header().Set("Vary", "HX-Request")
-				w.Header().Set("Cache-Control", "no-cache")
-				w.Header().Set("ETag", eTags[*eTagPath])
+	// 			w.Header().Set("Vary", "HX-Request")
+	// 			w.Header().Set("Cache-Control", "no-cache")
+	// 			w.Header().Set("ETag", eTags[*eTagPath])
 
-				http.ServeFile(w, r, *pagePath)
-			},
-		)
-	}
+	// 			http.ServeFile(w, r, *pagePath)
+	// 		},
+	// 	)
+	// }
 
 	log.Println("---------------------DATA HANDLERS-----------------------")
-	dataTmpls := map[string]*template.Template{}
-	for route, data := range DataList {
+	// dataTmpls := map[string]*template.Template{}
+	// for route, data := range DataList {
 
-		tmpl := template.Must(template.ParseFiles(data.Index))
-		tmpl2 := template.Must(template.ParseFiles(data.Page))
-		_, err := tmpl.New("page").Parse(tmpl2.Tree.Root.String())
+	// 	tmpl := template.Must(template.ParseFiles(data.Index))
+	// 	tmpl2 := template.Must(template.ParseFiles(data.Page))
+	// 	_, err := tmpl.New("page").Parse(tmpl2.Tree.Root.String())
 
-		if err != nil {
-			panic(err)
-		}
-		dataTmpls[route] = tmpl
+	// 	if err != nil {
+	// 		panic(err)
+	// 	}
+	// 	dataTmpls[route] = tmpl
 
-		// loop variable capture
-		currRoute := route
-		currData := data
+	// 	// loop variable capture
+	// 	currRoute := route
+	// 	currData := data
 
-		log.Println(currRoute)
-		r.HandleFunc(currRoute+"{slash:/?}",
+	// 	log.Println(currRoute)
+	// 	r.HandleFunc(currRoute+"{slash:/?}",
 
-			func(w http.ResponseWriter, r *http.Request) {
+	// 		func(w http.ResponseWriter, r *http.Request) {
 
-				log.Println("- - - - - - - - - - - -")
-				log.Println("Fetching Data...")
+	// 			log.Println("- - - - - - - - - - - -")
+	// 			log.Println("Fetching Data...")
 
-				tmpl := template.Must(dataTmpls[currRoute].Clone())
-				funcReturn := currData.Data(w, r)
+	// 			tmpl := template.Must(dataTmpls[currRoute].Clone())
+	// 			funcReturn := currData.Data(w, r)
 
-				// cannot get ETag from data because we are sending full and partials
-				if funcReturn.Error != nil {
-					log.Println("Error Fetching Data", funcReturn.Error)
-					http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-				}
+	// 			// cannot get ETag from data because we are sending full and partials
+	// 			if funcReturn.Error != nil {
+	// 				log.Println("Error Fetching Data", funcReturn.Error)
+	// 				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	// 			}
 
-				if len(funcReturn.Templates) > 0 {
-					_, err = tmpl.ParseFiles(funcReturn.Templates...)
-					if err != nil {
-						log.Println("Error Parsing Files", len(funcReturn.Templates), funcReturn.Templates)
-						http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-					}
-				}
+	// 			if len(funcReturn.Templates) > 0 {
+	// 				_, err = tmpl.ParseFiles(funcReturn.Templates...)
+	// 				if err != nil {
+	// 					log.Println("Error Parsing Files", len(funcReturn.Templates), funcReturn.Templates)
+	// 					http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	// 				}
+	// 			}
 
-				buffer := &bytes.Buffer{}
+	// 			buffer := &bytes.Buffer{}
 
-				handlePage := func() {
-					log.Println("Partial")
-					tmpl.ExecuteTemplate(buffer, "page", funcReturn.Content)
-				}
+	// 			handlePage := func() {
+	// 				log.Println("Partial")
+	// 				tmpl.ExecuteTemplate(buffer, "page", funcReturn.Content)
+	// 			}
 
-				handleBPage := func() {
-					handlePage()
-					w.Header().Set("HX-Retarget", "main")
-					w.Header().Set("HX-Reswap", "innerHTML")
-				}
-				handleIndex := func() {
-					log.Println("Full-Page")
-					tmpl.Execute(buffer, funcReturn.Content)
-				}
+	// 			handleBPage := func() {
+	// 				handlePage()
+	// 				w.Header().Set("HX-Retarget", "main")
+	// 				w.Header().Set("HX-Reswap", "innerHTML")
+	// 			}
+	// 			handleIndex := func() {
+	// 				log.Println("Full-Page")
+	// 				tmpl.Execute(buffer, funcReturn.Content)
+	// 			}
 
-				formatRequest(w, r, handlePage, handleBPage, handleIndex, handleIndex)
+	// 			formatRequest(w, r, handlePage, handleBPage, handleIndex, handleIndex)
 
-				currETag := utils.GenerateETag(buffer.String())
-				log.Println("ETag:", currETag)
-				if eTag := r.Header.Get("If-None-Match"); eTag == currETag {
-					log.Println("403: status not modified")
-					w.WriteHeader(http.StatusNotModified)
-					return
-				}
+	// 			currETag := utils.GenerateETag(buffer.String())
+	// 			log.Println("ETag:", currETag)
+	// 			if eTag := r.Header.Get("If-None-Match"); eTag == currETag {
+	// 				log.Println("403: status not modified")
+	// 				w.WriteHeader(http.StatusNotModified)
+	// 				return
+	// 			}
 
-				w.Header().Set("Vary", "HX-Request")
-				w.Header().Set("Cache-Control", "no-cache")
-				w.Header().Set("ETag", currETag)
+	// 			w.Header().Set("Vary", "HX-Request")
+	// 			w.Header().Set("Cache-Control", "no-cache")
+	// 			w.Header().Set("ETag", currETag)
 
-				w.Write(buffer.Bytes())
-			},
-		)
-	}
+	// 			w.Write(buffer.Bytes())
+	// 		},
+	// 	)
+	// }
 
 	log.Println("---------------------RENDER HANDLERS-----------------------")
-	for _, route := range RenderList {
-		// loop variable capture
-		currRoute := route
-		log.Println(currRoute.Path + DIR)
+	// for _, route := range RenderList {
+	// 	// loop variable capture
+	// 	currRoute := route
+	// 	log.Println(currRoute.Path + DIR)
 
-		switch currRoute.Handler.(type) {
-		case func() render.StaticF, func() render.StaticT:
-			r.HandleFunc(currRoute.Path+"{slash:/?}",
-				func(w http.ResponseWriter, r *http.Request) {
+	// 	switch currRoute.Handler.(type) {
+	// 	case func() render.StaticF, func() render.StaticT:
+	// 		r.HandleFunc(currRoute.Path+"{slash:/?}",
+	// 			func(w http.ResponseWriter, r *http.Request) {
 
-					eTagPath := filepath.Join(r.URL.Path, PAGE_FILE)
-					pagePath := filepath.Join(g.OutputDir, eTagPath)
+	// 				eTagPath := filepath.Join(r.URL.Path, PAGE_FILE)
+	// 				pagePath := filepath.Join(g.OutputDir, eTagPath)
 
-					log.Println("- - - - - - - - - - - -")
-					log.Println("Whole")
-					log.Println("Path:", pagePath)
-					log.Println("ETag:", eTags[eTagPath])
+	// 				log.Println("- - - - - - - - - - - -")
+	// 				log.Println("Whole")
+	// 				log.Println("Path:", pagePath)
+	// 				log.Println("ETag:", eTags[eTagPath])
 
-					w.Header().Set("ETag", eTags[eTagPath])
-					http.ServeFile(w, r, pagePath)
-				},
-			)
-		case func() render.DynamicF, func() render.DynamicT:
-			r.HandleFunc(currRoute.Path+"{slash:/?}",
-				func(w http.ResponseWriter, r *http.Request) {
-					log.Println("- - - - - - - - - - - -")
+	// 				w.Header().Set("ETag", eTags[eTagPath])
+	// 				http.ServeFile(w, r, pagePath)
+	// 			},
+	// 		)
+	// 	case func() render.DynamicF, func() render.DynamicT:
+	// 		r.HandleFunc(currRoute.Path+"{slash:/?}",
+	// 			func(w http.ResponseWriter, r *http.Request) {
+	// 				log.Println("- - - - - - - - - - - -")
 
-					eStr := ""
-					pStr := ""
-					eTagPath := &eStr
-					pagePath := &pStr
+	// 				eStr := ""
+	// 				pStr := ""
+	// 				eTagPath := &eStr
+	// 				pagePath := &pStr
 
-					handlePage := func() {
-						log.Println("Partial")
-						*eTagPath = filepath.Join(r.URL.Path, PAGE_BODY_FILE)
-						*pagePath = filepath.Join(g.OutputDir, *eTagPath)
-					}
-					handleBPage := func() {
-						handlePage()
-						w.Header().Set("HX-Retarget", "main")
-						w.Header().Set("HX-Reswap", "innerHTML")
-					}
-					handleIndex := func() {
-						log.Println("Full-Page")
-						*eTagPath = filepath.Join(r.URL.Path, PAGE_FILE)
-						*pagePath = filepath.Join(g.OutputDir, *eTagPath)
-					}
+	// 				handlePage := func() {
+	// 					log.Println("Partial")
+	// 					*eTagPath = filepath.Join(r.URL.Path, PAGE_BODY_FILE)
+	// 					*pagePath = filepath.Join(g.OutputDir, *eTagPath)
+	// 				}
+	// 				handleBPage := func() {
+	// 					handlePage()
+	// 					w.Header().Set("HX-Retarget", "main")
+	// 					w.Header().Set("HX-Reswap", "innerHTML")
+	// 				}
+	// 				handleIndex := func() {
+	// 					log.Println("Full-Page")
+	// 					*eTagPath = filepath.Join(r.URL.Path, PAGE_FILE)
+	// 					*pagePath = filepath.Join(g.OutputDir, *eTagPath)
+	// 				}
 
-					formatRequest(w, r, handlePage, handleBPage, handleIndex, handleIndex)
+	// 				formatRequest(w, r, handlePage, handleBPage, handleIndex, handleIndex)
 
-					log.Println("Path:", *pagePath)
-					log.Println("ETag:", eTags[*eTagPath])
+	// 				log.Println("Path:", *pagePath)
+	// 				log.Println("ETag:", eTags[*eTagPath])
 
-					if eTag := r.Header.Get("If-None-Match"); eTag == eTags[*eTagPath] {
-						log.Println("403: status not modified")
-						w.WriteHeader(http.StatusNotModified)
-						return
-					}
+	// 				if eTag := r.Header.Get("If-None-Match"); eTag == eTags[*eTagPath] {
+	// 					log.Println("403: status not modified")
+	// 					w.WriteHeader(http.StatusNotModified)
+	// 					return
+	// 				}
 
-					w.Header().Set("Vary", "HX-Request")
-					w.Header().Set("Cache-Control", "no-cache")
-					w.Header().Set("ETag", eTags[*eTagPath])
+	// 				w.Header().Set("Vary", "HX-Request")
+	// 				w.Header().Set("Cache-Control", "no-cache")
+	// 				w.Header().Set("ETag", eTags[*eTagPath])
 
-					http.ServeFile(w, r, *pagePath)
-				},
-			)
-		default:
-			log.Printf("Unknown function type for: %T\n", route.Handler)
-		}
-	}
+	// 				http.ServeFile(w, r, *pagePath)
+	// 			},
+	// 		)
+	// 	default:
+	// 		log.Printf("Unknown function type for: %T\n", route.Handler)
+	// 	}
+	// }
 	log.Println("----------------------CUSTOM HANDLERS----------------------")
-	for _, route := range HandleList {
-		// loop variable capture
-		currRoute := route
-		log.Println(currRoute.Path + DIR)
-		r.HandleFunc(currRoute.Path+"{slash:/?}", currRoute.Handler)
-	}
+	// for _, route := range HandleList {
+	// 	// loop variable capture
+	// 	currRoute := route
+	// 	log.Println(currRoute.Path + DIR)
+	// 	r.HandleFunc(currRoute.Path+"{slash:/?}", currRoute.Handler)
+	// }
 }
 
 func formatRequest(w http.ResponseWriter, r *http.Request, ifPage func(), ifBPage func(), ifIndex func(), ifBIndex func()) {
@@ -435,151 +445,86 @@ func formatRequest(w http.ResponseWriter, r *http.Request, ifPage func(), ifBPag
 // }
 
 // RenderStaticFiles() renders all static files defined by the user
-// Returns a map of all rendered paths
-// func (g *Gox) renderStaticFiles() error {
-// 	output := ""
+func (g *Gox) renderStaticFiles() error {
 
-// 	// Rendering routes defined with page.html
-// 	for path, data := range PagesList {
-// 		indexTmpl := template.Must(template.ParseFiles(data.Index))
-// 		pageTmpl := template.Must(template.ParseFiles(data.Page))
+	output := ""
 
-// 		_, err := indexTmpl.New("page").Parse(pageTmpl.Tree.Root.String())
-// 		if err != nil {
-// 			return err
-// 		}
+	for _, render := range PageRenderList {
 
-// 		if len(data.Data.Templates) > 0 {
-// 			_, err = indexTmpl.ParseFiles(data.Data.Templates...)
-// 			if err != nil {
-// 				return err
-// 			}
-// 		}
+		// page.html
+		fp, err := utils.CreateFile(filepath.Join(render.Path, PAGE_OUT_FILE), g.OutputDir)
+		if err != nil {
+			return err
+		}
 
-// 		err = utils.RenderTemplate[interface{}](filepath.Join(path, PAGE_FILE), g.OutputDir, template.Must(indexTmpl.Clone()), data.Data.Content, "")
-// 		if err != nil {
-// 			return err
-// 		}
-// 		content, err := os.ReadFile(filepath.Join(g.OutputDir, path, PAGE_FILE))
-// 		if err != nil {
-// 			return err
-// 		}
-// 		output += fmt.Sprintf("%s:%s\n", filepath.Join(path, PAGE_FILE), utils.GenerateETag(string(content)))
+		if _, ok := IndexList[render.Path]; !ok {
+			return errors.New(fmt.Sprintf("Could not find an index for path: %s", render.Path))
+		}
 
-// 		// page-body.html
-// 		err = utils.RenderTemplate[interface{}](filepath.Join(path, PAGE_BODY_FILE), g.OutputDir, template.Must(indexTmpl.Clone()), data.Data.Content, PAGE)
-// 		if err != nil {
-// 			return err
-// 		}
-// 		content, err = os.ReadFile(filepath.Join(g.OutputDir, path, PAGE_BODY_FILE))
-// 		if err != nil {
-// 			return err
-// 		}
-// 		output += fmt.Sprintf("%s:%s\n", filepath.Join(path, PAGE_BODY_FILE), utils.GenerateETag(string(content)))
-// 	}
+		err = IndexList[render.Path]().Render(templ.WithChildren(context.Background(), render.Handler()), fp)
+		if err != nil {
+			return err
+		}
 
-// 	// Rendering .html files returned from functions defined in render.go
-// 	for _, rd := range RenderList {
-// 		var err error
-// 		switch rd.Handler.(type) {
-// 		case func() render.StaticF:
-// 			fn := rd.Handler.(func() render.StaticF)()
-// 			err := utils.RenderFile[interface{}](filepath.Join(rd.Path, PAGE_FILE), g.OutputDir, fn.Templates, fn.Content, fn.Name)
-// 			if err != nil {
-// 				return err
-// 			}
-// 			content, err := os.ReadFile(filepath.Join(g.OutputDir, rd.Path, PAGE_FILE))
-// 			if err != nil {
-// 				return err
-// 			}
-// 			output += fmt.Sprintf("%s:%s\n", filepath.Join(rd.Path, PAGE_FILE), utils.GenerateETag(string(content)))
+		pathAndTagPage, err := readFileAndGenerateETag(g.OutputDir, filepath.Join(render.Path, PAGE_OUT_FILE))
+		if err != nil {
+			return err
+		}
+		output += pathAndTagPage
 
-// 		case func() render.DynamicF:
-// 			fn := rd.Handler.(func() render.DynamicF)()
-// 			if _, ok := IndexList[rd.Path]; !ok {
-// 				return errors.New(fmt.Sprintf("No index for %s dynamic render", rd.Path))
-// 			}
+		// page-body.html
+		f, err := utils.CreateFile(filepath.Join(render.Path, PAGE_BODY_OUT_FILE), g.OutputDir)
+		if err != nil {
+			return err
+		}
 
-// 			indexTmpl := template.Must(template.ParseFiles(IndexList[rd.Path]))
-// 			_, err := indexTmpl.New("page").ParseFiles(fn.Templates...)
-// 			if err != nil {
-// 				return err
-// 			}
+		err = render.Handler().Render(context.Background(), f)
+		if err != nil {
+			return err
+		}
 
-// 			err = utils.RenderTemplate[interface{}](filepath.Join(rd.Path, PAGE_FILE), g.OutputDir, indexTmpl, fn.Content, "")
-// 			// err := utils.RenderFile[interface{}](filepath.Join(rd.Path, PAGE_FILE), g.OutputDir, append([]string{IndexList[rd.Path]}, fn.Templates...), fn.Content, "")
-// 			if err != nil {
-// 				return err
-// 			}
-// 			pathAndTag, err := readFileAndGenerateETag(g.OutputDir, filepath.Join(rd.Path, PAGE_FILE))
-// 			if err != nil {
-// 				return err
-// 			}
-// 			output += pathAndTag
+		pathAndTagBody, err := readFileAndGenerateETag(g.OutputDir, filepath.Join(render.Path, PAGE_BODY_OUT_FILE))
+		if err != nil {
+			return err
+		}
+		output += pathAndTagBody
 
-// 			err = utils.RenderTemplate[interface{}](filepath.Join(rd.Path, PAGE_FILE), g.OutputDir, indexTmpl, fn.Content, PAGE)
-// 			// err = utils.RenderFile[interface{}](filepath.Join(rd.Path, PAGE_BODY_FILE), g.OutputDir, append([]string{IndexList[rd.Path]}, fn.Templates...), fn.Content, PAGE)
-// 			if err != nil {
-// 				return err
-// 			}
-// 			pathAndTag, err = readFileAndGenerateETag(g.OutputDir, filepath.Join(rd.Path, PAGE_BODY_FILE))
-// 			if err != nil {
-// 				return err
-// 			}
-// 			output += pathAndTag
+	}
 
-// 		case func() render.StaticT:
-// 			fn := rd.Handler.(func() render.StaticT)()
-// 			err = utils.RenderTemplate[interface{}](filepath.Join(rd.Path, PAGE_FILE), g.OutputDir, fn.Template, fn.Content, fn.Name)
-// 			pathAndTag, err := readFileAndGenerateETag(g.OutputDir, filepath.Join(rd.Path, PAGE_FILE))
-// 			if err != nil {
-// 				return err
-// 			}
-// 			output += pathAndTag
+	for _, render := range RouteRenderList {
 
-// 		case func() render.DynamicT:
-// 			fn := rd.Handler.(func() render.DynamicT)()
-// 			if _, ok := IndexList[rd.Path]; !ok {
-// 				return errors.New(fmt.Sprintf("No index for %s dynamic render", rd.Path))
-// 			}
-// 			err = utils.RenderFileTemplateIndex[interface{}](filepath.Join(rd.Path, PAGE_FILE), g.OutputDir, IndexList[rd.Path], fn.Templates, template.Must(fn.Template.Clone()), fn.Content)
-// 			if err != nil {
-// 				return err
-// 			}
-// 			pathAndTag, err := readFileAndGenerateETag(g.OutputDir, filepath.Join(rd.Path, PAGE_FILE))
-// 			if err != nil {
-// 				return err
-// 			}
-// 			output += pathAndTag
+		// page.html
+		f, err := utils.CreateFile(filepath.Join(render.Path, ROUTE_OUT_FILE), g.OutputDir)
+		if err != nil {
+			return err
+		}
 
-// 			err = utils.RenderFileTemplatePage[interface{}](filepath.Join(rd.Path, PAGE_BODY_FILE), g.OutputDir, fn.Templates, fn.Template, fn.Content)
-// 			if err != nil {
-// 				return err
-// 			}
-// 			pathAndTag, err = readFileAndGenerateETag(g.OutputDir, filepath.Join(rd.Path, PAGE_BODY_FILE))
-// 			if err != nil {
-// 				return err
-// 			}
-// 			output += pathAndTag
+		err = render.Handler().Render(context.Background(), f)
+		if err != nil {
+			return err
+		}
 
-// 		default:
-// 			log.Printf("Unknown function type for: %T\n", rd.Handler)
-// 		}
-// 	}
+		pathAndTagBody, err := readFileAndGenerateETag(g.OutputDir, filepath.Join(render.Path, ROUTE_OUT_FILE))
+		if err != nil {
+			return err
+		}
+		output += pathAndTagBody
 
-// 	file, err := utils.CreateFile(ETAG_FILE, g.OutputDir)
-// 	defer file.Close()
-// 	if err != nil {
-// 		return err
-// 	}
+	}
 
-// 	_, err = file.Write([]byte(output))
-// 	if err != nil {
-// 		return err
-// 	}
+	file, err := utils.CreateFile(ETAG_FILE, g.OutputDir)
+	defer file.Close()
+	if err != nil {
+		return err
+	}
 
-// 	return nil
-// }
+	_, err = file.Write([]byte(output))
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
 
 func readFileAndGenerateETag(outDir string, filePath string) (string, error) {
 
@@ -659,11 +604,13 @@ func walkDirectoryStructure(startDir string) (map[string]map[string][]GoxDir, er
 
 	return result, err
 }
-func getRelativeFunctions(dirFiles map[string]map[string][]GoxDir, packageDir string) (utils.StringSet, []string, []string, []string) {
+func getRelativeFunctions(dirFiles map[string]map[string][]GoxDir, packageDir string) (utils.StringSet, []string, []string, []string, []string, []string) {
 
 	var indexGroup map[string]string = make(map[string]string)
-	var renderFunctions []string
-	var handleFunctions []string
+	var routeRenderFunctions []string
+	var routeHandleFunctions []string
+	var pageRenderFunctions []string
+	var pageHandleFunctions []string
 	imports := utils.NewStringSet()
 
 	for dir, files := range dirFiles {
@@ -717,9 +664,9 @@ func getRelativeFunctions(dirFiles map[string]map[string][]GoxDir, packageDir st
 							continue
 						}
 
+						imports.Add(`"` + packageDir + filepath.Dir(gd.FilePath) + `"`)
 						indexGroup[leafPath] = formatIndexFunction(pkName, expFn)
 						fmt.Printf("   - Extracted -> func %s (%s)\n", expFn, gd.FilePath)
-						needImport = true
 					}
 				}
 
@@ -742,7 +689,26 @@ func getRelativeFunctions(dirFiles map[string]map[string][]GoxDir, packageDir st
 				}
 
 				for expFn, expT := range expFns {
-					if expFn == EXPORTED_PAGE_STATIC {
+					switch expFn {
+					case EXPORTED_PAGE_STATIC:
+						if expT.Rtn != "templ.Component" {
+							fmt.Printf("   - No Return Type -> func %s\n", expFn)
+							continue
+						}
+						if expT.Recv != "" {
+							fmt.Printf("   - Receiver Type Unsupported -> func %s\n", expFn)
+							continue
+						}
+						if expT.Params != nil {
+							fmt.Printf("   - Parameters in pre-rendered functions Unsupported -> func %s\n", expFn)
+							continue
+						}
+						formatFn := formatRootFunction(pkName, expFn, leafPath)
+						pageRenderFunctions = append(pageRenderFunctions, formatFn)
+						needImport = true
+						fmt.Printf("   - Extracted -> func %s\n", expFn)
+
+					case EXPORTED_PAGE:
 						if expT.Rtn != "templ.Component" {
 							fmt.Printf("   - No Return Type -> func %s\n", expFn)
 							continue
@@ -751,30 +717,17 @@ func getRelativeFunctions(dirFiles map[string]map[string][]GoxDir, packageDir st
 							fmt.Printf("   - Receiver Type Unsupported-> func %s\n", expFn)
 							continue
 						}
-						formatFn := formatRootFunction(pkName, expFn, leafPath)
-						renderFunctions = append(renderFunctions, formatFn)
-						needImport = true
-						fmt.Printf("   - Extracted -> func %s\n", expFn)
-					}
-
-					if expFn == EXPORTED_PAGE {
-						if expT.Rtn != "templ.Component" {
-							fmt.Printf("   - No Return Type -> func %s\n", expFn)
+						var formatFn string
+						if expT.Params == nil || len(expT.Params) == 0 {
+							formatFn = formatRootHandlerFunction(pkName, expFn, leafPath, "DefaultHandler")
+						} else if len(expT.Params) == 2 && expT.Params[0] == "http.ResponseWriter" && expT.Params[1] == "http.Request" {
+							formatFn = formatRootHandlerFunction(pkName, expFn, leafPath, "ResReqHandler")
+						} else {
+							fmt.Printf("   - Params Unsupported-> func %s\n", expFn)
 							continue
 						}
 
-						if expT.Recv == "" {
-							formatFn := formatRootFunction(pkName, expFn, leafPath)
-							handleFunctions = append(handleFunctions, formatFn)
-
-						} else if expT.Recv == "temporary.Temporary" {
-							formatFn := formatRootFunction(pkName, fmt.Sprintf("t.%s", expFn), leafPath)
-							handleFunctions = append(handleFunctions, formatFn)
-
-						} else if expT.Recv != "temporary.Temporary" {
-							fmt.Printf("   - Receiver Type Unsupported -> func %s\n", expFn)
-							continue
-						}
+						pageHandleFunctions = append(pageHandleFunctions, formatFn)
 						needImport = true
 						fmt.Printf("   - Extracted -> func %s\n", expFn)
 					}
@@ -782,7 +735,7 @@ func getRelativeFunctions(dirFiles map[string]map[string][]GoxDir, packageDir st
 
 			case ROUTE_FILE:
 
-				log.Println("   route.go")
+				fmt.Println("   route.go")
 
 				expFns, pkName, err := getExportedFuctions(gd.FilePath)
 				if err != nil {
@@ -805,34 +758,38 @@ func getRelativeFunctions(dirFiles map[string]map[string][]GoxDir, packageDir st
 							fmt.Printf("   - No Return Type -> func %s\n", expFn)
 							continue
 						}
-						if expT.Recv == "temporary.Temporary" {
-							fmt.Printf("   - Unnecessary Receiver Type -> func %s\n", expFn)
+						if expT.Recv != "" {
+							fmt.Printf("   - Unsupported Receiver Type -> func %s\n", expFn)
+							continue
+						}
+						if expT.Params != nil {
+							fmt.Printf("   - Parameters in Static Functions Unsupported -> func %s\n", expFn)
 							continue
 						}
 						formatFn := formatDefaultFunction(pkName, expFn, strings.TrimSuffix(expFn, "_"), leafPath)
-						renderFunctions = append(renderFunctions, formatFn)
+						routeRenderFunctions = append(routeRenderFunctions, formatFn)
 						needImport = true
 						fmt.Printf("   - Extracted -> func %s\n", expFn)
-					}
-
-					if !strings.HasSuffix(expFn, "_") {
+					} else {
 						if expT.Rtn != "templ.Component" {
 							fmt.Printf("   - No Return Type -> func %s\n", expFn)
 							continue
 						}
-
-						if expT.Recv == "" {
-							formatFn := formatDefaultFunction(pkName, expFn, strings.TrimSuffix(expFn, "_"), leafPath)
-							handleFunctions = append(handleFunctions, formatFn)
-
-						} else if expT.Recv == "temporary.Temporary" {
-							formatFn := formatDefaultFunction(pkName, fmt.Sprintf("t.%s", expFn), strings.TrimSuffix(expFn, "_"), leafPath)
-							handleFunctions = append(handleFunctions, formatFn)
-
-						} else if expT.Recv != "temporary.Temporary" {
-							fmt.Printf("   - Receiver Type Unsupported -> func %s\n", expFn)
+						if expT.Recv != "" {
+							fmt.Printf("   - Receiver Type Unsupported-> func %s\n", expFn)
 							continue
 						}
+						var formatFn string
+						if expT.Params == nil || len(expT.Params) == 0 {
+							formatFn = formatHandlerFunction(pkName, expFn, leafPath, expFn, "DefaultHandler")
+						} else if len(expT.Params) == 2 && expT.Params[0] == "http.ResponseWriter" && expT.Params[1] == "http.Request" {
+							formatFn = formatHandlerFunction(pkName, expFn, leafPath, expFn, "ResReqHandler")
+						} else {
+							fmt.Printf("   - Params Unsupported-> func %s\n", expFn)
+							continue
+						}
+
+						routeHandleFunctions = append(routeHandleFunctions, formatFn)
 						needImport = true
 						fmt.Printf("   - Extracted -> func %s\n", expFn)
 					}
@@ -849,10 +806,13 @@ func getRelativeFunctions(dirFiles map[string]map[string][]GoxDir, packageDir st
 		indexGroupFinal = append(indexGroupFinal, fmt.Sprintf(`"%s" : %s,`, path, index))
 	}
 
-	return imports, indexGroupFinal, renderFunctions, handleFunctions
+	return imports, indexGroupFinal, pageRenderFunctions, pageHandleFunctions, routeRenderFunctions, routeHandleFunctions
 }
 
 func formatDefaultFunction(pkName string, fnName string, pathName string, leafPath string) string {
+	if leafPath == "/" {
+		leafPath = ""
+	}
 	return `{"` + leafPath + `/` + strings.ToLower(pathName) + `", ` + pkName + `.` + fnName + `},`
 }
 
@@ -860,8 +820,19 @@ func formatRootFunction(pkName string, fnName string, leafPath string) string {
 	return `{"` + leafPath + `", ` + pkName + `.` + fnName + `},`
 }
 
+func formatRootHandlerFunction(pkName string, fnName string, leafPath string, fnType string) string {
+	return `{"` + leafPath + `", ` + pkName + `.` + fnName + `, ` + fnType + `},`
+}
+
+func formatHandlerFunction(pkName string, fnName string, leafPath string, pathName string, fnType string) string {
+	if leafPath == "/" {
+		leafPath = ""
+	}
+	return `{"` + leafPath + `/` + strings.ToLower(pathName) + `", ` + pkName + `.` + fnName + `, ` + fnType + `},`
+}
+
 func formatIndexFunction(pkName string, fnName string) string {
-	return `"` + pkName + `.` + fnName + `"`
+	return fmt.Sprintf("%s.%s", pkName, fnName)
 }
 
 func formatCustomFunction(pkName string, fnName string) string {
@@ -932,6 +903,42 @@ func getAstVals(path string) (*ast.File, error) {
 	return node, nil
 }
 
+func isHTTPResponseWriter(expr ast.Expr) bool {
+	selector, ok := expr.(*ast.SelectorExpr)
+	if !ok {
+		return false
+	}
+
+	x, ok := selector.X.(*ast.Ident)
+	if !ok {
+		return false
+	}
+
+	// Check if the type is "http" package and "ResponseWriter" identifier
+	return x.Name == "http" && selector.Sel.Name == "ResponseWriter"
+}
+
+func isHTTPRequest(expr ast.Expr) bool {
+	// Check for *http.Request
+	starExpr, ok := expr.(*ast.StarExpr)
+	if ok {
+		expr = starExpr.X
+	}
+
+	selector, ok := expr.(*ast.SelectorExpr)
+	if !ok {
+		return false
+	}
+
+	x, ok := selector.X.(*ast.Ident)
+	if !ok {
+		return false
+	}
+
+	// Check if the type is "http" package and "Request" identifier
+	return x.Name == "http" && selector.Sel.Name == "Request"
+}
+
 func getExportedFuctions(path string) (map[string]FnType, string, error) {
 
 	node, err := getAstVals(path)
@@ -969,10 +976,24 @@ func getExportedFuctions(path string) (map[string]FnType, string, error) {
 				}
 			}
 
+			// Params
+			if x.Type.Params != nil {
+				for _, param := range x.Type.Params.List {
+					for _, name := range param.Names {
+						if isHTTPResponseWriter(param.Type) {
+							fnType.Params = append(fnType.Params, "http.ResponseWriter")
+						} else if isHTTPRequest(param.Type) {
+							fnType.Params = append(fnType.Params, "http.Request")
+						} else {
+							fnType.Params = append(fnType.Params, name.Name)
+						}
+					}
+				}
+			}
+
 			// Receiver Type
 			if x.Recv != nil {
 				for _, res := range x.Recv.List {
-					fmt.Print("recv type : ")
 					switch t := res.Type.(type) {
 					case *ast.Ident:
 						fnType.Recv = t.Name
@@ -1045,7 +1066,7 @@ func hasExportedVariable(path string, varName string) (bool, string, error) {
 	return hasVar, pkName, nil
 }
 
-func generateCode(imports utils.StringSet, indexGroup []string, renderFunctions []string, handleFunctions []string) (string, error) {
+func renderSortedFunctions(imports utils.StringSet, indexGroup []string, pageRenderFunctions []string, pageHandleFunctions []string, routeRenderFunctions []string, routeHandleFunctions []string) (string, error) {
 
 	code := `
 // Code generated by gox; DO NOT EDIT.
@@ -1058,12 +1079,20 @@ var IndexList = map[string]IndexDefaultFunc{
 	` + strings.Join(indexGroup, "\n\t") + `
 }
 
-var RenderList = []RenderDefault{
-	` + strings.Join(renderFunctions, "\n\t") + `
+var PageRenderList = []RenderDefault{
+	` + strings.Join(pageRenderFunctions, "\n\t") + `
 }
 
-var HandleList = []HandlerDefault{
-	` + strings.Join(handleFunctions, "\n\t") + `
+var RouteRenderList = []RenderDefault{
+	` + strings.Join(routeRenderFunctions, "\n\t") + `
+}
+
+var PageHandleList = []HandlerDefault{
+	` + strings.Join(pageHandleFunctions, "\n\t") + `
+}
+
+var RouteHandleList = []HandlerDefault{
+	` + strings.Join(routeHandleFunctions, "\n\t") + `
 }
 `
 	err := ioutil.WriteFile("../gox/generated.go", []byte(code), 0644)

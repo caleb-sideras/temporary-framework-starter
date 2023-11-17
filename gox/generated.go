@@ -3,20 +3,36 @@
 package gox
 import (
 	"github.com/caleb-sideras/gox2/src/app/home_"
-	"github.com/caleb-sideras/gox2/src/app/home_/components"
-	"github.com/caleb-sideras/gox2/src/app/home_/utils"
+	"github.com/caleb-sideras/gox2/src/app/temp"
+	"github.com/caleb-sideras/gox2/src/app/example"
+	"github.com/caleb-sideras/gox2/src/app"
 )
 
 var IndexList = map[string]IndexDefaultFunc{
-	"/" : "app.Index",
-	"/components" : "app.Index",
-	"/utils" : "app.Index",
+	"/temp" : app.Index,
+	"/example" : app.Index,
+	"/" : app.Index,
+	"/components" : app.Index,
+	"/utils" : app.Index,
 }
 
-var RenderList = []RenderDefault{
+var PageRenderList = []RenderDefault{
 	{"/", home.Page_},
 }
 
-var HandleList = []HandlerDefault{
-	
+var RouteRenderList = []RenderDefault{
+	{"/test", home.Test_},
+	{"/example/example", example.Example_},
+}
+
+var PageHandleList = []HandlerDefault{
+	{"/temp", temp.Page, ResReqHandler},
+	{"/example", example.Page, ResReqHandler},
+}
+
+var RouteHandleList = []HandlerDefault{
+	{"/test2", home.Test2, ResReqHandler},
+	{"/test3", home.Test3, DefaultHandler},
+	{"/example/example3", example.Example3, DefaultHandler},
+	{"/example/example2", example.Example2, ResReqHandler},
 }

@@ -24,15 +24,22 @@ type DataRender struct {
 type HandlerDefaultFunc func(http.ResponseWriter, *http.Request)
 type HandlerDefault struct {
 	Path    string
-	Handler HandlerDefaultFunc
+	Handler interface{}
+	HandleType
 }
+type HandleType int64
+
+const (
+	DefaultHandler HandleType = iota // no params
+	ResReqHandler                    // Response and Request
+)
 
 type RenderCustomFunc func() error
 type RenderCustom struct {
 	Handler RenderCustomFunc
 }
-
+type RenderDefaultFunc func() templ.Component
 type RenderDefault struct {
 	Path    string
-	Handler interface{}
+	Handler RenderDefaultFunc
 }

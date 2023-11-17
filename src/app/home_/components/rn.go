@@ -2,7 +2,7 @@ package components
 
 import (
 	"github.com/a-h/templ"
-	utils "github.com/caleb-sideras/gox2/src/app/home/utils"
+	utils "github.com/caleb-sideras/gox2/src/app/home_/utils"
 	"log"
 	"strconv"
 )

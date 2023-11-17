@@ -1,6 +1,6 @@
 package home
 
-import comp "github.com/caleb-sideras/gox2/src/app/home/components"
+import comp "github.com/caleb-sideras/gox2/src/app/home_/components"
 
 var VarHomeCards []comp.HomeCard = []comp.HomeCard{
 	{
