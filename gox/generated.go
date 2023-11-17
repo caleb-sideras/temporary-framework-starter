@@ -3,17 +3,17 @@
 package gox
 import (
 	"github.com/caleb-sideras/gox2/src/app/home_"
-	"github.com/caleb-sideras/gox2/src/app"
 	"github.com/caleb-sideras/gox2/src/app/temp"
+	"github.com/caleb-sideras/gox2/src/app"
 	"github.com/caleb-sideras/gox2/src/app/example"
 )
 
 var IndexList = map[string]IndexDefaultFunc{
-	"/temp" : app.Index,
 	"/example" : app.Index,
 	"/" : app.Index,
 	"/components" : app.Index,
 	"/utils" : app.Index,
+	"/temp" : app.Index,
 }
 
 var PageRenderList = []RenderDefault{
@@ -26,13 +26,13 @@ var RouteRenderList = []RenderDefault{
 }
 
 var PageHandleList = []Handler{
-	{"/temp", temp.Page, ResReqHandler},
 	{"/example", example.Page, ResReqHandler},
+	{"/temp", temp.Page, ResReqHandler},
 }
 
 var RouteHandleList = []Handler{
 	{"/example/example2", example.Example2, ResReqHandler},
 	{"/example/example3", example.Example3, DefaultHandler},
-	{"/test3", home.Test3, DefaultHandler},
 	{"/test2", home.Test2, ResReqHandler},
+	{"/test3", home.Test3, DefaultHandler},
 }

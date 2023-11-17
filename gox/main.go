@@ -112,18 +112,18 @@ func (g *Gox) Run(r *mux.Router, port string, servePath string) {
 
 	http.Handle("/", r)
 	// http.Handle(servePath, http.StripPrefix(servePath, http.FileServer(http.Dir(g.OutputDir))))
+	fmt.Println("----------------------------CREATING HANDLERS----------------------------")
 	g.handleRoutes(r, g.getETags())
 	log.Fatal(http.ListenAndServe(port, nil))
 }
 
 func (g *Gox) getETags() map[string]string {
-	log.Println("GENERATING ETAGS...")
 	var eTags map[string]string
 	eTags = make(map[string]string)
 
 	file, err := os.Open(filepath.Join(g.OutputDir, ETAG_FILE))
 	if err != nil {
-		log.Fatalf("could not create file: %v", err)
+		log.Fatalf("Could not create file: %v", err)
 	}
 	defer file.Close()
 
@@ -139,11 +139,11 @@ func (g *Gox) getETags() map[string]string {
 
 // handleRoutes() binds Mux handlers to user defined functions, and creates default handlers to serve static pages
 func (g *Gox) handleRoutes(r *mux.Router, eTags map[string]string) {
-	log.Println("---------------------Page - Render-----------------------")
+	fmt.Println("Function Type: Page - Render")
 	for _, route := range PageRenderList {
 		// loop variable capture
 		currRoute := route.Path
-		log.Println(currRoute)
+		fmt.Printf("   - %s\n", currRoute)
 
 		r.HandleFunc(currRoute+"{slash:/?}",
 			func(w http.ResponseWriter, r *http.Request) {
@@ -192,11 +192,11 @@ func (g *Gox) handleRoutes(r *mux.Router, eTags map[string]string) {
 		)
 	}
 
-	log.Println("---------------------Page - Handle-----------------------")
+	fmt.Println("Function Type: Page - Handle")
 	for _, route := range PageHandleList {
 		// loop variable capture
 		currRoute := route.Path
-		log.Println(currRoute)
+		fmt.Printf("   - %s\n", currRoute)
 
 		switch route.HandleType {
 		case DefaultHandler:
@@ -206,7 +206,6 @@ func (g *Gox) handleRoutes(r *mux.Router, eTags map[string]string) {
 					log.Println("- - - - - - - - - - - -")
 
 					var buffer bytes.Buffer
-					// write to a buffer, calculate etag, if its the same then 304
 
 					handlePage := func() {
 						log.Println("Partial")
@@ -305,10 +304,10 @@ func (g *Gox) handleRoutes(r *mux.Router, eTags map[string]string) {
 		}
 	}
 
-	log.Println("---------------------Route - Handle-----------------------")
+	fmt.Println("Function Type: Route - Handle")
 	for _, route := range RouteHandleList {
 		currRoute := route.Path
-		log.Println(currRoute)
+		fmt.Printf("   - %s\n", currRoute)
 
 		switch route.HandleType {
 		case DefaultHandler:
@@ -372,10 +371,10 @@ func (g *Gox) handleRoutes(r *mux.Router, eTags map[string]string) {
 		}
 	}
 
-	log.Println("---------------------Route - Render-----------------------")
+	fmt.Println("Function Type: Route - Render")
 	for _, route := range RouteRenderList {
 		currRoute := route.Path
-		log.Println(currRoute)
+		fmt.Printf("   - %s\n", currRoute)
 
 		r.HandleFunc(currRoute+"{slash:/?}",
 			func(w http.ResponseWriter, r *http.Request) {
@@ -400,13 +399,6 @@ func (g *Gox) handleRoutes(r *mux.Router, eTags map[string]string) {
 			},
 		)
 	}
-	log.Println("----------------------CUSTOM HANDLERS----------------------")
-	// for _, route := range HandleList {
-	// 	// loop variable capture
-	// 	currRoute := route
-	// 	log.Println(currRoute.Path + DIR)
-	// 	r.HandleFunc(currRoute.Path+"{slash:/?}", currRoute.Handler)
-	// }
 }
 
 func formatRequest(w http.ResponseWriter, r *http.Request, ifPage func(), ifBPage func(), ifIndex func(), ifBIndex func()) {
@@ -467,7 +459,10 @@ func (g *Gox) renderStaticFiles() error {
 
 	for _, render := range PageRenderList {
 
+		fmt.Println("Directory:", render.Path)
+
 		// page.html
+		fmt.Println("   -", PAGE_OUT_FILE)
 		fp, err := utils.CreateFile(filepath.Join(render.Path, PAGE_OUT_FILE), g.OutputDir)
 		if err != nil {
 			return err
@@ -489,6 +484,7 @@ func (g *Gox) renderStaticFiles() error {
 		output += pathAndTagPage
 
 		// page-body.html
+		fmt.Println("   -", PAGE_BODY_OUT_FILE)
 		f, err := utils.CreateFile(filepath.Join(render.Path, PAGE_BODY_OUT_FILE), g.OutputDir)
 		if err != nil {
 			return err
@@ -509,7 +505,10 @@ func (g *Gox) renderStaticFiles() error {
 
 	for _, render := range RouteRenderList {
 
-		// page.html
+		fmt.Println("Directory:", render.Path)
+
+		// route.html
+		fmt.Println("   -", ROUTE_OUT_FILE)
 		f, err := utils.CreateFile(filepath.Join(render.Path, ROUTE_OUT_FILE), g.OutputDir)
 		if err != nil {
 			return err
