@@ -4,15 +4,11 @@
   "description": "Website for the GoX Framework",
   "main": "index.js",
   "scripts": {
-    "bun-build": "bun build bun.build.js",
     "tailwind-dev": "bun run tailwindcss -i ./src/styles/app.css -o ./static/css/output.css --watch",
     "tailwind-build": "bun run tailwindcss -i ./src/styles/app.css -o ./static/css/output.css",
-    "go-build": "bun run go run src/main.go build",
-    "templ-build": "templ generate",
-    "go-start": "go run src/main.go",
-    "dev": "bun run rollup & bun run tailwind-dev",
-    "build": "bun run rollup & bun run tailwind-build & bun run templ-build",
-    "start": "bun run go-start"
+    "dev": "bun run tailwind-dev",
+    "build": "bun bun.build.js & bun run tailwind-build & templ generate & go run src/main.go build",
+    "start": "go run src/main.go run"
   },
   "keywords": [],
   "author": "",
