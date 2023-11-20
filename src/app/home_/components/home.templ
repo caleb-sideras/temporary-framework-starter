@@ -2,7 +2,7 @@ package components
 
 import (
 	"fmt"
-	temp "github.com/caleb-sideras/gox2/temporary"
+	// temp "github.com/caleb-sideras/gox2/temporary"
 )
 
 templ  HomeTempl(HomeCards []HomeCard, HomeSections []HomeSection) {
@@ -18,12 +18,12 @@ templ  HomeTempl(HomeCards []HomeCard, HomeSections []HomeSection) {
 		<h1 class="text-6xl sm:text-8xl font-bold">GoX</h1>
 		<div class="text-lg sm:text-2xl">Supercharge your Go and HTMX workflow</div>
 		<div class="hidden lg:grid grid-cols-2 gap-2 w-full mt-16">
-			// for _, card := range HomeCards {
-			// 		@Card(card)
-			// }
-			@temp.Suspense(LoadingSpinner()) {
-				@RandomNumber()
+			for _, card := range HomeCards {
+				@Card(card)
 			}
+			// @temp.Suspense(LoadingSpinner()) {
+			// 	@RandomNumber()
+			// }
 		</div>
 	</div>
 	<div class="flex flex-col gap-2 lg:hidden w-full mt-10 px-2">

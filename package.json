@@ -4,25 +4,28 @@
   "description": "Website for the GoX Framework",
   "main": "index.js",
   "scripts": {
-    "rollup": "rollup -c",
-    "tailwind-dev": "npx tailwindcss -i ./src/styles/app.css -o ./static/css/output.css --watch",
-    "tailwind-build": "npx tailwindcss -i ./src/styles/app.css -o ./static/css/output.css",
-    "go-build": "go run src/main.go build",
+    "bun-build": "bun build bun.build.js",
+    "tailwind-dev": "bun run tailwindcss -i ./src/styles/app.css -o ./static/css/output.css --watch",
+    "tailwind-build": "bun run tailwindcss -i ./src/styles/app.css -o ./static/css/output.css",
+    "go-build": "bun run go run src/main.go build",
     "templ-build": "templ generate",
     "go-start": "go run src/main.go",
-    "dev": "npm run rollup && npm run tailwind-dev",
-    "build": "npm run rollup && npm run tailwind-build && npm run templ-build",
-    "start": "npm run go-start"
+    "dev": "bun run rollup & bun run tailwind-dev",
+    "build": "bun run rollup & bun run tailwind-build & bun run templ-build",
+    "start": "bun run go-start"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@material/web": "^1.0.0"
+    "@material/web": "^1.0.0",
+    "autoprefixer": "^10.4.16",
+    "lit": "^3.1.0",
+    "postcss": "^8.4.31"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.1.0",
-    "rollup": "^3.26.3 ",
+    "bun": "^1.0.0",
     "tailwindcss": "^3.3.3"
   }
 }

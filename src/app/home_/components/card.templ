@@ -7,12 +7,6 @@ type HomeCard struct {
 }
 
 templ Card(card HomeCard) {
-	<a
- 		href={ templ.URL(card.Link) }
- 		class="flex flex-col w-full relative gap-2 text-start rounded-3xl bg-surface-1 text-on-surface p-6 cursor-pointer hover:bg-secondary-container hover:text-on-secondary-container"
-	>
-		<md-ripple></md-ripple>
-		<span class="text-2xl font-bold">{ card.Title }</span>
-		<span class="text-md">{ card.Description } </span>
-	</a>
+	<script type="module" src="/static/js/temp.js"></script>
+	<simple-card url={ card.Link } title={ card.Title } description={ card.Description }  />
 }
