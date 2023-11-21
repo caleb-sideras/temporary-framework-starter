@@ -27,9 +27,11 @@ type fnType struct {
 }
 
 var FILE_CHECK_LIST = map[string]bool{
-	INDEX_FILE: true,
-	PAGE_FILE:  true,
-	ROUTE_FILE: true,
+	INDEX_FILE:   true,
+	PAGE_FILE:    true,
+	ROUTE_FILE:   true,
+	PAGE_JS_FILE: true,
+	PAGE_TS_FILE: true,
 }
 
 func (g *Gox) Build(startDir string, packageDir string) {

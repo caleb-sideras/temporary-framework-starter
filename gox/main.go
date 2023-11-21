@@ -13,6 +13,8 @@ func NewGox(outputDir string) *Gox {
 const (
 	DIR      = "/"
 	GO_EXT   = ".go"
+	JS_EXT   = ".js"
+	TS_EXT   = ".ts"
 	HTML_EXT = ".html"
 	TXT_EXT  = ".txt"
 
@@ -30,6 +32,8 @@ const (
 
 	PAGE_BODY          = PAGE + BODY
 	PAGE_FILE          = PAGE + GO_EXT
+	PAGE_JS_FILE       = PAGE + JS_EXT
+	PAGE_TS_FILE       = PAGE + TS_EXT
 	INDEX_FILE         = INDEX + GO_EXT
 	ROUTE_FILE         = ROUTE + GO_EXT
 	PAGE_OUT_FILE      = PAGE + HTML_EXT

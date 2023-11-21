@@ -1,5 +1,5 @@
 const appDir = {
-  entrypoints: ['src/app/example/testing.js', 'src/app/home_/test1.js'],
+  entrypoints: ['src/app/example/page.js', 'src/app/home_/page.ts'],
   outdir: 'static/js',
   format: "esm",
   naming: "[dir]/[name].[ext]", // default
@@ -7,7 +7,7 @@ const appDir = {
 }
 
 const globalDir = {
-  entrypoints: ['index.js'],
+  entrypoints: ['index.ts'],
   outdir: 'static/js',
   format: "esm",
   naming: "[dir]/[name].[ext]", // default
