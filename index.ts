@@ -21,3 +21,11 @@ import '@material/web/ripple/ripple.js';
 import '@material/web/tabs/primary-tab.js';
 import '@material/web/tabs/tabs.js';
 import 'lit'
+
+// custom
+import './src/app/example/t-list'
+import './src/app/example/t-navigation-bar-sub'
+import './src/app/example/t-navigation-bar-main'
+import './src/app/example/t-navigation-bar'
+import './src/app/example/t-navigation-tab'
+import './src/app/example/t-list-item'

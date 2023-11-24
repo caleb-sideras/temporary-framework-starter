@@ -14,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@material/web": "^1.0.0",
+    "@material/web": "^1.0.1",
     "autoprefixer": "^10.4.16",
     "lit": "^3.1.0",
     "postcss": "^8.4.31"
