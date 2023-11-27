@@ -9,7 +9,6 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -44,7 +43,7 @@ func (g *Gox) Build(startDir string, packageDir string) {
 	printDirectoryStructure(dirFiles)
 
 	fmt.Println("-------------------------EXTRACTING YOUR CODE-------------------------")
-	imports, indexGroup, pageRenderFunctions, pageHandleFunctions, routeRenderFunctions, routeHandleFunctions := getSortedFunctions(dirFiles, packageDir)
+	imports, indexGroup, pageRenderFunctions, pageHandleFunctions, routeRenderFunctions, routeHandleFunctions := getSortedFunctions(dirFiles, startDir, packageDir)
 
 	fmt.Println("-----------------------RENDERING SORTED FUNCTIONS----------------------")
 	code, err := renderSortedFunctions(imports, indexGroup, pageRenderFunctions, pageHandleFunctions, routeRenderFunctions, routeHandleFunctions)
@@ -137,7 +136,7 @@ type sortedFunctions struct {
 	imports              utils.StringSet
 }
 
-func getSortedFunctions(dirFiles map[string]map[string][]goxDir, packageDir string) (utils.StringSet, []string, []string, []string, []string, []string) {
+func getSortedFunctions(dirFiles map[string]map[string][]goxDir, startDir string, packageDir string) (utils.StringSet, []string, []string, []string, []string, []string) {
 
 	var indexGroup map[string]string = make(map[string]string)
 	var routeRenderFunctions []string
@@ -168,7 +167,7 @@ func getSortedFunctions(dirFiles map[string]map[string][]goxDir, packageDir stri
 		}
 
 		ndir := removeDirWithUnderscorePostfix(dir)
-		leafPath := ndir[3:]
+		leafPath := strings.Replace(ndir, startDir, "", 1)
 		if leafPath == "" {
 			leafPath = "/"
 		}
@@ -477,7 +476,7 @@ var RouteHandleList = []Handler{
 	` + strings.Join(routeHandleFunctions, "\n\t") + `
 }
 `
-	err := ioutil.WriteFile("../gox/generated.go", []byte(code), 0644)
+	err := os.WriteFile("./gox/generated.go", []byte(code), 0644)
 	if err != nil {
 		return "", err
 	}
@@ -615,7 +614,7 @@ func formatCustomFunction(pkName string, fnName string) string {
 }
 
 func getAstVals(path string) (*ast.File, error) {
-	_, err := ioutil.ReadFile(path)
+	_, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}

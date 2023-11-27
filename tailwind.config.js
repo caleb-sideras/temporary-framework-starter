@@ -8,7 +8,7 @@ module.exports = {
     "./**.{html,js,templ}",
     "./src/styles/**/*.{html,js,templ}",
     "./src/templates/**/*.{html,js,templ}",
-    "./src/app/**/*.{html,templ}",
+    "./src/app/**/*.{html,js,templ}",
   ],
   theme: {
     extend: {

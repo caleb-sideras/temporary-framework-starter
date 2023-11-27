@@ -1,4 +1,4 @@
-import { html, css, CSSResult, PropertyValues } from 'lit';
+import { html, css, PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { MdListItem } from '@material/web/list/list-item.js';
 import { classMap } from 'lit/directives/class-map.js';
@@ -21,8 +21,8 @@ export class TListItem extends MdListItem implements NavigationTabState {
           @apply bg-secondary-container;
         }  
   `,
-    MdListItem.styles
-  ] as CSSResult[];
+    ...MdListItem.styles
+  ];
 
   @property({ type: Boolean, reflect: true }) active = false;
 

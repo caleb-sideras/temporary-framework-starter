@@ -29,23 +29,39 @@ templ  HomeTempl(HomeCards []HomeCard, HomeSections []HomeSection) {
 		for _, card := range HomeCards {
 			<simple-card url={ card.Link } title={ card.Title } description={ card.Description }></simple-card>
 		}
-		<t-navigation-bar>
+		<t-navigation-bar active-index="0" >
+
 			<t-navigation-bar-main slot="main">
 				<t-navigation-tab label="Home"></t-navigation-tab>
 				<t-navigation-tab label="Examples"></t-navigation-tab>
 				<t-navigation-tab label="Docs"></t-navigation-tab>
 			</t-navigation-bar-main>
+
+			<t-navigation-bar-sub slot="sub">
+
+				<t-list active-index="0" class="h-full bg-surface-2 z-10 px-2 border-l border-surface-variant" hx-boost="true">
+				</t-list>
+
+				<t-list active-index="0" class="h-full bg-surface-2 z-10 px-2 border-l border-surface-variant" hx-boost="true">
+					<t-list-item href="/docs" id="intro" interactive type="link">
+						Introduction
+					</t-list-item>
+					<t-list-item href="/docs" id="intro" interactive type="link">
+						Routing
+					</t-list-item>
+				</t-list>
+
+				<t-list active-index="0" class="h-full bg-surface-2 z-10 px-2 border-l border-surface-variant" hx-boost="true">
+					<t-list-item href="/docs" id="intro" interactive type="link">
+						hello
+					</t-list-item>
+					<t-list-item href="/docs" id="intro" interactive type="link">
+						Son
+					</t-list-item>
+				</t-list>
+
+			</t-navigation-bar-sub>
 		</t-navigation-bar>
-
-		<t-list active-index="0" class="h-full bg-surface-2 z-10 px-2 border-l border-surface-variant" hx-boost="true">
-			<t-list-item href="/docs" id="intro" interactive type="link">
-				Introduction
-			</t-list-item>
-			<t-list-item href="/docs" id="intro" interactive type="link">
-				Routing
-			</t-list-item>
-		</t-list>
-
 	</div>
 	<div class="lg:hidden my-20 lg:my-10">
 		<svg class="m-auto" aria-hidden="true" width="155" height="9" fill="none" xmlns="http://www.w3.org/2000/svg">

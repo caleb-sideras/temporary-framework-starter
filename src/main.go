@@ -13,12 +13,13 @@ const (
 	GENERATED_OUT_DIR   = "./internal/generated/"
 	HTML_SERVE_PATH     = "/static/"
 	APP_DIR             = "src/app"
-	PROJECT_PACKAGE_DIR = "github.com/caleb-sideras/gox2/src/"
+	PROJECT_PACKAGE_DIR = "github.com/caleb-sideras/gox2/"
 )
 
 func main() {
 
 	if len(os.Args) > 1 {
+
 		switch os.Args[1] {
 		case "build":
 			g := gox.NewGox(HTML_OUT_DIR)

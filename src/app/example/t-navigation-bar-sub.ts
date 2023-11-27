@@ -1,10 +1,12 @@
 import { LitElement, html, css, PropertyValues } from 'lit';
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
+import { ref, createRef, Ref } from 'lit/directives/ref.js';
 import { MdNavigationTab } from '@material/web/labs/navigationtab/navigation-tab.js';
 import { MdNavigationDrawerModal } from '@material/web/labs/navigationdrawer/navigation-drawer-modal.js';
 
 import { NavigationBarState } from '@material/web/labs/navigationbar/internal/state.js';
 import { NavigationTabInteractionEvent } from '@material/web/labs/navigationbar/internal/constants.js';
+import { TList } from './t-list';
 
 @customElement('t-navigation-bar-sub')
 export class TNavigationBarSub extends LitElement {
@@ -17,97 +19,58 @@ export class TNavigationBarSub extends LitElement {
 
   @property({ type: Number, attribute: 'active-index' }) activeIndex = 0;
 
-  modals: MdNavigationDrawerModal[] = [];
-
   @queryAssignedElements({ flatten: true })
-  private readonly tabsElement!: MdNavigationDrawerModal[];
+  private readonly tabsElement!: TList[];
+
+  tLists: TList[] = [];
+  modalRef: Ref<MdNavigationDrawerModal> = createRef();
 
   protected override updated(changedProperties: PropertyValues<TNavigationBarSub>) {
     if (changedProperties.has('activeIndex')) {
-      // this.layout()
-      // this.onActiveIndexChange(this.activeIndex);
-      // this.dispatchEvent(
-      //   new CustomEvent('navigation-bar-2-activated', {
-      //     detail: {
-      //       tab: this.tabs[this.activeIndex],
-      //       activeIndex: this.activeIndex,
-      //     },
-      //     bubbles: true,
-      //     composed: true,
-      //   }),
-      // );
+      // fix this.layout() invoked everytime
+      this.layout()
+      this.onActiveIndexChange(this.activeIndex);
     }
-
-    // if (changedProperties.has('hideInactiveLabels')) {
-    //   this.onHideInactiveLabelsChange(this.hideInactiveLabels);
-    // }
-
-    // if (changedProperties.has('tabs')) {
-    //   this.onHideInactiveLabelsChange(this.hideInactiveLabels);
-    //   this.onActiveIndexChange(this.activeIndex);
-    // }
   }
 
   // @navigation-tab-rendered=${this.handleNavigationTabConnected}
   render() {
-    return html`<div
-          role="tablist"
-          @navigation-tab-interaction="${this.handleNavigationTabInteraction}" 
-        >
-      <slot></slot>
-      </div>`;
+    return html`
+      <div class="hidden lg:flex h-screen fixed">
+        <md-navigation-drawer-modal ${ref(this.modalRef)} pivot="start" active-index="0">
+        <slot></slot>
+        </md-navigation-drawer-modal>
+      </div>
+      `;
   }
-
-  // connectedCallback() {
-  //   super.connectedCallback()
-  //   addEventListener('navigation-bar-activated', (event: CustomEvent) => {
-  //     console.log('Received navigation-bar-activated event:', event.detail);
-  //   });
-  // }
-
-  // disconnectedCallback() {
-  //   super.disconnectedCallback()
-  //   window.removeEventListener('navigation-bar-activated', (event: CustomEvent) => {
-  //     console.log('Received navigation-bar-activated event:', event.detail);
-  //   });
-  // }
 
   layout() {
     if (!this.tabsElement) return;
-    const navTabs: MdNavigationTab[] = [];
+    const navTabs: TList[] = [];
     for (const node of this.tabsElement) {
       navTabs.push(node);
     }
-    this.tabs = navTabs;
-  }
-
-  private handleNavigationTabInteraction(event: NavigationTabInteractionEvent) {
-    const currIndex = this.tabs.indexOf(event.detail.state as MdNavigationTab)
-    if (this.activeIndex != currIndex) {
-      this.activeIndex = currIndex;
-    }
+    this.tLists = navTabs;
   }
 
   private onActiveIndexChange(value: number) {
-    if (!this.tabs[value]) {
-      throw new Error('NavigationBar Init: activeIndex is out of bounds.');
+    if (!this.tLists[value]) {
+      throw new Error('NavigationBarSub: activeIndex is out of bounds.');
     }
-    for (let i = 0; i < this.tabs.length; i++) {
-      this.tabs[i].active = i === value;
+    console.log(this.modalRef)
+    console.log("this.modalRef.value?.opened", this.modalRef.value?.opened)
+    console.log("this.tLists[value].tabs.length", this.tLists[value].tabs.length)
+
+    // weird syntax to stop the LSP from complaining
+    if (this.modalRef.value?.opened === true && this.tLists[value].tabs.length < 0) {
+      this.modalRef.value.opened = false;
+    } else if (this.modalRef.value?.opened === false && this.tLists[value].tabs.length > 0) {
+      this.modalRef.value.opened = true;
+    }
+
+    for (let i = 0; i < this.tLists.length; i++) {
+      this.tLists[i].hideInactiveList = !(i === value);
     }
   }
 
-  private onHideInactiveLabelsChange(value: boolean) {
-    for (const tab of this.tabs) {
-      tab.hideInactiveLabel = value;
-    }
-  }
-
-  // // checks if newly rendered tab is in list, if not calls layout()
-  // private handleNavigationTabConnected(event: CustomEvent) {
-  //   const target = event.target as MdNavigationTab;
-  //   if (this.tabs.indexOf(target) === -1) {
-  //     this.layout();
-  //   }
-  // }
 }

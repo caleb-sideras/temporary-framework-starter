@@ -6,6 +6,9 @@ import { TNavigationBarMain } from './t-navigation-bar-main';
 import { MdNavigationDrawerModal } from '@material/web/labs/navigationdrawer/navigation-drawer-modal.js';
 import { NavigationBarState } from '@material/web/labs/navigationbar/internal/state.js';
 import { NavigationTabInteractionEvent } from '@material/web/labs/navigationbar/internal/constants.js';
+import { TNavigationBarSub } from './t-navigation-bar-sub';
+
+import "../../../static/css/output.css";
 
 @customElement('t-navigation-bar')
 export class TNavigationBar extends LitElement {
@@ -18,85 +21,60 @@ export class TNavigationBar extends LitElement {
 
   @property({ type: Number, attribute: 'active-index' }) activeIndex = 0;
 
-  tabs: MdNavigationTab[] = [];
-
   @queryAssignedElements({ flatten: true, slot: 'main' })
-  private readonly navBar1!: VerticalNavigationBar[];
+  private readonly tNavigationBarMain!: TNavigationBarMain[];
 
   @queryAssignedElements({ flatten: true, slot: 'sub' })
-  private readonly drawerElement!: MdNavigationDrawerModal[];
+  private readonly tNavigationBarSub!: TNavigationBarSub[];
+
+  main: TNavigationBarMain
+  sub: TNavigationBarSub
 
   protected override updated(changedProperties: PropertyValues<TNavigationBar>) {
-    if (this.navBar1.length > 0) {
-      this.navBar1[0].activeIndex = this.activeIndex
+    if (changedProperties.has('activeIndex')) {
+      this.layout()
+      this.onActiveIndexChange(this.activeIndex);
     }
-
-    // if  (changedProperties.has('activeIndex')) {
-    // this.layout()
-    // this.onActiveIndexChange(this.activeIndex);
-    // }
-
-    // if (changedProperties.has('tabs')) {
-    // this.onActiveIndexChange(this.activeIndex);
-    // }
   }
 
-  // @navigation-tab-rendered=${this.handleNavigationTabConnected}
   render() {
-    return html`<div>
-      <slot @navigation-bar-main="${this.handleNavigationTabInteraction}" name="main"></slot>
-      <slot name="sub"></slot>
+    return html`
+      <div class="g:sticky lg:top-0 lg:left-0">
+        <div class="hidden lg:flex w-24 h-screen bg-surface-2">
+          <slot @navigation-bar-main="${this.handleNavigationBarMainInteraction}" name="main"></slot>
+          <slot name="sub"></slot>
+        </div>
       </div>`;
   }
 
-  // connectedCallback() {
-  //   super.connectedCallback()
-  //   addEventListener('navigation-bar-activated', (event: CustomEvent) => {
-  //     console.log('Received navigation-bar-activated event:', event.detail);
-  //   });
-  // }
-
-  // disconnectedCallback() {
-  //   super.disconnectedCallback()
-  //   window.removeEventListener('navigation-bar-activated', (event: CustomEvent) => {
-  //     console.log('Received navigation-bar-activated event:', event.detail);
-  //   });
-  // }
-
   layout() {
-    // if (!this.tabsElement) return;
-    // const navTabs: MdNavigationTab[] = [];
-    // for (const node of this.tabsElement) {
-    //   navTabs.push(node);
-    // }
-    // this.tabs = navTabs;
+    if (!this.tNavigationBarMain || this.main) return;
+    if (!this.tNavigationBarSub || this.sub) return;
+
+    if (this.tNavigationBarMain.length > 0) {
+      this.main = this.tNavigationBarMain[0]
+    }
+
+    if (this.tNavigationBarSub.length > 0) {
+      this.sub = this.tNavigationBarSub[0]
+    }
   }
 
-  private handleNavigationTabInteraction(event: CustomEvent) {
+  private handleNavigationBarMainInteraction(event: CustomEvent) {
     this.activeIndex = event.detail.activeIndex;
-    console.log("navigation-bar-main", this.activeIndex)
+    this.tNavigationBarSub[0].activeIndex = this.activeIndex
   }
 
   private onActiveIndexChange(value: number) {
-    if (!this.tabs[value]) {
-      throw new Error('NavigationBar Init: activeIndex is out of bounds.');
-    }
-    for (let i = 0; i < this.tabs.length; i++) {
-      this.tabs[i].active = i === value;
-    }
-  }
 
-  private onHideInactiveLabelsChange(value: boolean) {
-    for (const tab of this.tabs) {
-      tab.hideInactiveLabel = value;
-    }
-  }
+    if (!this.main) throw new Error('NavigationBarMain: Empty');
+    if (!this.sub) throw new Error('NavigationBarSub: Empty');
 
-  // // checks if newly rendered tab is in list, if not calls layout()
-  // private handleNavigationTabConnected(event: CustomEvent) {
-  //   const target = event.target as MdNavigationTab;
-  //   if (this.tabs.indexOf(target) === -1) {
-  //     this.layout();
-  //   }
-  // }
+    if (this.activeIndex == value){
+      return
+    }
+    this.activeIndex = value
+    this.sub.activeIndex = this.activeIndex
+
+  }
 }
