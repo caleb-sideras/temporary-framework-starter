@@ -1,30 +1,65 @@
 package components
 
 templ Test() {
-	<t-navigation-bar active-index="0">
-		<t-navigation-bar-main slot="main">
-			<t-navigation-tab label="Home"></t-navigation-tab>
-			<t-navigation-tab label="Examples"></t-navigation-tab>
-			<t-navigation-tab label="Docs"></t-navigation-tab>
-		</t-navigation-bar-main>
-		<t-navigation-bar-sub slot="sub">
-			<t-list active-index="0" class="h-full bg-surface-2 z-10 px-2 border-l border-surface-variant" hx-boost="true"></t-list>
-			<t-list active-index="0" class="h-full bg-surface-2 z-10 px-2 border-l border-surface-variant" hx-boost="true">
-				<t-list-item href="/docs" id="intro" interactive type="link">
-					Introduction
-				</t-list-item>
-				<t-list-item href="/docs" id="intro" interactive type="link">
-					Routing
-				</t-list-item>
-			</t-list>
-			<t-list active-index="0" class="h-full bg-surface-2 z-10 px-2 border-l border-surface-variant" hx-boost="true">
-				<t-list-item href="/docs" id="intro" interactive type="link">
-					hello
-				</t-list-item>
-				<t-list-item href="/docs" id="intro" interactive type="link">
-					Son
-				</t-list-item>
-			</t-list>
-		</t-navigation-bar-sub>
-	</t-navigation-bar>
+	<div class="hidden lg:flex w-24 h-screen bg-surface-2">
+		<t-navigation-bar active-index="0" class="flex flex-col items-start lg:flex-row bg-background">
+			<t-navigation-bar-main slot="main">
+				<t-navigation-tab label="Home">
+					<span
+ 						slot="active-icon"
+ 						class="material-symbols-outlined pointer-events-none"
+ 						style="font-variation-settings: &#39;FILL&#39; 1, &#39;wght&#39; 400, &#39;GRAD&#39; 0, &#39;opsz&#39; 48;"
+					>home</span>
+					<span
+ 						slot="inactive-icon"
+ 						class="material-symbols-outlined pointer-events-none"
+ 						style="font-variation-settings: &#39;FILL&#39; 0 , &#39;wght&#39; 400, &#39;GRAD&#39; 0, &#39;opsz&#39; 48;"
+					>home</span>
+				</t-navigation-tab>
+				<t-navigation-tab label="Examples">
+					<span
+ 						slot="active-icon"
+ 						class="material-symbols-outlined pointer-events-none"
+ 						style="font-variation-settings: &#39;FILL&#39; 1, &#39;wght&#39; 400, &#39;GRAD&#39; 0, &#39;opsz&#39; 48;"
+					>code</span>
+					<span
+ 						slot="inactive-icon"
+ 						class="material-symbols-outlined pointer-events-none"
+ 						style="font-variation-settings: &#39;FILL&#39; 0, &#39;wght&#39; 400, &#39;GRAD&#39; 0, &#39;opsz&#39; 48;"
+					>code</span>
+				</t-navigation-tab>
+				<t-navigation-tab label="Docs">
+					<span
+ 						slot="active-icon"
+ 						class="material-symbols-outlined pointer-events-none"
+ 						style="font-variation-settings: &#39;FILL&#39; 1, &#39;wght&#39; 400, &#39;GRAD&#39; 0, &#39;opsz&#39; 48;"
+					>book</span>
+					<span
+ 						slot="inactive-icon"
+ 						class="material-symbols-outlined pointer-events-none"
+ 						style="font-variation-settings: &#39;FILL&#39; 0, &#39;wght&#39; 400, &#39;GRAD&#39; 0, &#39;opsz&#39; 48;"
+					>book</span>
+				</t-navigation-tab>
+			</t-navigation-bar-main>
+			<t-navigation-bar-sub slot="sub">
+				<t-list active-index="0" hx-boost="true"></t-list>
+				<t-list active-index="0" hx-boost="true">
+					<t-list-item href="/a" id="a" interactive type="link">
+						Introduction
+					</t-list-item>
+					<t-list-item href="/b" id="b" interactive type="link">
+						Routing
+					</t-list-item>
+				</t-list>
+				<t-list active-index="0" hx-boost="true">
+					<t-list-item href="/c" id="c" interactive type="link">
+						hello
+					</t-list-item>
+					<t-list-item href="/d" id="d" interactive type="link">
+						Son
+					</t-list-item>
+				</t-list>
+			</t-navigation-bar-sub>
+		</t-navigation-bar>
+	</div>
 }

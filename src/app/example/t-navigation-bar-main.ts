@@ -9,13 +9,27 @@ export type ListItemType = 'text' | 'button' | 'link';
 
 @customElement('t-navigation-bar-main')
 export class TNavigationBarMain extends LitElement implements NavigationBarState {
-
   static styles = css`
     :host {
-      display: block;
-    }
-  `;
+      display: none;
+      width: 6rem; 
+      height: 100vh;
+      background-color: var(--md-sys-color-surface-2); 
+      justify-content: center;
+      padding-top: 1rem;
 
+    }
+
+    @media ( min-width: 1024px) {     
+     :host {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        left: 0;
+        display: flex;
+      }
+    }
+  `
   @property({ type: Number, attribute: 'active-index' }) activeIndex = 0;
 
   @property({ type: Boolean, attribute: 'hide-inactive-labels' })
@@ -26,10 +40,13 @@ export class TNavigationBarMain extends LitElement implements NavigationBarState
   @queryAssignedElements({ flatten: true })
   private readonly tabsElement!: TNavigationTab[];
 
+  override firstUpdated(changedProperties: PropertyValues) {
+    super.firstUpdated(changedProperties);
+    this.layout();
+  }
+
   protected override updated(changedProperties: PropertyValues<TNavigationBarMain>) {
     if (changedProperties.has('activeIndex')) {
-      // fix this.layout() invoked everytime
-      this.layout()
       this.onActiveIndexChange(this.activeIndex);
       this.dispatchEvent(
         new CustomEvent('navigation-bar-main', {
@@ -65,20 +82,6 @@ export class TNavigationBarMain extends LitElement implements NavigationBarState
       `;
   }
 
-  // connectedCallback() {
-  //   super.connectedCallback()
-  //   addEventListener('navigation-bar-main', (event: CustomEvent) => {
-  //     console.log('Received navigation-bar-activated event:', event.detail);
-  //   });
-  // }
-
-  // disconnectedCallback() {
-  //   super.disconnectedCallback()
-  //   window.removeEventListener('navigation-bar-main', (event: CustomEvent) => {
-  //     console.log('Received navigation-bar-activated event:', event.detail);
-  //   });
-  // }
-
   layout() {
     if (!this.tabsElement) return;
     const navTabs: TNavigationTab[] = [];
@@ -90,7 +93,6 @@ export class TNavigationBarMain extends LitElement implements NavigationBarState
 
   private handleNavigationTabInteraction(event: NavigationTabInteractionEvent) {
     const currIndex = this.tabs.indexOf(event.detail.state as TNavigationTab)
-    console.log("navigation-tab-interaction", currIndex)
     if (this.activeIndex != currIndex) {
       this.activeIndex = currIndex;
     }
@@ -110,12 +112,4 @@ export class TNavigationBarMain extends LitElement implements NavigationBarState
       tab.hideInactiveLabel = value;
     }
   }
-
-  // // checks if newly rendered tab is in list, if not calls layout()
-  // private handleNavigationTabConnected(event: CustomEvent) {
-  //   const target = event.target as MdNavigationTab;
-  //   if (this.tabs.indexOf(target) === -1) {
-  //     this.layout();
-  //   }
-  // }
 }

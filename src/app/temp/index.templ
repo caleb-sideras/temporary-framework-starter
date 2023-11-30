@@ -7,14 +7,17 @@ templ IndexTempl() {
 			<meta charset="UTF-8"/>
 			<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
+			<!-- My styling & scripts -->
 			<script type="module" src="/static/js/index.js"></script>
-
+			<link href="/static/css/output.css" rel="stylesheet"/>
+			<!-- GOOGLE stylesheets -->
 			<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
 			<link
  				rel="stylesheet"
  				href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
 			/>
+			<!-- HTMX -->
+			<script src="https://unpkg.com/htmx.org@1.9.6" integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous"></script>
 		</head>
 		<body>
 			{ children... }

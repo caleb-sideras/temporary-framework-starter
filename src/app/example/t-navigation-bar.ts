@@ -13,12 +13,6 @@ import "../../../static/css/output.css";
 @customElement('t-navigation-bar')
 export class TNavigationBar extends LitElement {
 
-  static styles = css`
-    :host {
-      display: block;
-    }
-  `;
-
   @property({ type: Number, attribute: 'active-index' }) activeIndex = 0;
 
   @queryAssignedElements({ flatten: true, slot: 'main' })
@@ -30,21 +24,22 @@ export class TNavigationBar extends LitElement {
   main: TNavigationBarMain
   sub: TNavigationBarSub
 
+  override firstUpdated(changedProperties: PropertyValues) {
+    super.firstUpdated(changedProperties);
+    this.layout();
+  }
+
   protected override updated(changedProperties: PropertyValues<TNavigationBar>) {
     if (changedProperties.has('activeIndex')) {
-      this.layout()
       this.onActiveIndexChange(this.activeIndex);
     }
   }
 
   render() {
     return html`
-      <div class="g:sticky lg:top-0 lg:left-0">
-        <div class="hidden lg:flex w-24 h-screen bg-surface-2">
-          <slot @navigation-bar-main="${this.handleNavigationBarMainInteraction}" name="main"></slot>
-          <slot name="sub"></slot>
-        </div>
-      </div>`;
+      <slot @navigation-bar-main="${this.handleNavigationBarMainInteraction}" name="main"></slot>
+      <slot name="sub"></slot>
+    `;
   }
 
   layout() {
@@ -61,6 +56,7 @@ export class TNavigationBar extends LitElement {
   }
 
   private handleNavigationBarMainInteraction(event: CustomEvent) {
+    // this line needed?
     this.activeIndex = event.detail.activeIndex;
     this.tNavigationBarSub[0].activeIndex = this.activeIndex
   }
@@ -70,11 +66,10 @@ export class TNavigationBar extends LitElement {
     if (!this.main) throw new Error('NavigationBarMain: Empty');
     if (!this.sub) throw new Error('NavigationBarSub: Empty');
 
-    if (this.activeIndex == value){
+    if (this.activeIndex == value) {
       return
     }
     this.activeIndex = value
     this.sub.activeIndex = this.activeIndex
-
   }
 }

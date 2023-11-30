@@ -12,8 +12,19 @@ import { TList } from './t-list';
 export class TNavigationBarSub extends LitElement {
 
   static styles = css`
-    :host {
-      display: block;
+    :host{
+      display: none;  
+    }
+    @media (min-width: 1024px) {
+      :host{
+        display: flex;
+        height: 100vh;
+      }
+    }
+  
+    .modal-wrap{
+      position: fixed !important;
+      height: 100vh;
     }
   `;
 
@@ -25,19 +36,21 @@ export class TNavigationBarSub extends LitElement {
   tLists: TList[] = [];
   modalRef: Ref<MdNavigationDrawerModal> = createRef();
 
+  override firstUpdated(changedProperties: PropertyValues) {
+    super.firstUpdated(changedProperties);
+    this.layout();
+  }
+
   protected override updated(changedProperties: PropertyValues<TNavigationBarSub>) {
     if (changedProperties.has('activeIndex')) {
-      // fix this.layout() invoked everytime
-      this.layout()
       this.onActiveIndexChange(this.activeIndex);
     }
   }
 
-  // @navigation-tab-rendered=${this.handleNavigationTabConnected}
   render() {
     return html`
-      <div class="hidden lg:flex h-screen fixed">
-        <md-navigation-drawer-modal ${ref(this.modalRef)} pivot="start" active-index="0">
+      <div class="modal-wrap">
+        <md-navigation-drawer-modal ${ref(this.modalRef)} pivot="start" active-index="0" role="presentation">
         <slot></slot>
         </md-navigation-drawer-modal>
       </div>
@@ -57,20 +70,23 @@ export class TNavigationBarSub extends LitElement {
     if (!this.tLists[value]) {
       throw new Error('NavigationBarSub: activeIndex is out of bounds.');
     }
-    console.log(this.modalRef)
-    console.log("this.modalRef.value?.opened", this.modalRef.value?.opened)
-    console.log("this.tLists[value].tabs.length", this.tLists[value].tabs.length)
 
-    // weird syntax to stop the LSP from complaining
-    if (this.modalRef.value?.opened === true && this.tLists[value].tabs.length < 0) {
+    // Init the list for opening -> activeIndex to 0
+    this.updateLists(value)
+
+    // If open && next tab !have children -> close
+    if (this.modalRef.value?.opened === true && this.tLists[value].tabs.length <= 0) {
       this.modalRef.value.opened = false;
-    } else if (this.modalRef.value?.opened === false && this.tLists[value].tabs.length > 0) {
-      this.modalRef.value.opened = true;
     }
-
-    for (let i = 0; i < this.tLists.length; i++) {
-      this.tLists[i].hideInactiveList = !(i === value);
+    // If closed && next tab has children -> open
+    else if (this.modalRef.value?.opened === false && this.tLists[value].tabs.length > 0) {
+      this.modalRef.value.opened = true;
     }
   }
 
+  private updateLists(value: number) {
+    for (let i = 0; i < this.tLists.length; i++) {
+      this.tLists[i].initList = i === value;
+    }
+  }
 }

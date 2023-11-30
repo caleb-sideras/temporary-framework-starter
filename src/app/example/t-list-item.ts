@@ -12,22 +12,32 @@ export class TListItem extends MdListItem implements NavigationTabState {
 
   static styles = [
     css`
-      .inactive, 
-        .active {
-          @apply rounded-full;
-        }
-
-        .active {
-          @apply bg-secondary-container;
-        }  
+    .inactive, .active {
+        border-radius: 9999px;        
+        width: 100%;
+      }
+    .active {
+      background: var(--md-sys-color-secondary-container) 
+    }  
   `,
     ...MdListItem.styles
   ];
 
   @property({ type: Boolean, reflect: true }) active = false;
 
+  // TODO: Not sure why Material 3 team checks for child render
+  // override firstUpdated(changedProperties: PropertyValues) {
+  //   super.firstUpdated(changedProperties);
+  //   const event = new Event('list-item-rendered', {
+  //     bubbles: true,
+  //     composed: true,
+  //   });
+  //   this.dispatchEvent(event);
+  // }
+
   protected override updated(changedProperties: PropertyValues<TListItem>) {
     this.onclick = (event) => {
+      // if the t-list was not initialized (init-list), then the current active element cannot be clicked
       // if (this.active) {
       event.stopImmediatePropagation();
       event.preventDefault();
@@ -41,7 +51,6 @@ export class TListItem extends MdListItem implements NavigationTabState {
         }),
       );
     };
-
   }
 
   protected override render() {

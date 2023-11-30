@@ -4486,14 +4486,13 @@ class TListItem extends MdListItem {
   }
   static styles = [
     i`
-      .inactive, 
-        .active {
-          @apply rounded-full;
-        }
-
-        .active {
-          @apply bg-secondary-container;
-        }  
+    .inactive, .active {
+        border-radius: 9999px;        
+        width: 100%;
+      }
+    .active {
+      background: var(--md-sys-color-secondary-container) 
+    }  
   `,
     ...MdListItem.styles
   ];
@@ -4532,67 +4531,88 @@ class TList extends MdList {
   constructor() {
     super(...arguments);
     this.activeIndex = 0;
-    this.hideInactiveList = true;
+    this.initList = false;
   }
   static styles = [
     i`
+    :host{
+      padding: 0px !important;
+    }
+
+    .list-wrap{
+      padding-left: 8px;
+      padding-right: 8px;
+      padding-top: 16px;
+    }
+
     .visible{
-      display: none;
+      display: block;
     }
 
     .hidden{
-      display: block;
+      display: none;
     }
   `,
     ...MdList.styles
   ];
   tabs = [];
+  INITIAL_INDEX;
+  firstUpdated(changedProperties) {
+    super.firstUpdated(changedProperties);
+    this.layout();
+    this.INITIAL_INDEX = this.activeIndex;
+  }
   updated(changedProperties) {
     if (changedProperties.has("activeIndex")) {
-      this.layout();
       this.onActiveIndexChange(this.activeIndex);
+    }
+    if (changedProperties.has("initList")) {
+      if (this.initList)
+        this.handleInitList();
     }
   }
   render() {
     return x`
       <div 
       @list-item-interaction=${this.handleListItemInteraction}
-      class="md3-navigation-tab ${e8(this.getRenderClasses())}"
+      class="list-wrap ${e8(this.getRenderClasses())}"
       >
         ${super.render()}
       </div>
-      `;
+    `;
   }
   getRenderClasses() {
     return {
-      hidden: this.hideInactiveList,
-      visible: !this.hideInactiveList
+      hidden: !this.initList,
+      visible: this.initList
     };
   }
   layout() {
     if (!this.slotItems)
       return;
-    console.log(this.slotItems);
     const navTabs = [];
     for (const node of this.slotItems) {
       navTabs.push(node);
     }
     this.tabs = navTabs;
   }
+  handleInitList() {
+    if (!this.tabs[this.INITIAL_INDEX])
+      return;
+    this.tabs[this.INITIAL_INDEX].click();
+  }
   handleListItemInteraction(event) {
     const currIndex = this.tabs.indexOf(event.detail.state);
-    console.log("list-item-interaction", currIndex);
     if (this.activeIndex != currIndex) {
       this.activeIndex = currIndex;
     }
   }
   onActiveIndexChange(value) {
     if (!this.tabs[value]) {
-      throw new Error("T-List: activeIndex is out of bounds.");
+      return;
     }
     for (let i6 = 0;i6 < this.tabs.length; i6++) {
       if (this.tabs[i6] instanceof TListItem) {
-        console.log(this.tabs[i6], i6, value);
         this.tabs[i6].active = i6 === value;
       }
     }
@@ -4602,8 +4622,8 @@ __legacyDecorateClassTS([
   n3({ type: Number, attribute: "active-index" })
 ], TList.prototype, "activeIndex", undefined);
 __legacyDecorateClassTS([
-  n3({ type: Boolean, attribute: "hide-inactive-list" })
-], TList.prototype, "hideInactiveList", undefined);
+  n3({ type: Boolean, attribute: "init-list" })
+], TList.prototype, "initList", undefined);
 TList = __legacyDecorateClassTS([
   t("t-list")
 ], TList);
@@ -4717,22 +4737,36 @@ class TNavigationBarSub extends s3 {
     this.activeIndex = 0;
   }
   static styles = i`
-    :host {
-      display: block;
+    :host{
+      display: none;  
+    }
+    @media (min-width: 1024px) {
+      :host{
+        display: flex;
+        height: 100vh;
+      }
+    }
+  
+    .modal-wrap{
+      position: fixed !important;
+      height: 100vh;
     }
   `;
   tLists = [];
   modalRef = e10();
+  firstUpdated(changedProperties) {
+    super.firstUpdated(changedProperties);
+    this.layout();
+  }
   updated(changedProperties) {
     if (changedProperties.has("activeIndex")) {
-      this.layout();
       this.onActiveIndexChange(this.activeIndex);
     }
   }
   render() {
     return x`
-      <div class="hidden lg:flex h-screen fixed">
-        <md-navigation-drawer-modal ${n9(this.modalRef)} pivot="start" active-index="0">
+      <div class="modal-wrap">
+        <md-navigation-drawer-modal ${n9(this.modalRef)} pivot="start" active-index="0" role="presentation">
         <slot></slot>
         </md-navigation-drawer-modal>
       </div>
@@ -4751,16 +4785,16 @@ class TNavigationBarSub extends s3 {
     if (!this.tLists[value]) {
       throw new Error("NavigationBarSub: activeIndex is out of bounds.");
     }
-    console.log(this.modalRef);
-    console.log("this.modalRef.value?.opened", this.modalRef.value?.opened);
-    console.log("this.tLists[value].tabs.length", this.tLists[value].tabs.length);
-    if (this.modalRef.value?.opened === true && this.tLists[value].tabs.length < 0) {
+    this.updateLists(value);
+    if (this.modalRef.value?.opened === true && this.tLists[value].tabs.length <= 0) {
       this.modalRef.value.opened = false;
     } else if (this.modalRef.value?.opened === false && this.tLists[value].tabs.length > 0) {
       this.modalRef.value.opened = true;
     }
+  }
+  updateLists(value) {
     for (let i6 = 0;i6 < this.tLists.length; i6++) {
-      this.tLists[i6].hideInactiveList = !(i6 === value);
+      this.tLists[i6].initList = i6 === value;
     }
   }
 }
@@ -4783,13 +4817,32 @@ class TNavigationBarMain extends s3 {
   }
   static styles = i`
     :host {
-      display: block;
+      display: none;
+      width: 6rem; 
+      height: 100vh;
+      background-color: var(--md-sys-color-surface-2); 
+      justify-content: center;
+      padding-top: 1rem;
+
+    }
+
+    @media ( min-width: 1024px) {     
+     :host {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        left: 0;
+        display: flex;
+      }
     }
   `;
   tabs = [];
+  firstUpdated(changedProperties) {
+    super.firstUpdated(changedProperties);
+    this.layout();
+  }
   updated(changedProperties) {
     if (changedProperties.has("activeIndex")) {
-      this.layout();
       this.onActiveIndexChange(this.activeIndex);
       this.dispatchEvent(new CustomEvent("navigation-bar-main", {
         detail: {
@@ -4829,7 +4882,6 @@ class TNavigationBarMain extends s3 {
   }
   handleNavigationTabInteraction(event) {
     const currIndex = this.tabs.indexOf(event.detail.state);
-    console.log("navigation-tab-interaction", currIndex);
     if (this.activeIndex != currIndex) {
       this.activeIndex = currIndex;
     }
@@ -4866,27 +4918,22 @@ class TNavigationBar extends s3 {
     super(...arguments);
     this.activeIndex = 0;
   }
-  static styles = i`
-    :host {
-      display: block;
-    }
-  `;
   main;
   sub;
+  firstUpdated(changedProperties) {
+    super.firstUpdated(changedProperties);
+    this.layout();
+  }
   updated(changedProperties) {
     if (changedProperties.has("activeIndex")) {
-      this.layout();
       this.onActiveIndexChange(this.activeIndex);
     }
   }
   render() {
     return x`
-      <div class="g:sticky lg:top-0 lg:left-0">
-        <div class="hidden lg:flex w-24 h-screen bg-surface-2">
-          <slot @navigation-bar-main="${this.handleNavigationBarMainInteraction}" name="main"></slot>
-          <slot name="sub"></slot>
-        </div>
-      </div>`;
+      <slot @navigation-bar-main="${this.handleNavigationBarMainInteraction}" name="main"></slot>
+      <slot name="sub"></slot>
+    `;
   }
   layout() {
     if (!this.tNavigationBarMain || this.main)
@@ -4937,6 +4984,11 @@ class TNavigationTab extends MdNavigationTab {
     this.href = "";
     this.target = "";
   }
+  static style = i`
+    a {
+      text-decoration: none; !important
+    }
+  `;
   render() {
     return this.renderNavigationTab();
   }

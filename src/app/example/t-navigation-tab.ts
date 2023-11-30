@@ -1,4 +1,4 @@
-import { nothing } from 'lit';
+import { nothing, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { MdNavigationTab } from '@material/web/labs/navigationtab/navigation-tab.js';
 import { literal, html as staticHtml, StaticValue } from 'lit/static-html.js';
@@ -8,11 +8,25 @@ export type ListItemType = 'text' | 'button' | 'link';
 @customElement('t-navigation-tab')
 export class TNavigationTab extends MdNavigationTab {
 
+  static style = css`
+    a {
+      text-decoration: none; !important
+    }
+  `
   @property({ reflect: true }) type: ListItemType = 'link';
 
   @property() href = '';
 
   @property() target: '_blank' | '_parent' | '_self' | '_top' | '' = '';
+
+  // protected override updated(_: PropertyValues<ListItemType>) {
+  //   this.onclick = (event) => {
+  //     if (this.href = '') {
+  //       // event.stopImmediatePropagation();
+  //       event.preventDefault();
+  //     }
+  //   }
+  // }
 
   protected override render() {
     return this.renderNavigationTab()
