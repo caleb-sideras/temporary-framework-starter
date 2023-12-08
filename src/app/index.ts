@@ -21,23 +21,3 @@ import '@material/web/ripple/ripple.js';
 import '@material/web/tabs/primary-tab.js';
 import '@material/web/tabs/tabs.js';
 import 'lit'
-
-// custom
-import './src/app/example/t-list'
-import './src/app/example/t-navigation'
-import './src/app/example/t-navigation-rail'
-import './src/app/example/t-list-item'
-
-import './src/components/t-list'
-import './src/app/example/t-navigation-rail-item'
-import './src/components/t-navigation-rail-list'
-import './src/app/example/t-base-list-item'
-
-import './src/app/example/t-navigation-drawer'
-import './src/app/example/t-navigation-list'
-import './src/app/example/t-navigation-tab'
-
-import './src/app/example/t-dropdown'
-import './src/app/example/t-dropdown-title'
-import './src/app/example/t-dropdown-list'
-import './src/app/example/t-dropdown-item'

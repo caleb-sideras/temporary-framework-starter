@@ -1,30 +1,32 @@
+
 import { PropertyValues, html, css } from 'lit';
 import { MdList } from '@material/web/list/list';
-import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
-import { TListItem } from './t-list-item';
+import { customElement, property, queryAssignedElements  } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { TDropdownItem } from './t-dropdown-item';
 
-@customElement('t-list')
-export class TList extends MdList {
+@customElement('t-dropdown-list')
+export class TDropdownList extends MdList {
 
   static styles = [
     css`
     :host{
-        background: var(--md-list-container-color); important!
-        padding: 0px !important;
+      padding: 0px !important;
     }
 
     .list-wrap{
       padding-left: 8px;
       padding-right: 8px;
-      padding-top: 8px;
+      padding-top: 16px;
     }
 
     .visible{
+      height: auto;
       display: block;
     }
 
     .hidden{
+      height: 0px;
       display: none;
     }
   `,
@@ -33,22 +35,19 @@ export class TList extends MdList {
 
   @property({ type: Number, attribute: 'active-index' }) activeIndex = -1;
 
-  @property({ type: String, attribute: 'event' }) event = "list";
+  @property({ type: Boolean, reflect: true }) collapsed = false;
 
-  @property({ type: Boolean, reflect: true }) active = false;
+  @queryAssignedElements({ flatten: true })
+  protected override readonly slotItems!: TDropdownItem[];
 
-  // @queryAssignedElements({ flatten: true })
-  // protected override readonly slotItems!: TListItem[];
-  public slotItems: any;
-
-  public tabs: TListItem[] | (HTMLElement & { item?: TListItem })[] = [];
+  tabs: TDropdownItem[] = [];
 
   override firstUpdated(changedProperties: PropertyValues) {
     super.firstUpdated(changedProperties);
     this.layout();
   }
 
-  protected override updated(changedProperties: PropertyValues<TList>) {
+  protected override updated(changedProperties: PropertyValues<TDropdownList>) {
     if (changedProperties.has('activeIndex')) {
       this.onActiveIndexChange(this.activeIndex);
     }
@@ -58,7 +57,7 @@ export class TList extends MdList {
 
     return html`
       <div 
-      @${this.event}-item-interaction=${this.handleListItemInteraction}
+      @dropdown-item-interaction=${this.handleListItemInteraction}
       class="list-wrap ${classMap(this.getRenderClasses())}"
       >
         ${super.render()}
@@ -68,14 +67,14 @@ export class TList extends MdList {
 
   private getRenderClasses() {
     return {
-      'hidden': !this.active,
-      'visible': this.active,
+      'hidden': this.collapsed,
+      'visible': !this.collapsed,
     };
   }
 
   layout() {
     if (!this.slotItems) return;
-    const navTabs: any = [];
+    const navTabs: TDropdownItem[] = [];
     for (const node of this.slotItems) {
       navTabs.push(node);
     }
@@ -83,24 +82,23 @@ export class TList extends MdList {
   }
 
   private handleListItemInteraction(event: CustomEvent) {
-    const currIndex = this.tabs.indexOf(event.detail.state);
-    if (this.activeIndex == currIndex) return
-
-    this.activeIndex = currIndex;
-
-    this.dispatchEvent(
-      new CustomEvent(`t-${this.event}-interaction`, {
-        detail: { state: this },
-        bubbles: true,
-        composed: true,
-      })
-    );
+    const currIndex = this.tabs.indexOf(event.detail.state as TDropdownItem);
+    if (this.activeIndex != currIndex) {
+      this.activeIndex = currIndex;
+      this.dispatchEvent(
+        new CustomEvent('t-dropdown-list-interaction', {
+          detail: { state: this },
+          bubbles: true,
+          composed: true,
+        })
+      );
+    }
   }
 
   private onActiveIndexChange(value: number) {
     if (value === -1) {
       for (let i = 0; i < this.tabs.length; i++) {
-        if (this.tabs[i]) { this.tabs[i].active = false; }
+        if (this.tabs[i]) this.tabs[i].active = false;
       }
       return
     }
@@ -110,7 +108,7 @@ export class TList extends MdList {
     }
 
     for (let i = 0; i < this.tabs.length; i++) {
-      if (this.tabs[i]) { this.tabs[i].active = i === value; }
+      if (this.tabs[i]) this.tabs[i].active = i === value;
     }
   }
 }

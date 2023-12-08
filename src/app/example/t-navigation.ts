@@ -1,28 +1,23 @@
-import { LitElement, html, css, PropertyValues } from 'lit';
+import { LitElement, html, PropertyValues } from 'lit';
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
-import { MdNavigationTab } from '@material/web/labs/navigationtab/navigation-tab.js';
-import { TNavigationBarMain } from './t-navigation-bar-main';
+import { TNavigationRail } from './t-navigation-bar-main';
+import { TNavigationDrawer } from './t-navigation-bar-sub';
 
-import { MdNavigationDrawerModal } from '@material/web/labs/navigationdrawer/navigation-drawer-modal.js';
-import { NavigationBarState } from '@material/web/labs/navigationbar/internal/state.js';
-import { NavigationTabInteractionEvent } from '@material/web/labs/navigationbar/internal/constants.js';
-import { TNavigationBarSub } from './t-navigation-bar-sub';
 
-import "../../../static/css/output.css";
-
-@customElement('t-navigation-bar')
-export class TNavigationBar extends LitElement {
+@customElement('t-navigation')
+export class TNavigation extends LitElement {
 
   @property({ type: Number, attribute: 'active-index' }) activeIndex = 0;
 
-  @queryAssignedElements({ flatten: true, slot: 'main' })
-  private readonly tNavigationBarMain!: TNavigationBarMain[];
+  @queryAssignedElements({ flatten: true, slot: 'rail' })
+  private readonly tNavigationBarMain!: TNavigationRail[];
 
-  @queryAssignedElements({ flatten: true, slot: 'sub' })
-  private readonly tNavigationBarSub!: TNavigationBarSub[];
+  @queryAssignedElements({ flatten: true, slot: 'drawer' })
+  private readonly tNavigationBarSub!: TNavigationDrawer[];
 
-  main: TNavigationBarMain
-  sub: TNavigationBarSub
+
+  main: TNavigationRail
+  sub: TNavigationDrawer
 
   override firstUpdated(changedProperties: PropertyValues) {
     super.firstUpdated(changedProperties);
@@ -37,8 +32,8 @@ export class TNavigationBar extends LitElement {
 
   render() {
     return html`
-      <slot @navigation-bar-main="${this.handleNavigationBarMainInteraction}" name="main"></slot>
-      <slot name="sub"></slot>
+      <slot @navigation-bar-main="${this.handleNavigationBarMainInteraction}" name="rail"></slot>
+      <slot name="drawer"></slot>
     `;
   }
 

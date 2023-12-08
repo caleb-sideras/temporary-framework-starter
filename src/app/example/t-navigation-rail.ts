@@ -7,15 +7,14 @@ import { NavigationTabInteractionEvent } from '@material/web/labs/navigationbar/
 
 export type ListItemType = 'text' | 'button' | 'link';
 
-@customElement('t-navigation-bar-main')
-export class TNavigationBarMain extends LitElement implements NavigationBarState {
+@customElement('t-navigation-rail')
+export class TNavigationRail extends LitElement implements NavigationBarState {
   static styles = css`
     :host {
       display: none;
       width: 6rem; 
       height: 100vh;
-      background-color: var(--md-sys-color-surface-2); 
-      justify-content: center;
+      background-color: var(--md-sys-color-secondary); 
       padding-top: 1rem;
 
     }
@@ -76,6 +75,7 @@ export class TNavigationBarMain extends LitElement implements NavigationBarState
       <div
         role="tablist"
         @navigation-tab-interaction="${this.handleNavigationTabInteraction}"
+        style="width:100%;"
       >
       <slot></slot>
       </div>

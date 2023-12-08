@@ -9,7 +9,7 @@ import (
 
 func Example_() templ.Component {
 
-	return components.HomeTempl(home.VarHomeCards, home.VarHomeSections)
+	return components.Test2()
 }
 
 func Example2(w http.ResponseWriter, r *http.Request) templ.Component {

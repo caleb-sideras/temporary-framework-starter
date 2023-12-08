@@ -1,0 +1,26 @@
+package components
+
+templ Test2() {
+	<div class="flex flex-row">
+		<div class="hidden lg:flex w-24 h-screen">
+			<t-navigation-rail-list active>
+
+				<t-navigation-rail-list-item interactive type="link">
+					Home
+					<md-icon slot="start" class="material-symbols-filled">crop_square</md-icon>
+				</t-navigation-rail-list-item>
+
+				<t-navigation-rail-list-item interactive type="link">
+					Code
+					<md-icon slot="start" class="material-symbols-filled">code_blocks</md-icon>
+				</t-navigation-rail-list-item>
+
+				<t-navigation-rail-list-item interactive type="link">
+					Docs
+					<md-icon slot="start" class="material-symbols-filled">developer_guide</md-icon>
+				</t-navigation-rail-list-item>
+
+			</t-navigation-rail-list>
+		</div>
+	</div>
+}

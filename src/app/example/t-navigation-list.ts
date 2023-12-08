@@ -3,21 +3,23 @@ import { MdList } from '@material/web/list/list';
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
 import { TListItem } from './t-list-item';
 import { classMap } from 'lit/directives/class-map.js';
+import { TDropdown } from './t-dropdown';
 
-@customElement('t-list')
-export class TList extends MdList {
+@customElement('t-navigation-list')
+export class TNavigationList extends MdList {
 
   static styles = [
     css`
     :host{
-        background: var(--md-list-container-color); important!
-        padding: 0px !important;
+      padding: 0px !important;
+      --md-list-container-color: var(--md-sys-color-secondary);
+      background: var(--md-list-container-color)
     }
 
     .list-wrap{
       padding-left: 8px;
       padding-right: 8px;
-      padding-top: 8px;
+      padding-top: 16px;
     }
 
     .visible{
@@ -31,26 +33,33 @@ export class TList extends MdList {
     ...MdList.styles
   ]
 
-  @property({ type: Number, attribute: 'active-index' }) activeIndex = -1;
+  // active index of t-list-item
+  @property({ type: Number, attribute: 'active-index' }) activeIndex = 0;
 
-  @property({ type: String, attribute: 'event' }) event = "list";
+  // whether to click the initial active-index t-list-element in the list
+  @property({ type: Boolean, attribute: 'init-list' }) initList = false;
 
-  @property({ type: Boolean, reflect: true }) active = false;
+  @queryAssignedElements({ flatten: true })
+  protected override readonly slotItems!: (TListItem | TDropdown)[];
 
-  // @queryAssignedElements({ flatten: true })
-  // protected override readonly slotItems!: TListItem[];
-  public slotItems: any;
+  tabs: (TListItem | TDropdown)[] = [];
 
-  public tabs: TListItem[] | (HTMLElement & { item?: TListItem })[] = [];
+  INITIAL_INDEX: number
 
   override firstUpdated(changedProperties: PropertyValues) {
     super.firstUpdated(changedProperties);
     this.layout();
+    this.INITIAL_INDEX = this.activeIndex
   }
 
-  protected override updated(changedProperties: PropertyValues<TList>) {
+  protected override updated(changedProperties: PropertyValues<TNavigationList>) {
     if (changedProperties.has('activeIndex')) {
       this.onActiveIndexChange(this.activeIndex);
+    }
+
+    // on initList, the list will be visible and the first t-list-item called
+    if (changedProperties.has('initList')) {
+      if (this.initList) this.handleInitList()
     }
   }
 
@@ -58,7 +67,7 @@ export class TList extends MdList {
 
     return html`
       <div 
-      @${this.event}-item-interaction=${this.handleListItemInteraction}
+      @list-item-interaction=${this.handleListItemInteraction}
       class="list-wrap ${classMap(this.getRenderClasses())}"
       >
         ${super.render()}
@@ -68,33 +77,29 @@ export class TList extends MdList {
 
   private getRenderClasses() {
     return {
-      'hidden': !this.active,
-      'visible': this.active,
+      'hidden': !this.initList,
+      'visible': this.initList,
     };
   }
 
   layout() {
+    console.log(this.slotItems)
     if (!this.slotItems) return;
-    const navTabs: any = [];
+    const navTabs: TListItem | (HTMLElement & { item?: TListItem })[] = [];
     for (const node of this.slotItems) {
       navTabs.push(node);
     }
     this.tabs = navTabs;
   }
 
+  private handleInitList() {
+    if (!this.tabs[this.INITIAL_INDEX]) return
+    this.tabs[this.INITIAL_INDEX].click()
+  }
+
   private handleListItemInteraction(event: CustomEvent) {
-    const currIndex = this.tabs.indexOf(event.detail.state);
-    if (this.activeIndex == currIndex) return
-
-    this.activeIndex = currIndex;
-
-    this.dispatchEvent(
-      new CustomEvent(`t-${this.event}-interaction`, {
-        detail: { state: this },
-        bubbles: true,
-        composed: true,
-      })
-    );
+    const currIndex = this.tabs.indexOf(event.detail.state as TListItem);
+    if (this.activeIndex != currIndex) { this.activeIndex = currIndex; }
   }
 
   private onActiveIndexChange(value: number) {

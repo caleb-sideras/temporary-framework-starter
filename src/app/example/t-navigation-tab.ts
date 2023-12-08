@@ -8,11 +8,24 @@ export type ListItemType = 'text' | 'button' | 'link';
 @customElement('t-navigation-tab')
 export class TNavigationTab extends MdNavigationTab {
 
-  static style = css`
+  static style = [
+    css`
+    :host {
+      width: 6rem !important; 
+      width: 6rem;!important 
+    }
+
     a {
       text-decoration: none; !important
     }
-  `
+
+    .anchor {
+       width:100%; 
+    }
+  `,
+  ...MdNavigationTab.styles
+  ]
+
   @property({ reflect: true }) type: ListItemType = 'link';
 
   @property() href = '';
@@ -54,6 +67,7 @@ export class TNavigationTab extends MdNavigationTab {
       <${tag}
           href=${this.href || nothing}
           target=${target}
+          style="width: 100%;"
         >
       ${parentRender}
       </${tag}>

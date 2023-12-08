@@ -7,8 +7,8 @@ interface NavigationTabState {
   active: boolean;
 }
 
-@customElement('t-list-item')
-export class TListItem extends MdListItem implements NavigationTabState {
+@customElement('t-dropdown-item')
+export class TDropdownItem extends MdListItem implements NavigationTabState {
 
   static styles = [
     css`
@@ -19,23 +19,22 @@ export class TListItem extends MdListItem implements NavigationTabState {
     .active {
       background: var(--md-sys-color-primary);
       --md-list-item-label-text-color: var(--md-sys-color-on-primary);
-        } 
+    }  
   `,
     ...MdListItem.styles
   ];
 
   @property({ type: Boolean, reflect: true }) active = false;
 
-  protected override updated(_: PropertyValues<TListItem>) {
+  protected override updated(_: PropertyValues<TDropdownItem>) {
     this.onclick = (event) => {
-      // if the t-list was not initialized (init-list), then the current active element cannot be clicked
       if (this.active) {
         event.stopImmediatePropagation();
         event.preventDefault();
       }
 
       this.dispatchEvent(
-        new CustomEvent('list-item-interaction', {
+        new CustomEvent('dropdown-item-interaction', {
           detail: { state: this },
           bubbles: true,
           composed: true,

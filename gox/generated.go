@@ -9,11 +9,11 @@ import (
 )
 
 var IndexList = map[string]IndexDefaultFunc{
-	"/example" : app.Index,
-	"/" : app.Index,
 	"/components" : app.Index,
 	"/utils" : app.Index,
 	"/temp" : temp.Index,
+	"/example" : app.Index,
+	"/" : app.Index,
 }
 
 var PageRenderList = []RenderDefault{
@@ -31,8 +31,8 @@ var PageHandleList = []Handler{
 }
 
 var RouteHandleList = []Handler{
-	{"/example/example3", example.Example3, DefaultHandler},
 	{"/example/example2", example.Example2, ResReqHandler},
+	{"/example/example3", example.Example3, DefaultHandler},
 	{"/test2", home.Test2, ResReqHandler},
 	{"/test3", home.Test3, DefaultHandler},
 }

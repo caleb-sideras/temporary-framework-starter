@@ -19,6 +19,14 @@
   background-image: url('/static/assets/gox-mascot-hor.png');
 }
 
+md-item:host() {
+  gap: 8px !important;
+}
+
+md-item:host {
+  gap: 8px !important;
+}
+
 @font-face {
   font-family: 'Google';
   src: url("https://fonts.gstatic.com/s/googlesanstext/v21/5aUu9-KzpRiLCAt4Unrc-xIKmCU5qEp2i0VBuxM.woff2");
@@ -29,6 +37,12 @@
   font-family: 'Google-Bold';
   src: url("https://fonts.gstatic.com/s/googlesanstext/v21/5aUp9-KzpRiLCAt4Unrc-xIKmCU5oLlVnmhjtjm4DZw.woff2");
   font-weight: bold;
+}
+
+@font-face {
+  font-family: 'Roboto Mono, monospace';
+  src: url("https://fonts.gstatic.com/s/robotomono/v23/L0xTDF4xlVMF-BfR8bXMIhJHg45mwgGEFl0_3vrtSM1J-gEPT5Ese6hmHSh0me8iUI0.woff2");
+  font-weight: normal;
 }
 
 .dark {
@@ -50,24 +64,55 @@
   --md-sys-color-surface-5: #2f3929;
   --md-sys-color-inverse-surface: #2f312c;
   --md-sys-color-inverse-on-surface: #f1f1ea;
-  --md-sys-color-primary: #9cd67d;
+
+  --md-sys-color-primary: #09090b;
+  --md-sys-color-on-primary: #fafafa;
+
   --md-sys-color-primary-80: #9cd67d;
   --md-sys-color-primary-30: #205107;
   --md-sys-color-primary-20: #0c3900;
   --md-sys-color-neutral-10: #1a1c18;
   --md-sys-color-neutral-90: #e3e3dc;
-  --md-sys-color-on-primary: #0c3900;
   --md-sys-color-primary-container: #205107;
   --md-sys-color-on-primary-container: #b8f397;
-  --md-sys-color-secondary: #bdcbb0;
-  --md-sys-color-on-secondary: #273420;
+
+  --md-sys-color-secondary: #27272a;
+  --md-sys-color-on-secondary: #64646a;
+
+  --md-list-item-label-text-color: var(--md-sys-color-on-surface-variant);
+
   --md-sys-color-secondary-container: #3e4a36;
   --md-sys-color-on-secondary-container: #d9e7cb;
+
   --md-sys-color-tertiary-container: #1e4e4e;
   --md-sys-color-on-tertiary-container: #bbebeb;
   --md-sys-color-utility-error: #ffb4a9;
   --md-sys-color-utility-on-error: #680003;
   --md-sys-color-utility-outline: #8d9286;
+
+  --md-navigation-bar-active-indicator-color: var(--md-sys-color-primary);
+
+  --md-navigation-bar-active-icon-color: var(--md-sys-color-on-primary);
+  --md-navigation-bar-active-label-text-color: var(--md-sys-color-on-primary);
+  --md-navigation-bar-active-label-text-weight: 500;
+  --md-navigation-bar-active-label-text-size: 12px;
+
+  --md-navigation-bar-icon-color: var(--md-sys-color-on-secondary);
+  --md-navigation-bar-label-text-color: var(--md-sys-color-on-secondary);
+  --md-navigation-bar-label-text-weight: 500;
+  --md-navigation-bar-label-text-size: 12px;
+
+  --md-navigation-bar-active-pressed-icon-color: var(--md-sys-color-on-primary);
+  --md-navigation-bar-active-hover-icon-color: var(--md-sys-color-on-primary);
+  --md-navigation-bar-active-focus-icon-color: var(--md-sys-color-on-primary);
+
+  --md-navigation-bar-pressed-icon-color: var(--md-sys-color-on-primary);
+  --md-navigation-bar-hover-icon-color: var(--md-sys-color-on-primary);
+  --md-navigation-bar-focus-icon-color: var(--md-sys-color-on-primary);
+
+  --md-navigation-drawer-modal-container-color: var(--md-sys-color-secondary);
+
+
 }
 
 :root {
@@ -88,28 +133,35 @@
 
   --md-sys-color-inverse-surface: #2f312c;
   --md-sys-color-inverse-on-surface: #f1f1ea;
-  --md-sys-color-primary: #386a20;
-  --md-sys-color-primary-80: #9cd67d;
 
+  --md-sys-color-primary-80: #9cd67d;
   --md-sys-color-primary-30: #205107;
   --md-sys-color-primary-20: #0c3900;
-  --md-sys-color-on-primary: #fff;
+
+  --md-sys-color-primary: #ffffff;
+  --md-sys-color-on-primary: #09090b;
+
   --md-sys-color-primary-container: #b8f397;
   --md-sys-color-on-primary-container: #042100;
-  --md-sys-color-secondary: #55624c;
-  --md-sys-color-on-secondary: #fff;
-  --md-sys-color-secondary-container: #d9e7cb;
-  --md-sys-color-on-secondary-container: #131f0d;
+
+  --md-sys-color-secondary: #f4f4f5;
+  --md-sys-color-on-secondary: #b3b3b7;
+
+  --md-sys-color-secondary-container: #ffffff;
+  --md-sys-color-on-secondary-container: #09090b;
+
   --md-sys-color-tertiary-container: #bbebeb;
   --md-sys-color-on-tertiary-container: #002021;
   --md-sys-color-utility-error: #ba1b1b;
   --md-sys-color-utility-on-error: #fff;
   --md-sys-color-utility-outline: #74796e;
+
   --md-sys-color-surface-1: #f0f3e8;
   --md-sys-color-surface-2: #ebefe2;
   --md-sys-color-surface-3: #e5eadc;
   --md-sys-color-surface-4: #e3e9da;
   --md-sys-color-surface-5: #dfe6d5;
+
   --md-sys-color-ref-secondary-200: #bdcbb0;
   --md-sys-color-ref-secondary-300: #a1b095;
   --md-sys-color-neutral-10: #1f1f1f;
@@ -131,13 +183,14 @@
   --md-navigation-bar-container-shape: 9999px;
   --md-navigation-bar-active-indicator-shape: var(--md-navigation-bar-active-indicator-shape);
 
-  --md-navigation-drawer-container-color: var(--md-sys-color-surface-2);
+  --md-navigation-drawer-container-color: var(--md-sys-color-secondary);
+
   --md-navigation-drawer-modal-modal-container-elevation: 5;
-  --md-navigation-drawer-modal-container-color: var(--md-sys-color-surface-2);
+  --md-navigation-drawer-modal-container-color: var(--md-sys-color-secondary);
   --md-navigation-drawer-modal-container-width: 320px;
   --md-navigation-drawer-modal-container-height: 100vh;
 
-  --md-list-container-color: var(--md-sys-color-surface-2);
+  --md-list-container-color: var(--md-sys-color-secondary);
 
   --md-list-item-label-text-color: var(--md-sys-color-on-surface-variant);
   --md-list-item-container-color: var(--md-sys-color-surface-2);
@@ -154,8 +207,45 @@
   --md-navigation-drawer-modal-scrim-opacity: 0.32;
 
   --md-primary-tab-container-color: var(--md-sys-color-surface-0);
+
+  /** Custom Components **/
+
+  /** Navigation Rail List**/
+  --t-navigation-rail-list-container-color: #ffffff;
+
+  /** Navigation Rail Item **/
+  --t-navigation-rail-list-item-container-color: #f5f5f5;
+  --t-navigation-rail-list-item-color: #000000;
+  --t-navigation-rail-list-item-text-size: 0.95rem;
+
+  --t-navigation-rail-list-item-hover-state-layer-color: #000000;
+  --t-navigation-rail-list-item-hover-state-layer-opacity: 0.06;
+
+  --t-navigation-rail-list-item-pressed-state-layer-color: #000000;
+  --t-navigation-rail-list-item-pressed-state-layer-opacity: 0.08;
+
+  --t-navigation-rail-list-item-active-color: #743342;
+
+  --md-list-item-top-space: 8px;
+  --md-list-item-bottom-space: 8px;
+  --md-list-item-one-line-container-height: 42px;
 }
 
+.material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
+}
+
+.material-symbols-filled {
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
+}
 
 @media screen and (min-width: 1024px) {
   :root {

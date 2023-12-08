@@ -1,31 +1,18 @@
 import { PropertyValues, html, css } from 'lit';
 import { MdList } from '@material/web/list/list';
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
-import { TListItem } from './t-list-item';
 import { classMap } from 'lit/directives/class-map.js';
 
-@customElement('t-list')
+// @customElement('t-list')
 export class TList extends MdList {
 
   static styles = [
     css`
     :host{
-        background: var(--md-list-container-color); important!
-        padding: 0px !important;
-    }
-
-    .list-wrap{
-      padding-left: 8px;
-      padding-right: 8px;
-      padding-top: 8px;
-    }
-
-    .visible{
-      display: block;
-    }
-
-    .hidden{
-      display: none;
+        padding-bottom: 0px !important;
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+        padding-top: 8px !important;
     }
   `,
     ...MdList.styles
@@ -34,14 +21,10 @@ export class TList extends MdList {
   @property({ type: Number, attribute: 'active-index' }) activeIndex = -1;
 
   @property({ type: String, attribute: 'event' }) event = "list";
+  @queryAssignedElements({ flatten: true })
+  protected override readonly slotItems: any[];
 
-  @property({ type: Boolean, reflect: true }) active = false;
-
-  // @queryAssignedElements({ flatten: true })
-  // protected override readonly slotItems!: TListItem[];
-  public slotItems: any;
-
-  public tabs: TListItem[] | (HTMLElement & { item?: TListItem })[] = [];
+  public tabs: any = [];
 
   override firstUpdated(changedProperties: PropertyValues) {
     super.firstUpdated(changedProperties);
@@ -54,23 +37,18 @@ export class TList extends MdList {
     }
   }
 
-  protected override render() {
-
-    return html`
-      <div 
-      @${this.event}-item-interaction=${this.handleListItemInteraction}
-      class="list-wrap ${classMap(this.getRenderClasses())}"
-      >
-        ${super.render()}
-      </div>
-    `
+  connectedCallback() {
+    super.connectedCallback();
+    if (this.event) {
+      this.addEventListener(`${this.event}-item-interaction`, (e: Event) => { this.handleListItemInteraction(e as CustomEvent); });
+    }
   }
 
-  private getRenderClasses() {
-    return {
-      'hidden': !this.active,
-      'visible': this.active,
-    };
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this.event) {
+      this.addEventListener(`${this.event}-item-interaction`, (e: Event) => { this.handleListItemInteraction(e as CustomEvent); });
+    }
   }
 
   layout() {
@@ -100,7 +78,7 @@ export class TList extends MdList {
   private onActiveIndexChange(value: number) {
     if (value === -1) {
       for (let i = 0; i < this.tabs.length; i++) {
-        if (this.tabs[i]) { this.tabs[i].active = false; }
+        if ("active" in this.tabs[i]) { this.tabs[i].active = false; }
       }
       return
     }
@@ -110,7 +88,7 @@ export class TList extends MdList {
     }
 
     for (let i = 0; i < this.tabs.length; i++) {
-      if (this.tabs[i]) { this.tabs[i].active = i === value; }
+      if ("active" in this.tabs[i]) { this.tabs[i].active = i === value; }
     }
   }
 }

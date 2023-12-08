@@ -1,15 +1,12 @@
 import { LitElement, html, css, PropertyValues } from 'lit';
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
 import { ref, createRef, Ref } from 'lit/directives/ref.js';
-import { MdNavigationTab } from '@material/web/labs/navigationtab/navigation-tab.js';
 import { MdNavigationDrawerModal } from '@material/web/labs/navigationdrawer/navigation-drawer-modal.js';
+// import { TNavigationList } from './t-navigation-list2';
+import { TNavigationList } from './t-navigation-list';
 
-import { NavigationBarState } from '@material/web/labs/navigationbar/internal/state.js';
-import { NavigationTabInteractionEvent } from '@material/web/labs/navigationbar/internal/constants.js';
-import { TList } from './t-list';
-
-@customElement('t-navigation-bar-sub')
-export class TNavigationBarSub extends LitElement {
+@customElement('t-navigation-drawer')
+export class TNavigationDrawer extends LitElement {
 
   static styles = css`
     :host{
@@ -31,9 +28,9 @@ export class TNavigationBarSub extends LitElement {
   @property({ type: Number, attribute: 'active-index' }) activeIndex = 0;
 
   @queryAssignedElements({ flatten: true })
-  private readonly tabsElement!: TList[];
+  private readonly tabsElement!: TNavigationList[];
 
-  tLists: TList[] = [];
+  tNavLists: TNavigationList[] = [];
   modalRef: Ref<MdNavigationDrawerModal> = createRef();
 
   override firstUpdated(changedProperties: PropertyValues) {
@@ -59,15 +56,15 @@ export class TNavigationBarSub extends LitElement {
 
   layout() {
     if (!this.tabsElement) return;
-    const navTabs: TList[] = [];
+    const navTabs: TNavigationList[] = [];
     for (const node of this.tabsElement) {
       navTabs.push(node);
     }
-    this.tLists = navTabs;
+    this.tNavLists = navTabs;
   }
 
   private onActiveIndexChange(value: number) {
-    if (!this.tLists[value]) {
+    if (!this.tNavLists[value]) {
       throw new Error('NavigationBarSub: activeIndex is out of bounds.');
     }
 
@@ -75,18 +72,18 @@ export class TNavigationBarSub extends LitElement {
     this.updateLists(value)
 
     // If open && next tab !have children -> close
-    if (this.modalRef.value?.opened === true && this.tLists[value].tabs.length <= 0) {
+    if (this.modalRef.value?.opened === true && this.tNavLists[value].tabs.length <= 0) {
       this.modalRef.value.opened = false;
     }
     // If closed && next tab has children -> open
-    else if (this.modalRef.value?.opened === false && this.tLists[value].tabs.length > 0) {
+    else if (this.modalRef.value?.opened === false && this.tNavLists[value].tabs.length > 0) {
       this.modalRef.value.opened = true;
     }
   }
 
   private updateLists(value: number) {
-    for (let i = 0; i < this.tLists.length; i++) {
-      this.tLists[i].initList = i === value;
+    for (let i = 0; i < this.tNavLists.length; i++) {
+      this.tNavLists[i].initList= i === value;
     }
   }
 }
