@@ -4940,6 +4940,16 @@ class TNavigationDrawerItem extends TNavigationRailItem {
     super(...arguments);
     this.event = "drawer-list";
   }
+  static styles = [
+    i`
+      :host([active]){
+        border: none !important;
+        border-width: 0px !important;
+        border-color: transparent !important;
+      }
+    `,
+    ...TNavigationRailItem.styles
+  ];
 }
 __legacyDecorateClassTS([
   n3({ type: String, attribute: "event-name" })
