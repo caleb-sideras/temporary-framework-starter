@@ -4478,338 +4478,8 @@ MdTabs = __decorate([
   t("md-tabs")
 ], MdTabs);
 
-// node_modules/lit-html/dir
-class TList extends MdList {
-  constructor() {
-    super(...arguments);
-    this.activeIndex = -1;
-    this.event = "list";
-    this.active = false;
-  }
-  static styles = [
-    i`
-    :host{
-        background: var(--md-list-container-color); important!
-        padding: 0px !important;
-    }
-
-    .list-wrap{
-      padding-left: 8px;
-      padding-right: 8px;
-      padding-top: 8px;
-    }
-
-    .visible{
-      display: block;
-    }
-
-    .hidden{
-      display: none;
-    }
-  `,
-    ...MdList.styles
-  ];
-  slotItems;
-  tabs = [];
-  firstUpdated(changedProperties) {
-    super.firstUpdated(changedProperties);
-    this.layout();
-  }
-  updated(changedProperties) {
-    if (changedProperties.has("activeIndex")) {
-      this.onActiveIndexChange(this.activeIndex);
-    }
-  }
-  render() {
-    return x`
-      <div 
-      @${this.event}-item-interaction=${this.handleListItemInteraction}
-      class="list-wrap ${e8(this.getRenderClasses())}"
-      >
-        ${super.render()}
-      </div>
-    `;
-  }
-  getRenderClasses() {
-    return {
-      hidden: !this.active,
-      visible: this.active
-    };
-  }
-  layout() {
-    if (!this.slotItems)
-      return;
-    const navTabs = [];
-    for (const node of this.slotItems) {
-      navTabs.push(node);
-    }
-    this.tabs = navTabs;
-  }
-  handleListItemInteraction(event) {
-    const currIndex = this.tabs.indexOf(event.detail.state);
-    if (this.activeIndex == currIndex)
-      return;
-    this.activeIndex = currIndex;
-    this.dispatchEvent(new CustomEvent(`t-${this.event}-interaction`, {
-      detail: { state: this },
-      bubbles: true,
-      composed: true
-    }));
-  }
-  onActiveIndexChange(value) {
-    if (value === -1) {
-      for (let i6 = 0;i6 < this.tabs.length; i6++) {
-        if (this.tabs[i6]) {
-          this.tabs[i6].active = false;
-        }
-      }
-      return;
-    }
-    if (!this.tabs[value]) {
-      return;
-    }
-    for (let i6 = 0;i6 < this.tabs.length; i6++) {
-      if (this.tabs[i6]) {
-        this.tabs[i6].active = i6 === value;
-      }
-    }
-  }
-}
-__legacyDecorateClassTS([
-  n3({ type: Number, attribute: "active-index" })
-], TList.prototype, "activeIndex", undefined);
-__legacyDecorateClassTS([
-  n3({ type: String, attribute: "event" })
-], TList.prototype, "event", undefined);
-__legacyDecorateClassTS([
-  n3({ type: Boolean, reflect: true })
-], TList.prototype, "active", undefined);
-TList = __legacyDecorateClassTS([
-  t("t-list")
-], TList);
-
-// node_modules/lit-html/directive
-class TNavigation extends s3 {
-  constructor() {
-    super(...arguments);
-    this.activeIndex = 0;
-  }
-  main;
-  sub;
-  firstUpdated(changedProperties) {
-    super.firstUpdated(changedProperties);
-    this.layout();
-  }
-  updated(changedProperties) {
-    if (changedProperties.has("activeIndex")) {
-      this.onActiveIndexChange(this.activeIndex);
-    }
-  }
-  render() {
-    return x`
-      <slot @navigation-bar-main="${this.handleNavigationBarMainInteraction}" name="rail"></slot>
-      <slot name="drawer"></slot>
-    `;
-  }
-  layout() {
-    if (!this.tNavigationBarMain || this.main)
-      return;
-    if (!this.tNavigationBarSub || this.sub)
-      return;
-    if (this.tNavigationBarMain.length > 0) {
-      this.main = this.tNavigationBarMain[0];
-    }
-    if (this.tNavigationBarSub.length > 0) {
-      this.sub = this.tNavigationBarSub[0];
-    }
-  }
-  handleNavigationBarMainInteraction(event) {
-    this.activeIndex = event.detail.activeIndex;
-    this.tNavigationBarSub[0].activeIndex = this.activeIndex;
-  }
-  onActiveIndexChange(value) {
-    if (!this.main)
-      throw new Error("NavigationBarMain: Empty");
-    if (!this.sub)
-      throw new Error("NavigationBarSub: Empty");
-    if (this.activeIndex == value) {
-      return;
-    }
-    this.activeIndex = value;
-    this.sub.activeIndex = this.activeIndex;
-  }
-}
-__legacyDecorateClassTS([
-  n3({ type: Number, attribute: "active-index" })
-], TNavigation.prototype, "activeIndex", undefined);
-__legacyDecorateClassTS([
-  o4({ flatten: true, slot: "rail" })
-], TNavigation.prototype, "tNavigationBarMain", undefined);
-__legacyDecorateClassTS([
-  o4({ flatten: true, slot: "drawer" })
-], TNavigation.prototype, "tNavigationBarSub", undefined);
-TNavigation = __legacyDecorateClassTS([
-  t("t-navigation")
-], TNavigation);
-
-// node_modules/lit-html/directive-help
-class TNavigationRail extends s3 {
-  constructor() {
-    super(...arguments);
-    this.activeIndex = 0;
-    this.hideInactiveLabels = false;
-  }
-  static styles = i`
-    :host {
-      display: none;
-      width: 6rem; 
-      height: 100vh;
-      background-color: var(--md-sys-color-secondary); 
-      padding-top: 1rem;
-
-    }
-
-    @media ( min-width: 1024px) {     
-     :host {
-        position: -webkit-sticky;
-        position: sticky;
-        top: 0;
-        left: 0;
-        display: flex;
-      }
-    }
-  `;
-  tabs = [];
-  firstUpdated(changedProperties) {
-    super.firstUpdated(changedProperties);
-    this.layout();
-  }
-  updated(changedProperties) {
-    if (changedProperties.has("activeIndex")) {
-      this.onActiveIndexChange(this.activeIndex);
-      this.dispatchEvent(new CustomEvent("navigation-bar-main", {
-        detail: {
-          tab: this.tabs[this.activeIndex],
-          activeIndex: this.activeIndex
-        },
-        bubbles: true,
-        composed: true
-      }));
-    }
-    if (changedProperties.has("hideInactiveLabels")) {
-      this.onHideInactiveLabelsChange(this.hideInactiveLabels);
-    }
-    if (changedProperties.has("tabs")) {
-      this.onHideInactiveLabelsChange(this.hideInactiveLabels);
-      this.onActiveIndexChange(this.activeIndex);
-    }
-  }
-  render() {
-    return x`
-      <div
-        role="tablist"
-        @navigation-tab-interaction="${this.handleNavigationTabInteraction}"
-        style="width:100%;"
-      >
-      <slot></slot>
-      </div>
-      `;
-  }
-  layout() {
-    if (!this.tabsElement)
-      return;
-    const navTabs = [];
-    for (const node of this.tabsElement) {
-      navTabs.push(node);
-    }
-    this.tabs = navTabs;
-  }
-  handleNavigationTabInteraction(event) {
-    const currIndex = this.tabs.indexOf(event.detail.state);
-    if (this.activeIndex != currIndex) {
-      this.activeIndex = currIndex;
-    }
-  }
-  onActiveIndexChange(value) {
-    if (!this.tabs[value]) {
-      throw new Error("NavigationBar Init: activeIndex is out of bounds.");
-    }
-    for (let i6 = 0;i6 < this.tabs.length; i6++) {
-      this.tabs[i6].active = i6 === value;
-    }
-  }
-  onHideInactiveLabelsChange(value) {
-    for (const tab3 of this.tabs) {
-      tab3.hideInactiveLabel = value;
-    }
-  }
-}
-__legacyDecorateClassTS([
-  n3({ type: Number, attribute: "active-index" })
-], TNavigationRail.prototype, "activeIndex", undefined);
-__legacyDecorateClassTS([
-  n3({ type: Boolean, attribute: "hide-inactive-labels" })
-], TNavigationRail.prototype, "hideInactiveLabels", undefined);
-__legacyDecorateClassTS([
-  o4({ flatten: true })
-], TNavigationRail.prototype, "tabsElement", undefined);
-TNavigationRail = __legacyDecorateClassTS([
-  t("t-navigation-rail")
-], TNavigationRail);
-
-// node_modules/lit-html/directiv
-class TListItem extends MdListItem {
-  constructor() {
-    super(...arguments);
-    this.active = false;
-  }
-  static styles = [
-    i`
-    .inactive, .active {
-        border-radius: 9999px;        
-        width: 100%;
-      }
-    .active {
-      background: var(--md-sys-color-primary);
-      --md-list-item-label-text-color: var(--md-sys-color-on-primary);
-        } 
-  `,
-    ...MdListItem.styles
-  ];
-  updated(_2) {
-    this.onclick = (event) => {
-      if (this.active) {
-        event.stopImmediatePropagation();
-        event.preventDefault();
-      }
-      this.dispatchEvent(new CustomEvent("list-item-interaction", {
-        detail: { state: this },
-        bubbles: true,
-        composed: true
-      }));
-    };
-  }
-  render() {
-    const classes = {
-      inactive: !this.active,
-      active: this.active
-    };
-    return x`
-      <div class=${e8(classes)}>
-        ${super.render()}
-      </div>
-    `;
-  }
-}
-__legacyDecorateClassTS([
-  n3({ type: Boolean, reflect: true })
-], TListItem.prototype, "active", undefined);
-TListItem = __legacyDecorateClassTS([
-  t("t-list-item")
-], TListItem);
-
 // node_modules/lit-html/di
-class TList2 extends MdList {
+class TList extends MdList {
   constructor() {
     super(...arguments);
     this.activeIndex = -1;
@@ -4839,7 +4509,7 @@ class TList2 extends MdList {
   connectedCallback() {
     super.connectedCallback();
     if (this.event) {
-      this.addEventListener(`${this.event}-item-interaction`, (e10) => {
+      this.addEventListener(`t-${this.event}-item-interaction`, (e10) => {
         this.handleListItemInteraction(e10);
       });
     }
@@ -4847,7 +4517,7 @@ class TList2 extends MdList {
   disconnectedCallback() {
     super.disconnectedCallback();
     if (this.event) {
-      this.addEventListener(`${this.event}-item-interaction`, (e10) => {
+      this.addEventListener(`t-${this.event}-item-interaction`, (e10) => {
         this.handleListItemInteraction(e10);
       });
     }
@@ -4867,13 +4537,13 @@ class TList2 extends MdList {
       return;
     this.activeIndex = currIndex;
     this.dispatchEvent(new CustomEvent(`t-${this.event}-interaction`, {
-      detail: { state: this },
+      detail: { state: event.detail.state },
       bubbles: true,
       composed: true
     }));
   }
   onActiveIndexChange(value) {
-    if (value === -1) {
+    if (value === -1 || value === undefined) {
       for (let i6 = 0;i6 < this.tabs.length; i6++) {
         if ("active" in this.tabs[i6]) {
           this.tabs[i6].active = false;
@@ -4893,16 +4563,19 @@ class TList2 extends MdList {
 }
 __legacyDecorateClassTS([
   n3({ type: Number, attribute: "active-index" })
-], TList2.prototype, "activeIndex", undefined);
+], TList.prototype, "activeIndex", undefined);
 __legacyDecorateClassTS([
   n3({ type: String, attribute: "event" })
-], TList2.prototype, "event", undefined);
+], TList.prototype, "event", undefined);
 __legacyDecorateClassTS([
   o4({ flatten: true })
-], TList2.prototype, "slotItems", undefined);
+], TList.prototype, "slotItems", undefined);
+TList = __legacyDecorateClassTS([
+  t("t-list")
+], TList);
 
-// node_modules/lit-html/directive-hel
-class TListItem2 extends MdListItem {
+// node_modules/lit-html/directi
+class TListItem extends MdListItem {
   constructor() {
     super(...arguments);
     this.active = false;
@@ -4923,7 +4596,7 @@ class TListItem2 extends MdListItem {
         event.stopImmediatePropagation();
         event.preventDefault();
       }
-      this.dispatchEvent(new CustomEvent(`${this.event}-item-interaction`, {
+      this.dispatchEvent(new CustomEvent(`t-${this.event}-item-interaction`, {
         detail: { state: this },
         bubbles: true,
         composed: true
@@ -4945,19 +4618,154 @@ class TListItem2 extends MdListItem {
 }
 __legacyDecorateClassTS([
   n3({ type: Boolean, reflect: true })
-], TListItem2.prototype, "active", undefined);
+], TListItem.prototype, "active", undefined);
 __legacyDecorateClassTS([
   n3({ type: String, attribute: "event-name" })
-], TListItem2.prototype, "event", undefined);
-TListItem2 = __legacyDecorateClassTS([
+], TListItem.prototype, "event", undefined);
+TListItem = __legacyDecorateClassTS([
   t("t-list-items")
-], TListItem2);
+], TListItem);
 
-// node_modules/lit-html/directive-helpers.j
-class TNavigationRailListItem extends TListItem2 {
+// node_modules/lit-html/directiv
+class TNavigation extends s3 {
   constructor() {
     super(...arguments);
-    this.event = "rail-list";
+  }
+  static styles = i`
+    :host{
+      display: flex;
+    }
+  `;
+  navRail;
+  navDrawers = [];
+  firstUpdated(_changedProperties) {
+    super.firstUpdated(_changedProperties);
+    this.layout();
+    this.setDrawerIndex();
+  }
+  layout() {
+    if (!this.items)
+      return;
+    for (let i6 = 0;i6 < this.items.length; i6++) {
+      const item3 = this.items[i6];
+      switch (item3.localName) {
+        case "t-navigation-rail":
+          this.navRail = item3;
+          break;
+        case "t-navigation-drawer":
+          this.navDrawers.push(item3);
+          break;
+        default:
+          break;
+      }
+    }
+    console.log(this.navRail);
+    console.log(this.navDrawers);
+  }
+  setDrawerIndex() {
+    console.log("setDrawerIndex");
+    if (!this.navDrawers)
+      return;
+    for (let i6 = 0;i6 < this.navDrawers.length; i6++) {
+      this.navDrawers[i6].parentIndex = i6;
+      console.log(this.navDrawers[i6].parentIndex, i6);
+    }
+  }
+  handleRailInteraction(event) {
+    console.log("handleRailInteraction");
+    for (let i6 = 0;i6 < this.navDrawers.length; i6++) {
+      this.navDrawers[i6].activeId = event.detail.state.id;
+    }
+  }
+  handleDrawerInteraction(event) {
+    const id = event.detail.state.id;
+    const index = event.target?.parentIndex;
+    console.log("handleDrawerInteraction", index, id);
+    if (index >= this.navDrawers.length)
+      return;
+    for (let i6 = index + 1;i6 < this.navDrawers.length; i6++) {
+      this.navDrawers[i6].activeId = id;
+    }
+  }
+  testing(e10) {
+    console.log("parentState", e10.detail.state);
+    console.log("parentDetail", e10.detail);
+    console.log("parent", e10);
+  }
+  render() {
+    return x`
+      <slot 
+        @t-rail-interaction=${this.handleRailInteraction}
+        @t-drawer-interaction=${this.handleDrawerInteraction}
+      >
+      </slot>
+      `;
+  }
+}
+__legacyDecorateClassTS([
+  o4({ flatten: true })
+], TNavigation.prototype, "items", undefined);
+TNavigation = __legacyDecorateClassTS([
+  t("t-navigation")
+], TNavigation);
+
+// node_modules/lit-html/directive-hel
+class TNavigationRail extends TList {
+  constructor() {
+    super(...arguments);
+    this.activeIndex = 0;
+    this.event = "rail";
+    this.initList = false;
+  }
+  static styles = [
+    i`
+    :host{
+      --md-list-container-color: var(--t-navigation-rail-list-container-color) !important;
+--md-ref-typeface-plain: 'Roboto Mono, monospace';
+
+      padding: 0px !important;
+      background: var(--t-navigation-rail-list-container-color);
+    }
+  `,
+    ...TList.styles
+  ];
+  INITIAL_INDEX;
+  firstUpdated(changedProperties) {
+    this.INITIAL_INDEX = this.activeIndex;
+    super.firstUpdated(changedProperties);
+    this.layout();
+  }
+  updated(changedProperties) {
+    super.updated(changedProperties);
+    if (changedProperties.has("initList")) {
+      if (this.initList)
+        this.handleInitList();
+    }
+  }
+  handleInitList() {
+    if (!this.tabs[this.INITIAL_INDEX])
+      return;
+    this.tabs[this.INITIAL_INDEX].click();
+  }
+}
+__legacyDecorateClassTS([
+  n3({ type: Number, attribute: "active-index" })
+], TNavigationRail.prototype, "activeIndex", undefined);
+__legacyDecorateClassTS([
+  n3({ type: String, attribute: "event" })
+], TNavigationRail.prototype, "event", undefined);
+__legacyDecorateClassTS([
+  n3({ type: Boolean, attribute: "init-list" })
+], TNavigationRail.prototype, "initList", undefined);
+TNavigationRail = __legacyDecorateClassTS([
+  t("t-navigation-rail")
+], TNavigationRail);
+
+// node_modules/lit-html/directive-helpers.
+class TNavigationRailItem extends TListItem {
+  constructor() {
+    super(...arguments);
+    this.event = "rail";
   }
   static styles = [
     i`
@@ -4986,337 +4794,82 @@ class TNavigationRailListItem extends TListItem2 {
         border-color: var(--t-navigation-rail-list-item-active-color) !important;
       }
     `,
-    ...TListItem2.styles
+    ...TListItem.styles
   ];
 }
 __legacyDecorateClassTS([
   n3({ type: String, attribute: "event-name" })
-], TNavigationRailListItem.prototype, "event", undefined);
-TNavigationRailListItem = __legacyDecorateClassTS([
-  t("t-navigation-rail-list-item")
-], TNavigationRailListItem);
+], TNavigationRailItem.prototype, "event", undefined);
+TNavigationRailItem = __legacyDecorateClassTS([
+  t("t-navigation-rail-item")
+], TNavigationRailItem);
 
-// node_modules/lit-html/directive-helpers.
-class TNavigationRailList extends TList2 {
+// node_modules/lit-html/directive-helpe
+class TNavigationDrawer extends TList {
   constructor() {
     super(...arguments);
-    this.activeIndex = 0;
-    this.event = "rail-list";
-    this.initList = false;
+    this.activeId = "";
+    this.event = "drawer";
+    this.parentIndex = -1;
   }
-  static styles = [
-    i`
-    :host{
-      --md-list-container-color: var(--t-navigation-rail-list-container-color) !important;
---md-ref-typeface-plain: 'Roboto Mono, monospace';
-
-      padding: 0px !important;
-      background: var(--t-navigation-rail-list-container-color);
-    }
-  `,
-    ...TList2.styles
-  ];
-  INITIAL_INDEX;
+  idToIndex = new Map;
   firstUpdated(changedProperties) {
     super.firstUpdated(changedProperties);
-    this.layout();
-    this.INITIAL_INDEX = this.activeIndex;
+    this.initId();
+    this.setActiveIndex();
   }
   updated(changedProperties) {
+    if (changedProperties.has("activeId"))
+      this.setActiveIndex();
     super.updated(changedProperties);
-    if (changedProperties.has("initList")) {
-      if (this.initList)
-        this.handleInitList();
+  }
+  connectedCallback() {
+    super.connectedCallback();
+    if (this.event) {
+      this.addEventListener(`t-${this.event}-list-interaction`, (e10) => {
+        this.handleListInteraction(e10);
+      });
     }
   }
-  handleInitList() {
-    if (!this.tabs[this.INITIAL_INDEX])
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this.event) {
+      this.addEventListener(`t-${this.event}-list-interaction`, (e10) => {
+        this.handleListInteraction(e10);
+      });
+    }
+  }
+  handleListInteraction(e10) {
+    console.log(`t-${this.event}-interaction`);
+    this.dispatchEvent(new CustomEvent(`t-${this.event}-interaction`, {
+      detail: { state: e10.detail.state },
+      bubbles: true,
+      composed: true
+    }));
+  }
+  setActiveIndex() {
+    if (!this.idToIndex.has(this.activeId)) {
+      this.activeIndex = -1;
       return;
-    this.tabs[this.INITIAL_INDEX].click();
-  }
-}
-__legacyDecorateClassTS([
-  n3({ type: Number, attribute: "active-index" })
-], TNavigationRailList.prototype, "activeIndex", undefined);
-__legacyDecorateClassTS([
-  n3({ type: String, attribute: "event" })
-], TNavigationRailList.prototype, "event", undefined);
-__legacyDecorateClassTS([
-  n3({ type: Boolean, attribute: "init-list" })
-], TNavigationRailList.prototype, "initList", undefined);
-TNavigationRailList = __legacyDecorateClassTS([
-  t("t-navigation-rail-list")
-], TNavigationRailList);
-
-// node_modules/lit-html/directive-helpers.
-var h3 = function(i6) {
-  this._$AN !== undefined ? (o9(this), this._$AM = i6, r8(this)) : this._$AM = i6;
-};
-var n8 = function(i6, t5 = false, e10 = 0) {
-  const r8 = this._$AH, h4 = this._$AN;
-  if (h4 !== undefined && h4.size !== 0)
-    if (t5)
-      if (Array.isArray(r8))
-        for (let i7 = e10;i7 < r8.length; i7++)
-          s5(r8[i7], false), o9(r8[i7]);
-      else
-        r8 != null && (s5(r8, false), o9(r8));
-    else
-      s5(this, i6);
-};
-var s5 = (i6, t5) => {
-  const e10 = i6._$AN;
-  if (e10 === undefined)
-    return false;
-  for (const i7 of e10)
-    i7._$AO?.(t5, false), s5(i7, t5);
-  return true;
-};
-var o9 = (i6) => {
-  let t5, e10;
-  do {
-    if ((t5 = i6._$AM) === undefined)
-      break;
-    e10 = t5._$AN, e10.delete(i6), i6 = t5;
-  } while (e10?.size === 0);
-};
-var r8 = (i6) => {
-  for (let t5;t5 = i6._$AM; i6 = t5) {
-    let e10 = t5._$AN;
-    if (e10 === undefined)
-      t5._$AN = e10 = new Set;
-    else if (e10.has(i6))
-      break;
-    e10.add(i6), c4(t5);
-  }
-};
-var c4 = (i6) => {
-  i6.type == t4.CHILD && (i6._$AP ??= n8, i6._$AQ ??= h3);
-};
-
-class f4 extends i4 {
-  constructor() {
-    super(...arguments), this._$AN = undefined;
-  }
-  _$AT(i6, t5, e10) {
-    super._$AT(i6, t5, e10), r8(this), this.isConnected = i6._$AU;
-  }
-  _$AO(i6, t5 = true) {
-    i6 !== this.isConnected && (this.isConnected = i6, i6 ? this.reconnected?.() : this.disconnected?.()), t5 && (s5(this, i6), o9(this));
-  }
-  setValue(t5) {
-    if (f3(this._$Ct))
-      this._$Ct._$AI(t5, this);
-    else {
-      const i6 = [...this._$Ct._$AH];
-      i6[this._$Ci] = t5, this._$Ct._$AI(i6, this, 0);
     }
+    this.activeIndex = this.idToIndex.get(this.activeId);
   }
-  disconnected() {
-  }
-  reconnected() {
-  }
-}
-
-// node_modules/lit-html/directive-helpers
-var e10 = () => new h4;
-
-class h4 {
-}
-var o10 = new WeakMap;
-var n9 = e7(class extends f4 {
-  render(i6) {
-    return T;
-  }
-  update(i6, [s6]) {
-    const e11 = s6 !== this.G;
-    return e11 && this.G !== undefined && this.ot(undefined), (e11 || this.rt !== this.lt) && (this.G = s6, this.ct = i6.options?.host, this.ot(this.lt = i6.element)), T;
-  }
-  ot(t5) {
-    if (typeof this.G == "function") {
-      const i6 = this.ct ?? globalThis;
-      let s6 = o10.get(i6);
-      s6 === undefined && (s6 = new WeakMap, o10.set(i6, s6)), s6.get(this.G) !== undefined && this.G.call(this.ct, undefined), s6.set(this.G, t5), t5 !== undefined && this.G.call(this.ct, t5);
-    } else
-      this.G.value = t5;
-  }
-  get rt() {
-    return typeof this.G == "function" ? o10.get(this.ct ?? globalThis)?.get(this.G) : this.G?.value;
-  }
-  disconnected() {
-    this.rt === this.lt && this.ot(undefined);
-  }
-  reconnected() {
-    this.ot(this.lt);
-  }
-});
-// node_modules/lit-html/directive-helper
-class TNavigationDrawer extends s3 {
-  constructor() {
-    super(...arguments);
-    this.activeIndex = 0;
-  }
-  static styles = i`
-    :host{
-      display: none;  
-    }
-    @media (min-width: 1024px) {
-      :host{
-        display: flex;
-        height: 100vh;
+  initId() {
+    for (let i6 = 0;i6 < this.tabs.length; i6++) {
+      if (this.tabs[i6].id !== "") {
+        this.idToIndex.set(this.tabs[i6].id, i6);
       }
     }
-  
-    .modal-wrap{
-      position: fixed !important;
-      height: 100vh;
-    }
-  `;
-  tNavLists = [];
-  modalRef = e10();
-  firstUpdated(changedProperties) {
-    super.firstUpdated(changedProperties);
-    this.layout();
-  }
-  updated(changedProperties) {
-    if (changedProperties.has("activeIndex")) {
-      this.onActiveIndexChange(this.activeIndex);
-    }
-  }
-  render() {
-    return x`
-      <div class="modal-wrap">
-        <md-navigation-drawer-modal ${n9(this.modalRef)} pivot="start" active-index="0" role="presentation">
-        <slot></slot>
-        </md-navigation-drawer-modal>
-      </div>
-      `;
-  }
-  layout() {
-    if (!this.tabsElement)
-      return;
-    const navTabs = [];
-    for (const node of this.tabsElement) {
-      navTabs.push(node);
-    }
-    this.tNavLists = navTabs;
   }
   onActiveIndexChange(value) {
-    if (!this.tNavLists[value]) {
-      throw new Error("NavigationBarSub: activeIndex is out of bounds.");
-    }
-    this.updateLists(value);
-    if (this.modalRef.value?.opened === true && this.tNavLists[value].tabs.length <= 0) {
-      this.modalRef.value.opened = false;
-    } else if (this.modalRef.value?.opened === false && this.tNavLists[value].tabs.length > 0) {
-      this.modalRef.value.opened = true;
-    }
-  }
-  updateLists(value) {
-    for (let i6 = 0;i6 < this.tNavLists.length; i6++) {
-      this.tNavLists[i6].initList = i6 === value;
-    }
-  }
-}
-__legacyDecorateClassTS([
-  n3({ type: Number, attribute: "active-index" })
-], TNavigationDrawer.prototype, "activeIndex", undefined);
-__legacyDecorateClassTS([
-  o4({ flatten: true })
-], TNavigationDrawer.prototype, "tabsElement", undefined);
-TNavigationDrawer = __legacyDecorateClassTS([
-  t("t-navigation-drawer")
-], TNavigationDrawer);
-
-// node_modules/lit-html/directive-help
-class TNavigationList extends MdList {
-  constructor() {
-    super(...arguments);
-    this.activeIndex = 0;
-    this.initList = false;
-  }
-  static styles = [
-    i`
-    :host{
-      padding: 0px !important;
-      --md-list-container-color: var(--md-sys-color-secondary);
-      background: var(--md-list-container-color)
-    }
-
-    .list-wrap{
-      padding-left: 8px;
-      padding-right: 8px;
-      padding-top: 16px;
-    }
-
-    .visible{
-      display: block;
-    }
-
-    .hidden{
-      display: none;
-    }
-  `,
-    ...MdList.styles
-  ];
-  tabs = [];
-  INITIAL_INDEX;
-  firstUpdated(changedProperties) {
-    super.firstUpdated(changedProperties);
-    this.layout();
-    this.INITIAL_INDEX = this.activeIndex;
-  }
-  updated(changedProperties) {
-    if (changedProperties.has("activeIndex")) {
-      this.onActiveIndexChange(this.activeIndex);
-    }
-    if (changedProperties.has("initList")) {
-      if (this.initList)
-        this.handleInitList();
-    }
-  }
-  render() {
-    return x`
-      <div 
-      @list-item-interaction=${this.handleListItemInteraction}
-      class="list-wrap ${e8(this.getRenderClasses())}"
-      >
-        ${super.render()}
-      </div>
-    `;
-  }
-  getRenderClasses() {
-    return {
-      hidden: !this.initList,
-      visible: this.initList
-    };
-  }
-  layout() {
-    console.log(this.slotItems);
-    if (!this.slotItems)
-      return;
-    const navTabs = [];
-    for (const node of this.slotItems) {
-      navTabs.push(node);
-    }
-    this.tabs = navTabs;
-  }
-  handleInitList() {
-    if (!this.tabs[this.INITIAL_INDEX])
-      return;
-    this.tabs[this.INITIAL_INDEX].click();
-  }
-  handleListItemInteraction(event) {
-    const currIndex = this.tabs.indexOf(event.detail.state);
-    if (this.activeIndex != currIndex) {
-      this.activeIndex = currIndex;
-    }
-  }
-  onActiveIndexChange(value) {
-    if (value === -1) {
+    console.log(this.id, this.activeIndex);
+    if (value === -1 || value === undefined) {
       for (let i6 = 0;i6 < this.tabs.length; i6++) {
-        if (this.tabs[i6]) {
+        if ("active" in this.tabs[i6]) {
           this.tabs[i6].active = false;
+        }
+        if ("activeIndex" in this.tabs[i6]) {
+          this.tabs[i6].activeIndex = 0;
         }
       }
       return;
@@ -5325,374 +4878,72 @@ class TNavigationList extends MdList {
       return;
     }
     for (let i6 = 0;i6 < this.tabs.length; i6++) {
-      if (this.tabs[i6]) {
+      if ("active" in this.tabs[i6]) {
         this.tabs[i6].active = i6 === value;
       }
+      if ("activeIndex" in this.tabs[i6]) {
+        this.tabs[i6].activeIndex = 0;
+      }
     }
   }
 }
+__legacyDecorateClassTS([
+  n3({ type: String, attribute: "active-index" })
+], TNavigationDrawer.prototype, "activeId", undefined);
+__legacyDecorateClassTS([
+  n3({ type: String, attribute: "event" })
+], TNavigationDrawer.prototype, "event", undefined);
+__legacyDecorateClassTS([
+  n3({ type: Number, attribute: "parent-index" })
+], TNavigationDrawer.prototype, "parentIndex", undefined);
+TNavigationDrawer = __legacyDecorateClassTS([
+  t("t-navigation-drawer")
+], TNavigationDrawer);
+
+// node_modules/lit-html/directive-helpers.js
+class TNavigationDrawerList extends TList {
+  constructor() {
+    super(...arguments);
+    this.active = false;
+    this.activeIndex = 0;
+    this.event = "drawer-list";
+  }
+  static styles = [
+    i`
+      :host {
+        display: none !important;
+      }
+
+      :host([active]) {
+        display: block !important;
+      }  
+  `,
+    ...TList.styles
+  ];
+}
+__legacyDecorateClassTS([
+  n3({ type: Boolean, reflect: true })
+], TNavigationDrawerList.prototype, "active", undefined);
 __legacyDecorateClassTS([
   n3({ type: Number, attribute: "active-index" })
-], TNavigationList.prototype, "activeIndex", undefined);
+], TNavigationDrawerList.prototype, "activeIndex", undefined);
 __legacyDecorateClassTS([
-  n3({ type: Boolean, attribute: "init-list" })
-], TNavigationList.prototype, "initList", undefined);
-__legacyDecorateClassTS([
-  o4({ flatten: true })
-], TNavigationList.prototype, "slotItems", undefined);
-TNavigationList = __legacyDecorateClassTS([
-  t("t-navigation-list")
-], TNavigationList);
+  n3({ type: String, attribute: "event" })
+], TNavigationDrawerList.prototype, "event", undefined);
+TNavigationDrawerList = __legacyDecorateClassTS([
+  t("t-navigation-drawer-list")
+], TNavigationDrawerList);
 
-// node_modules/lit-html/directive-hel
-class TNavigationTab extends MdNavigationTab {
+// node_modules/lit-html/directive-helpers.js.jsus
+class TNavigationDrawerItem extends TNavigationRailItem {
   constructor() {
     super(...arguments);
-    this.type = "link";
-    this.href = "";
-    this.target = "";
-  }
-  static style = [
-    i`
-    :host {
-      width: 6rem !important; 
-      width: 6rem;!important 
-    }
-
-    a {
-      text-decoration: none; !important
-    }
-
-    .anchor {
-       width:100%; 
-    }
-  `,
-    ...MdNavigationTab.styles
-  ];
-  render() {
-    return this.renderNavigationTab();
-  }
-  renderNavigationTab() {
-    const isAnchor = this.type === "link";
-    let tag;
-    switch (this.type) {
-      case "link":
-        tag = s4`a`;
-        break;
-      case "button":
-        tag = s4`button`;
-        break;
-      default:
-      case "text":
-        tag = s4`li`;
-        break;
-    }
-    const target = isAnchor && !!this.target ? this.target : T;
-    const parentRender = super.render();
-    return n6`
-      <${tag}
-          href=${this.href || T}
-          target=${target}
-          style="width: 100%;"
-        >
-      ${parentRender}
-      </${tag}>
-    `;
+    this.event = "drawer-list";
   }
 }
 __legacyDecorateClassTS([
-  n3({ reflect: true })
-], TNavigationTab.prototype, "type", undefined);
-__legacyDecorateClassTS([
-  n3()
-], TNavigationTab.prototype, "href", undefined);
-__legacyDecorateClassTS([
-  n3()
-], TNavigationTab.prototype, "target", undefined);
-TNavigationTab = __legacyDecorateClassTS([
-  t("t-navigation-tab")
-], TNavigationTab);
-
-// node_modules/lit-html/directi
-class TDropdown extends s3 {
-  constructor() {
-    super(...arguments);
-    this.active = false;
-  }
-  dTitle;
-  dList;
-  firstUpdated(_changedProperties) {
-    super.firstUpdated(_changedProperties);
-    this.layout();
-  }
-  updated(_changedProperties) {
-    super.updated(_changedProperties);
-    if (_changedProperties.has("active")) {
-      if (this.active === false) {
-        this.dList.activeIndex = -1;
-        this.dTitle.active = false;
-      }
-    }
-  }
-  layout() {
-    if (!this.dropdownTitle)
-      return;
-    if (!this.dropdownList)
-      return;
-    this.dTitle = this.dropdownTitle[0];
-    this.dList = this.dropdownList[0];
-  }
-  render() {
-    return x`
-      <slot @t-dropdown-title-iteraction="${this.handleTitleIteraction}" name="title"></slot>
-      <slot @t-dropdown-list-interaction="${this.handleListIteraction}" name="content"></slot>
-    `;
-  }
-  handleTitleIteraction(event) {
-    this.dList.collapsed = event.detail.state.collapsed;
-  }
-  handleListIteraction(_2) {
-    this.active = true;
-    this.dTitle.active = true;
-    this.dispatchEvent(new CustomEvent("list-item-interaction", {
-      detail: { state: this },
-      bubbles: true,
-      composed: true
-    }));
-  }
-}
-__legacyDecorateClassTS([
-  n3({ type: Boolean, reflect: true })
-], TDropdown.prototype, "active", undefined);
-__legacyDecorateClassTS([
-  o4({ flatten: true, slot: "title" })
-], TDropdown.prototype, "dropdownTitle", undefined);
-__legacyDecorateClassTS([
-  o4({ flatten: true, slot: "content" })
-], TDropdown.prototype, "dropdownList", undefined);
-TDropdown = __legacyDecorateClassTS([
-  t("t-dropdown")
-], TDropdown);
-
-// node_modules/lit-html/directive-hel
-class TDropdownTitle extends MdListItem {
-  constructor() {
-    super(...arguments);
-    this.collapsed = false;
-    this.active = false;
-  }
-  static styles = [
-    i`
-    .inactive, .active {
-        border-radius: 9999px;        
-        width: 100%;
-      }
-    .active {
-      background: #363639;
-    }  
-    
-  `,
-    ...MdListItem.styles
-  ];
-  render() {
-    return this.renderListItem(x`
-      <md-item @click="${this.click}"  class="${e8(this.getTitleState())}">
-        <div slot="container">
-          ${this.renderRipple()} ${this.renderFocusRing()}
-        </div>
-        <slot name="start" slot="start"></slot>
-        <slot name="end" slot="end">  
-          ${this.collapsed ? this.inactiveSlot : this.activeSlot} 
-        </slot>
-        ${this.renderBody()}
-      </md-item>
-    `);
-  }
-  get activeSlot() {
-    return x`<slot name="active"></slot>`;
-  }
-  get inactiveSlot() {
-    return x`<slot name="inactive"></slot>`;
-  }
-  click() {
-    this.collapsed = !this.collapsed;
-    this.dispatchEvent(new CustomEvent(`t-dropdown-title-iteraction`, {
-      detail: { state: this },
-      bubbles: true,
-      composed: true
-    }));
-  }
-  getTitleState() {
-    return {
-      inactive: !this.active,
-      active: this.active
-    };
-  }
-}
-__legacyDecorateClassTS([
-  n3({ type: Boolean, reflect: true })
-], TDropdownTitle.prototype, "collapsed", undefined);
-__legacyDecorateClassTS([
-  n3({ type: Boolean, reflect: true })
-], TDropdownTitle.prototype, "active", undefined);
-TDropdownTitle = __legacyDecorateClassTS([
-  t("t-dropdown-title")
-], TDropdownTitle);
-
-// node_modules/lit-html/directive-he
-class TDropdownList extends MdList {
-  constructor() {
-    super(...arguments);
-    this.activeIndex = -1;
-    this.collapsed = false;
-  }
-  static styles = [
-    i`
-    :host{
-      padding: 0px !important;
-    }
-
-    .list-wrap{
-      padding-left: 8px;
-      padding-right: 8px;
-      padding-top: 16px;
-    }
-
-    .visible{
-      height: auto;
-      display: block;
-    }
-
-    .hidden{
-      height: 0px;
-      display: none;
-    }
-  `,
-    ...MdList.styles
-  ];
-  tabs = [];
-  firstUpdated(changedProperties) {
-    super.firstUpdated(changedProperties);
-    this.layout();
-  }
-  updated(changedProperties) {
-    if (changedProperties.has("activeIndex")) {
-      this.onActiveIndexChange(this.activeIndex);
-    }
-  }
-  render() {
-    return x`
-      <div 
-      @dropdown-item-interaction=${this.handleListItemInteraction}
-      class="list-wrap ${e8(this.getRenderClasses())}"
-      >
-        ${super.render()}
-      </div>
-    `;
-  }
-  getRenderClasses() {
-    return {
-      hidden: this.collapsed,
-      visible: !this.collapsed
-    };
-  }
-  layout() {
-    if (!this.slotItems)
-      return;
-    const navTabs = [];
-    for (const node of this.slotItems) {
-      navTabs.push(node);
-    }
-    this.tabs = navTabs;
-  }
-  handleListItemInteraction(event) {
-    const currIndex = this.tabs.indexOf(event.detail.state);
-    if (this.activeIndex != currIndex) {
-      this.activeIndex = currIndex;
-      this.dispatchEvent(new CustomEvent("t-dropdown-list-interaction", {
-        detail: { state: this },
-        bubbles: true,
-        composed: true
-      }));
-    }
-  }
-  onActiveIndexChange(value) {
-    if (value === -1) {
-      for (let i6 = 0;i6 < this.tabs.length; i6++) {
-        if (this.tabs[i6])
-          this.tabs[i6].active = false;
-      }
-      return;
-    }
-    if (!this.tabs[value]) {
-      return;
-    }
-    for (let i6 = 0;i6 < this.tabs.length; i6++) {
-      if (this.tabs[i6])
-        this.tabs[i6].active = i6 === value;
-    }
-  }
-}
-__legacyDecorateClassTS([
-  n3({ type: Number, attribute: "active-index" })
-], TDropdownList.prototype, "activeIndex", undefined);
-__legacyDecorateClassTS([
-  n3({ type: Boolean, reflect: true })
-], TDropdownList.prototype, "collapsed", undefined);
-__legacyDecorateClassTS([
-  o4({ flatten: true })
-], TDropdownList.prototype, "slotItems", undefined);
-TDropdownList = __legacyDecorateClassTS([
-  t("t-dropdown-list")
-], TDropdownList);
-
-// node_modules/lit-html/directive-he
-class TDropdownItem extends MdListItem {
-  constructor() {
-    super(...arguments);
-    this.active = false;
-  }
-  static styles = [
-    i`
-    .inactive, .active {
-        border-radius: 9999px;        
-        width: 100%;
-      }
-    .active {
-      background: var(--md-sys-color-primary);
-      --md-list-item-label-text-color: var(--md-sys-color-on-primary);
-    }  
-  `,
-    ...MdListItem.styles
-  ];
-  updated(_2) {
-    this.onclick = (event) => {
-      if (this.active) {
-        event.stopImmediatePropagation();
-        event.preventDefault();
-      }
-      this.dispatchEvent(new CustomEvent("dropdown-item-interaction", {
-        detail: { state: this },
-        bubbles: true,
-        composed: true
-      }));
-    };
-  }
-  render() {
-    const classes = {
-      inactive: !this.active,
-      active: this.active
-    };
-    return x`
-      <div class=${e8(classes)}>
-        ${super.render()}
-      </div>
-    `;
-  }
-}
-__legacyDecorateClassTS([
-  n3({ type: Boolean, reflect: true })
-], TDropdownItem.prototype, "active", undefined);
-TDropdownItem = __legacyDecorateClassTS([
-  t("t-dropdown-item")
-], TDropdownItem);
+  n3({ type: String, attribute: "event-name" })
+], TNavigationDrawerItem.prototype, "event", undefined);
+TNavigationDrawerItem = __legacyDecorateClassTS([
+  t("t-navigation-drawer-item")
+], TNavigationDrawerItem);

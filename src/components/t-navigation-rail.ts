@@ -2,8 +2,8 @@ import { PropertyValues, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { TList } from './t-list';
 
-@customElement('t-navigation-rail-list')
-export class TNavigationRailList extends TList {
+@customElement('t-navigation-rail')
+export class TNavigationRail extends TList {
 
   static styles = [
     css`
@@ -20,28 +20,29 @@ export class TNavigationRailList extends TList {
 
   @property({ type: Number, attribute: 'active-index' }) activeIndex = 0;
 
-  @property({ type: String, attribute: 'event' }) event = "rail-list";
+  @property({ type: String, attribute: 'event' }) event = "rail";
 
   @property({ type: Boolean, attribute: 'init-list' }) initList = false;
 
-  INITIAL_INDEX: number
+  private INITIAL_INDEX: number
 
-  override firstUpdated(changedProperties: PropertyValues) {
+  override firstUpdated(changedProperties: PropertyValues<TNavigationRail>) {
+    this.INITIAL_INDEX = this.activeIndex;
+
     super.firstUpdated(changedProperties);
     this.layout();
-    this.INITIAL_INDEX = this.activeIndex
   }
 
-  protected override updated(changedProperties: PropertyValues<TNavigationRailList>) {
-    super.updated(changedProperties as PropertyValues<TList>)
+  protected override updated(changedProperties: PropertyValues<TNavigationRail>) {
+    super.updated(changedProperties as PropertyValues<TList>);
 
     if (changedProperties.has('initList')) {
-      if (this.initList) this.handleInitList()
+      if (this.initList) this.handleInitList();
     }
   }
 
   private handleInitList() {
-    if (!this.tabs[this.INITIAL_INDEX]) return
-    this.tabs[this.INITIAL_INDEX].click()
+    if (!this.tabs[this.INITIAL_INDEX]) return;
+    this.tabs[this.INITIAL_INDEX].click();
   }
 }

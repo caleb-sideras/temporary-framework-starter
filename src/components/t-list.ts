@@ -1,9 +1,8 @@
-import { PropertyValues, html, css } from 'lit';
+import { PropertyValues, css } from 'lit';
 import { MdList } from '@material/web/list/list';
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
-import { classMap } from 'lit/directives/class-map.js';
 
-// @customElement('t-list')
+@customElement('t-list')
 export class TList extends MdList {
 
   static styles = [
@@ -40,14 +39,14 @@ export class TList extends MdList {
   connectedCallback() {
     super.connectedCallback();
     if (this.event) {
-      this.addEventListener(`${this.event}-item-interaction`, (e: Event) => { this.handleListItemInteraction(e as CustomEvent); });
+      this.addEventListener(`t-${this.event}-item-interaction`, (e: Event) => { this.handleListItemInteraction(e as CustomEvent); });
     }
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     if (this.event) {
-      this.addEventListener(`${this.event}-item-interaction`, (e: Event) => { this.handleListItemInteraction(e as CustomEvent); });
+      this.addEventListener(`t-${this.event}-item-interaction`, (e: Event) => { this.handleListItemInteraction(e as CustomEvent); });
     }
   }
 
@@ -60,23 +59,22 @@ export class TList extends MdList {
     this.tabs = navTabs;
   }
 
-  private handleListItemInteraction(event: CustomEvent) {
+  protected handleListItemInteraction(event: CustomEvent) {
     const currIndex = this.tabs.indexOf(event.detail.state);
     if (this.activeIndex == currIndex) return
 
     this.activeIndex = currIndex;
-
     this.dispatchEvent(
       new CustomEvent(`t-${this.event}-interaction`, {
-        detail: { state: this },
+        detail: { state: event.detail.state },
         bubbles: true,
         composed: true,
       })
     );
   }
 
-  private onActiveIndexChange(value: number) {
-    if (value === -1) {
+  protected onActiveIndexChange(value: number) {
+    if (value === -1 || value === undefined) {
       for (let i = 0; i < this.tabs.length; i++) {
         if ("active" in this.tabs[i]) { this.tabs[i].active = false; }
       }

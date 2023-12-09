@@ -3,24 +3,84 @@ package components
 templ Test2() {
 	<div class="flex flex-row">
 		<div class="hidden lg:flex w-24 h-screen">
-			<t-navigation-rail-list active>
+			<t-navigation>
 
-				<t-navigation-rail-list-item interactive type="link">
-					Home
-					<md-icon slot="start" class="material-symbols-filled">crop_square</md-icon>
-				</t-navigation-rail-list-item>
+				<t-navigation-rail id="rail" active>
 
-				<t-navigation-rail-list-item interactive type="link">
-					Code
-					<md-icon slot="start" class="material-symbols-filled">code_blocks</md-icon>
-				</t-navigation-rail-list-item>
+					<t-navigation-rail-item interactive type="link" id="home">
+						Home
+						<md-icon slot="start" class="material-symbols-filled">crop_square</md-icon>
+					</t-navigation-rail-item>
 
-				<t-navigation-rail-list-item interactive type="link">
-					Docs
-					<md-icon slot="start" class="material-symbols-filled">developer_guide</md-icon>
-				</t-navigation-rail-list-item>
+					<t-navigation-rail-item interactive type="link" id="code">
+						Code
+						<md-icon slot="start" class="material-symbols-filled">code_blocks</md-icon>
+					</t-navigation-rail-item>
 
-			</t-navigation-rail-list>
+					<t-navigation-rail-item interactive type="link" id="docs">
+						Docs
+						<md-icon slot="start" class="material-symbols-filled">developer_guide</md-icon>
+					</t-navigation-rail-item>
+
+				</t-navigation-rail>
+
+				<t-navigation-drawer id="drawer">
+
+					<t-navigation-drawer-list id="code">
+
+						<t-navigation-drawer-item interactive type="link" id="code_overview">
+							Code Overview
+						</t-navigation-drawer-item>
+
+						<t-navigation-drawer-item interactive type="link" id="example">
+							Example
+						</t-navigation-drawer-item>
+
+					</t-navigation-drawer-list>
+
+					<t-navigation-drawer-list id="docs">
+
+						<t-navigation-drawer-item interactive type="link">
+							Docs Overview
+						</t-navigation-drawer-item>
+
+						<t-navigation-drawer-item interactive type="link">
+							Sample
+						</t-navigation-drawer-item>
+
+					</t-navigation-drawer-list>
+
+				</t-navigation-drawer>
+
+				<t-navigation-drawer id="drawer">
+
+					<t-navigation-drawer-list id="code_overview">
+
+						<t-navigation-drawer-item interactive type="link">
+							Tester Overview
+						</t-navigation-drawer-item>
+
+						<t-navigation-drawer-item interactive type="link">
+							Tester Example
+						</t-navigation-drawer-item>
+
+					</t-navigation-drawer-list>
+
+					<t-navigation-drawer-list id="example">
+
+						<t-navigation-drawer-item interactive type="link">
+							Example Overview
+						</t-navigation-drawer-item>
+
+						<t-navigation-drawer-item interactive type="link">
+							Example Example
+						</t-navigation-drawer-item>
+
+					</t-navigation-drawer-list>
+
+				</t-navigation-drawer>
+
+			</t-navigation>
 		</div>
 	</div>
 }

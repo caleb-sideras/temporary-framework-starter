@@ -1,6 +1,6 @@
-import { PropertyValueMap, css } from 'lit';
-import { TListItem } from "./t-base-list-item";
-import { property, queryAssignedElements, customElement } from 'lit/decorators.js';
+import { css } from 'lit';
+import { TListItem } from "./t-list-item";
+import { property, customElement } from 'lit/decorators.js';
 
 @customElement('t-navigation-rail-item')
 export class TNavigationRailItem extends TListItem {
@@ -35,5 +35,4 @@ export class TNavigationRailItem extends TListItem {
   ];
 
   @property({ type: String, attribute: 'event-name' }) event = "rail";
-  
 }

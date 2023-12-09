@@ -28,7 +28,7 @@ export class TListItem extends MdListItem {
       }
 
       this.dispatchEvent(
-        new CustomEvent(`${this.event}-item-interaction`, {
+        new CustomEvent(`t-${this.event}-item-interaction`, {
           detail: { state: this },
           bubbles: true,
           composed: true,
@@ -38,10 +38,6 @@ export class TListItem extends MdListItem {
   }
 
   protected override render() {
-
-    // return html`
-    //   ${super.render()}
-    // `
 
     return this.renderListItem(html`
       <md-item>
