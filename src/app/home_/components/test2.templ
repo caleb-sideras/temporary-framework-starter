@@ -5,7 +5,7 @@ templ Test2() {
 		<div class="hidden lg:flex w-24 h-screen">
 			<t-navigation>
 
-				<t-navigation-rail id="rail" active>
+				<t-navigation-rail active>
 
 					<t-navigation-rail-item interactive type="link" id="home">
 						Home
@@ -24,16 +24,44 @@ templ Test2() {
 
 				</t-navigation-rail>
 
-				<t-navigation-drawer id="drawer">
+				<t-navigation-drawer>
 
 					<t-navigation-drawer-list id="code">
 
-						<t-navigation-drawer-item interactive type="link" id="code_overview">
+						<t-navigation-drawer-item interactive type="link">
 							Code Overview
+
 						</t-navigation-drawer-item>
 
-						<t-navigation-drawer-item interactive type="link" id="example">
-							Example
+						<t-dropdown>
+							<t-dropdown-title slot="title" type="button" interactive>
+								<div slot="headline">Introduction</div>
+								<md-icon slot="active">arrow_drop_up</md-icon>
+								<md-icon slot="inactive">arrow_drop_down</md-icon>
+							</t-dropdown-title>
+							<t-dropdown-list slot="content">
+								<t-dropdown-list-item interactive type="link">
+									hello
+								</t-dropdown-list-item>
+								<t-dropdown-list-item interactive type="link">
+									Son
+								</t-dropdown-list-item>
+							</t-dropdown-list>
+						</t-dropdown>
+
+						<t-navigation-drawer-item interactive type="link" id="navigation">
+							Navigation
+
+							<md-icon slot="end" class="material-symbols-outlined">
+								chevron_right
+							</md-icon>
+						</t-navigation-drawer-item>
+
+						<t-navigation-drawer-item interactive type="link" id="lists">
+							Lists
+							<md-icon slot="end" class="material-symbols-outlined">
+								chevron_right
+							</md-icon>
 						</t-navigation-drawer-item>
 
 					</t-navigation-drawer-list>
@@ -52,28 +80,36 @@ templ Test2() {
 
 				</t-navigation-drawer>
 
-				<t-navigation-drawer id="drawer">
+				<t-navigation-drawer>
 
-					<t-navigation-drawer-list id="code_overview">
+					<t-navigation-drawer-list id="navigation">
 
 						<t-navigation-drawer-item interactive type="link">
-							Tester Overview
+							Overview
 						</t-navigation-drawer-item>
 
 						<t-navigation-drawer-item interactive type="link">
-							Tester Example
+							Rail
+						</t-navigation-drawer-item>
+
+						<t-navigation-drawer-item interactive type="link">
+							Drawer
 						</t-navigation-drawer-item>
 
 					</t-navigation-drawer-list>
 
-					<t-navigation-drawer-list id="example">
+					<t-navigation-drawer-list id="lists">
 
 						<t-navigation-drawer-item interactive type="link">
-							Example Overview
+							Nav Overview
 						</t-navigation-drawer-item>
 
 						<t-navigation-drawer-item interactive type="link">
-							Example Example
+							List
+						</t-navigation-drawer-item>
+
+						<t-navigation-drawer-item interactive type="link">
+							List-Item
 						</t-navigation-drawer-item>
 
 					</t-navigation-drawer-list>

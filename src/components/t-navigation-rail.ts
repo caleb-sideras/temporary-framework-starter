@@ -11,8 +11,11 @@ export class TNavigationRail extends TList {
       --md-list-container-color: var(--t-navigation-rail-list-container-color) !important;
 --md-ref-typeface-plain: 'Roboto Mono, monospace';
 
-      padding: 0px !important;
+      padding: 8px !important;
       background: var(--t-navigation-rail-list-container-color);
+      gap: 24px;
+      display: flex;
+      flex-direction: column;    
     }
   `,
     ...TList.styles

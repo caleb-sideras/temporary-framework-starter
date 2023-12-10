@@ -1,21 +1,9 @@
-import { PropertyValues, css } from 'lit';
+import { PropertyValues } from 'lit';
 import { MdList } from '@material/web/list/list';
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
 
 @customElement('t-list')
 export class TList extends MdList {
-
-  static styles = [
-    css`
-    :host{
-        padding-bottom: 0px !important;
-        padding-left: 8px !important;
-        padding-right: 8px !important;
-        padding-top: 8px !important;
-    }
-  `,
-    ...MdList.styles
-  ]
 
   @property({ type: Number, attribute: 'active-index' }) activeIndex = -1;
 

@@ -4485,17 +4485,6 @@ class TList extends MdList {
     this.activeIndex = -1;
     this.event = "list";
   }
-  static styles = [
-    i`
-    :host{
-        padding-bottom: 0px !important;
-        padding-left: 8px !important;
-        padding-right: 8px !important;
-        padding-top: 8px !important;
-    }
-  `,
-    ...MdList.styles
-  ];
   tabs = [];
   firstUpdated(changedProperties) {
     super.firstUpdated(changedProperties);
@@ -4576,44 +4565,30 @@ TList = __legacyDecorateClassTS([
 
 // node_modules/lit-html/directi
 class TListItem extends MdListItem {
-  constructor() {
-    super(...arguments);
-    this.active = false;
-    this.event = "list";
-  }
   static styles = [
     i`
       md-item {
-        --md-list-item-label-text-size: var(--t-navigation-rail-list-item-text-size);
         gap: 8px !important;
       }      
     `,
     ...MdListItem.styles
   ];
-  updated(_2) {
-    this.onclick = (event) => {
-      if (this.active) {
-        event.stopImmediatePropagation();
-        event.preventDefault();
-      }
-      this.dispatchEvent(new CustomEvent(`t-${this.event}-item-interaction`, {
-        detail: { state: this },
-        bubbles: true,
-        composed: true
-      }));
-    };
+  constructor() {
+    super();
+    this.active = false;
+    this.event = "list";
+    this.addEventListener("click", (e10) => this.handleClick(e10));
   }
-  render() {
-    return this.renderListItem(x`
-      <md-item>
-        <div slot="container">
-          ${this.renderRipple()} ${this.renderFocusRing()}
-        </div>
-        <slot name="start" slot="start"></slot>
-        <slot name="end" slot="end"></slot>
-        ${this.renderBody()}
-      </md-item>
-    `);
+  handleClick(e10) {
+    if (this.active) {
+      e10.stopImmediatePropagation();
+      e10.preventDefault();
+    }
+    this.dispatchEvent(new CustomEvent(`t-${this.event}-item-interaction`, {
+      detail: { state: this },
+      bubbles: true,
+      composed: true
+    }));
   }
 }
 __legacyDecorateClassTS([
@@ -4723,8 +4698,11 @@ class TNavigationRail extends TList {
       --md-list-container-color: var(--t-navigation-rail-list-container-color) !important;
 --md-ref-typeface-plain: 'Roboto Mono, monospace';
 
-      padding: 0px !important;
+      padding: 8px !important;
       background: var(--t-navigation-rail-list-container-color);
+      gap: 24px;
+      display: flex;
+      flex-direction: column;    
     }
   `,
     ...TList.styles
@@ -4769,6 +4747,10 @@ class TNavigationRailItem extends TListItem {
   }
   static styles = [
     i`
+      md-item {     
+          --md-list-item-label-text-size: var(--t-navigation-rail-list-item-text-size);
+      }
+
       :host{
         background-color: var(--t-navigation-rail-list-item-container-color);
         --md-list-item-label-text-color	: var(--t-navigation-rail-list-item-color);
@@ -4780,18 +4762,12 @@ class TNavigationRailItem extends TListItem {
         --md-list-item-hover-state-layer-opacity: var(--t-navigation-rail-list-item-hover-state-layer-opacity);
 
         --md-list-item-pressed-state-layer-color: var(--t-navigation-rail-list-item-pressed-state-layer-color);
-        --md-list-item-pressed-state-layer-opacity: var(--t-navigation-rail-list-item-pressed-state-layer-opacity);
-    
-        margin-bottom: 24px;
+        --md-list-item-pressed-state-layer-opacity: var(--t-navigation-rail-list-item-pressed-state-layer-opacity);   
       }
 
       :host([active]){
-        --md-list-item-label-text-color: var(--t-navigation-rail-list-item-active-color) !important;
-        --md-list-item-trailing-icon-color: var(--t-navigation-rail-list-item-active-color) !important;
-
-        border: solid !important;
-        border-width: 1px !important;
-        border-color: var(--t-navigation-rail-list-item-active-color) !important;
+        --md-list-item-label-text-color: var(--t-navigation-rail-list-item-active-color);
+        --md-list-item-trailing-icon-color: var(--t-navigation-rail-list-item-active-color);
       }
     `,
     ...TListItem.styles
@@ -4812,6 +4788,15 @@ class TNavigationDrawer extends TList {
     this.event = "drawer";
     this.parentIndex = -1;
   }
+  static styles = [
+    i`
+    :host{
+      padding-top: 0px !important;
+      --md-list-container-color: var(--t-navigation-drawer-container-color, var(--md-sys-color-surface, #fef7ff));
+        }
+    `,
+    ...TList.styles
+  ];
   idToIndex = new Map;
   firstUpdated(changedProperties) {
     super.firstUpdated(changedProperties);
@@ -4879,10 +4864,11 @@ class TNavigationDrawer extends TList {
     }
     for (let i6 = 0;i6 < this.tabs.length; i6++) {
       if ("active" in this.tabs[i6]) {
-        this.tabs[i6].active = i6 === value;
-      }
-      if ("activeIndex" in this.tabs[i6]) {
-        this.tabs[i6].activeIndex = 0;
+        const setActive = i6 === value;
+        this.tabs[i6].active = setActive;
+        if (setActive) {
+          this.tabs[i6].clickFirstListItem();
+        }
       }
     }
   }
@@ -4900,22 +4886,31 @@ TNavigationDrawer = __legacyDecorateClassTS([
   t("t-navigation-drawer")
 ], TNavigationDrawer);
 
-// node_modules/lit-html/directive-helpers.js
-class TNavigationDrawerList extends TList {
+// node_modules/lit-html/directive
+class TListActive extends TList {
   constructor() {
     super(...arguments);
     this.active = false;
-    this.activeIndex = 0;
-    this.event = "drawer-list";
   }
   static styles = [
     i`
       :host {
+        /** MdList Styling **/
+        --md-list-container-color: var(--t-list-container-color, #ffffff) !important;
+        --md-ref-typeface-plain: var(--t-list-container-font, 'Roboto Mono, monospace');
+
+        width: var(--t-list-container-width, 165px);
+        gap: var(--t-list-container-gap, 24px);
         display: none !important;
+        flex-direction: column;    
       }
 
       :host([active]) {
-        display: block !important;
+        display: flex !important;
+        padding-right: var(--t-list-container-padding-right, 8px !important;
+        padding-left: var(--t-list-container-padding-left, 8px) !important;
+        padding-top: var(--t-list-container-padding-top, 8px) !important;
+        padding-bottom: var(--t-list-container-padding-bottom, 0px) !important;
       }  
   `,
     ...TList.styles
@@ -4923,7 +4918,43 @@ class TNavigationDrawerList extends TList {
 }
 __legacyDecorateClassTS([
   n3({ type: Boolean, reflect: true })
-], TNavigationDrawerList.prototype, "active", undefined);
+], TListActive.prototype, "active", undefined);
+TListActive = __legacyDecorateClassTS([
+  t("t-list-active")
+], TListActive);
+
+// node_modules/lit-html/directive-helpers.js
+class TNavigationDrawerList extends TListActive {
+  constructor() {
+    super(...arguments);
+    this.activeIndex = 0;
+    this.event = "drawer-list";
+  }
+  static styles = [
+    i`
+      :host {
+        --t-list-container-color: var(--t-navigation-drawer-list-container-color, var(--t-list-container-color, #ffffff));
+        --t-list-container-font: var(--t-navigation-drawer-list-container-font, var(--t-list-container-font, 'Roboto Mono, monospace'));
+        --t-list-container-width: var(--t-navigation-drawer-list-container-width, var(--t-list-container-width, 165px));
+        --t-list-container-gap: var(--t-navigation-drawer-list-container-gap, var(--t-list-container-gap, 16px));
+      }
+
+      :host([active]) {
+        --t-list-container-padding-right: var(--t-navigation-drawer-list-container-padding-right, var(--t-list-container-padding-right, 8px));
+        --t-list-container-padding-left: var(--t-navigation-drawer-list-container-padding-left, var(--t-list-container-padding-left, 8px));
+        --t-list-container-padding-top: var(--t-navigation-drawer-list-container-padding-top, var(--t-list-container-padding-top, 0px));
+        --t-list-container-padding-bottom: var(--t-navigation-drawer-list-container-padding-bottom, var(--t-list-container-padding-bottom, 0px));
+      }  
+  `,
+    ...TListActive.styles
+  ];
+  clickFirstListItem() {
+    if (this.tabs.length <= 0)
+      return;
+    this.activeIndex = -1;
+    this.tabs[0].click();
+  }
+}
 __legacyDecorateClassTS([
   n3({ type: Number, attribute: "active-index" })
 ], TNavigationDrawerList.prototype, "activeIndex", undefined);
@@ -4942,10 +4973,14 @@ class TNavigationDrawerItem extends TNavigationRailItem {
   }
   static styles = [
     i`
+      md-item {
+        --md-list-item-label-text-size: var(--t-navigation-drawer-list-item-text-size) !important;
+      }      
+
       :host([active]){
-        border: none !important;
-        border-width: 0px !important;
-        border-color: transparent !important;
+        border: solid !important;
+        border-width: 1px !important;
+        border-color: var(--t-navigation-rail-list-item-active-color) !important;
       }
     `,
     ...TNavigationRailItem.styles
@@ -4957,3 +4992,153 @@ __legacyDecorateClassTS([
 TNavigationDrawerItem = __legacyDecorateClassTS([
   t("t-navigation-drawer-item")
 ], TNavigationDrawerItem);
+
+// node_modules/lit-html/direct
+class TDropdown extends s3 {
+  constructor() {
+    super(...arguments);
+    this.active = false;
+  }
+  dTitle;
+  dList;
+  firstUpdated(_changedProperties) {
+    super.firstUpdated(_changedProperties);
+    this.layout();
+  }
+  updated(_changedProperties) {
+    super.updated(_changedProperties);
+    if (_changedProperties.has("active")) {
+      if (this.active === false) {
+        this.dList.activeIndex = -1;
+        this.dTitle.active = false;
+      }
+    }
+  }
+  layout() {
+    if (!this.dropdownTitle)
+      return;
+    if (!this.dropdownList)
+      return;
+    this.dTitle = this.dropdownTitle[0];
+    this.dList = this.dropdownList[0];
+  }
+  render() {
+    return x`
+      <slot @t-dropdown-title-item-interaction="${this.handleTitleIteraction}" name="title"></slot>
+      <slot @t-dropdown-list-interaction="${this.handleListIteraction}" name="content"></slot>
+    `;
+  }
+  handleTitleIteraction(event) {
+    console.log("handleTitleIteraction");
+    this.dList.active = event.detail.state.collapsed;
+  }
+  handleListIteraction(_2) {
+    this.active = true;
+    this.dTitle.active = true;
+    this.dispatchEvent(new CustomEvent("list-item-interaction", {
+      detail: { state: this },
+      bubbles: true,
+      composed: true
+    }));
+  }
+}
+__legacyDecorateClassTS([
+  n3({ type: Boolean, reflect: true })
+], TDropdown.prototype, "active", undefined);
+__legacyDecorateClassTS([
+  o4({ flatten: true, slot: "title" })
+], TDropdown.prototype, "dropdownTitle", undefined);
+__legacyDecorateClassTS([
+  o4({ flatten: true, slot: "content" })
+], TDropdown.prototype, "dropdownList", undefined);
+TDropdown = __legacyDecorateClassTS([
+  t("t-dropdown")
+], TDropdown);
+
+// node_modules/lit-html/directive-he
+class TDropdownTitle extends TNavigationDrawerItem {
+  constructor() {
+    super(...arguments);
+    this.event = "dropdown-title";
+    this.collapsed = false;
+  }
+  render() {
+    return this.renderListItem(x`
+      <md-item>
+        <div slot="container">
+          ${this.renderRipple()} ${this.renderFocusRing()}
+        </div>
+        <slot name="start" slot="start"></slot>
+        <slot name="end" slot="end">  
+          ${this.collapsed ? this.inactiveSlot : this.activeSlot}         </slot>
+        ${this.renderBody()}
+      </md-item>
+    `);
+  }
+  get activeSlot() {
+    return x`<slot name="active"></slot>`;
+  }
+  get inactiveSlot() {
+    return x`<slot name="inactive"></slot>`;
+  }
+  handleClick(e10) {
+    this.collapsed = !this.collapsed;
+    console.log();
+    super.handleClick(e10);
+  }
+}
+__legacyDecorateClassTS([
+  n3({ type: String, attribute: "event-name" })
+], TDropdownTitle.prototype, "event", undefined);
+__legacyDecorateClassTS([
+  n3({ type: Boolean, reflect: true })
+], TDropdownTitle.prototype, "collapsed", undefined);
+TDropdownTitle = __legacyDecorateClassTS([
+  t("t-dropdown-title")
+], TDropdownTitle);
+
+// node_modules/lit-html/directive-h
+class TDropdownList extends TListActive {
+  constructor() {
+    super(...arguments);
+    this.event = "dropdown-list";
+  }
+  static styles = [
+    i`
+      :host {
+        --t-list-container-color: var(--t-navigation-dropdown-list-container-color, var(--t-list-container-color, #ffffff));
+        --t-list-container-font: var(--t-navigation-dropdown-list-container-font, var(--t-list-container-font, 'Roboto Mono, monospace'));
+        --t-list-container-width: var(--t-navigation-dropdown-list-container-width, var(--t-list-container-width, 165px));
+        --t-list-container-gap: var(--t-navigation-dropdown-list-container-gap, var(--t-list-container-gap, 0px));
+      }
+
+      :host([active]) {
+        --t-list-container-padding-right: var(--t-navigation-dropdown-list-container-padding-right, var(--t-list-container-padding-right, 0px));
+        --t-list-container-padding-left: var(--t-navigation-dropdown-list-container-padding-left, var(--t-list-container-padding-left, 16px));
+        --t-list-container-padding-top: var(--t-navigation-dropdown-list-container-padding-top, var(--t-list-container-padding-top, 0px));
+        --t-list-container-padding-bottom: var(--t-navigation-dropdown-list-container-padding-bottom, var(--t-list-container-padding-bottom, 0px));
+      }  
+  `,
+    ...TListActive.styles
+  ];
+}
+__legacyDecorateClassTS([
+  n3({ type: String, attribute: "event" })
+], TDropdownList.prototype, "event", undefined);
+TDropdownList = __legacyDecorateClassTS([
+  t("t-dropdown-list")
+], TDropdownList);
+
+// node_modules/lit-html/directive-helper
+class TDropdownItem extends TNavigationDrawerItem {
+  constructor() {
+    super(...arguments);
+    this.event = "dropdown-list";
+  }
+}
+__legacyDecorateClassTS([
+  n3({ type: String, attribute: "event-name" })
+], TDropdownItem.prototype, "event", undefined);
+TDropdownItem = __legacyDecorateClassTS([
+  t("t-dropdown-list-item")
+], TDropdownItem);

@@ -57,7 +57,6 @@ export class TNavigation extends LitElement {
   handleRailInteraction(event: CustomEvent) {
     console.log("handleRailInteraction")
     for (let i = 0; i < this.navDrawers.length; i++) {
-      // this about this propagation later
       this.navDrawers[i].activeId = event.detail.state.id;
     }
   }
@@ -68,8 +67,6 @@ export class TNavigation extends LitElement {
 
     console.log("handleDrawerInteraction", index, id)
     if (index >= this.navDrawers.length) return;
-
-    // this about this propagation later
     for (let i = index + 1; i < this.navDrawers.length; i++) {
       this.navDrawers[i].activeId = id;
     }

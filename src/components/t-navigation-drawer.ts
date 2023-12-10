@@ -1,9 +1,19 @@
-import { PropertyValueMap } from "lit";
+import { PropertyValueMap, css } from "lit";
 import { property, customElement } from "lit/decorators.js";
 import { TList } from './t-list';
 
 @customElement('t-navigation-drawer')
 export class TNavigationDrawer extends TList {
+
+  static styles = [
+    css`
+    :host{
+      padding-top: 0px !important;
+      --md-list-container-color: var(--t-navigation-drawer-container-color, var(--md-sys-color-surface, #fef7ff));
+        }
+    `,
+    ...TList.styles
+  ]
 
   @property({ type: String, attribute: 'active-index' }) activeId = "";
 
@@ -65,6 +75,7 @@ export class TNavigationDrawer extends TList {
       }
     }
   }
+
   override onActiveIndexChange(value: number) {
     console.log(this.id, this.activeIndex)
     if (value === -1 || value === undefined) {
@@ -80,8 +91,13 @@ export class TNavigationDrawer extends TList {
     }
 
     for (let i = 0; i < this.tabs.length; i++) {
-      if ("active" in this.tabs[i]) { this.tabs[i].active = i === value; }
-      if ("activeIndex" in this.tabs[i]) { this.tabs[i].activeIndex = 0; }
+      if ("active" in this.tabs[i]) {
+        const setActive = i === value;
+        this.tabs[i].active = setActive;
+        if (setActive) {
+          this.tabs[i].clickFirstListItem();
+        }
+      }
     }
   }
 }

@@ -226,6 +226,12 @@ md-item:host {
 
   --t-navigation-rail-list-item-active-color: #743342;
 
+  /** Navigation Drawer **/
+  --t-navigation-drawer-container-color: #ffffff;
+
+  /** Navigation Drawer List Item **/
+  --t-navigation-drawer-list-item-text-size: 0.9rem;
+
   --md-list-item-top-space: 8px;
   --md-list-item-bottom-space: 8px;
   --md-list-item-one-line-container-height: 42px;

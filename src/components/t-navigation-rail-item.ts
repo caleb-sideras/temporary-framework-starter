@@ -6,6 +6,10 @@ import { property, customElement } from 'lit/decorators.js';
 export class TNavigationRailItem extends TListItem {
   static styles = [
     css`
+      md-item {     
+          --md-list-item-label-text-size: var(--t-navigation-rail-list-item-text-size);
+      }
+
       :host{
         background-color: var(--t-navigation-rail-list-item-container-color);
         --md-list-item-label-text-color	: var(--t-navigation-rail-list-item-color);
@@ -17,18 +21,12 @@ export class TNavigationRailItem extends TListItem {
         --md-list-item-hover-state-layer-opacity: var(--t-navigation-rail-list-item-hover-state-layer-opacity);
 
         --md-list-item-pressed-state-layer-color: var(--t-navigation-rail-list-item-pressed-state-layer-color);
-        --md-list-item-pressed-state-layer-opacity: var(--t-navigation-rail-list-item-pressed-state-layer-opacity);
-    
-        margin-bottom: 24px;
+        --md-list-item-pressed-state-layer-opacity: var(--t-navigation-rail-list-item-pressed-state-layer-opacity);   
       }
 
       :host([active]){
-        --md-list-item-label-text-color: var(--t-navigation-rail-list-item-active-color) !important;
-        --md-list-item-trailing-icon-color: var(--t-navigation-rail-list-item-active-color) !important;
-
-        border: solid !important;
-        border-width: 1px !important;
-        border-color: var(--t-navigation-rail-list-item-active-color) !important;
+        --md-list-item-label-text-color: var(--t-navigation-rail-list-item-active-color);
+        --md-list-item-trailing-icon-color: var(--t-navigation-rail-list-item-active-color);
       }
     `,
     ...TListItem.styles,

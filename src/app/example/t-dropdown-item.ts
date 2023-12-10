@@ -34,7 +34,7 @@ export class TDropdownItem extends MdListItem implements NavigationTabState {
       }
 
       this.dispatchEvent(
-        new CustomEvent('dropdown-item-interaction', {
+        new CustomEvent('dropdown-list-item-interaction', {
           detail: { state: this },
           bubbles: true,
           composed: true,

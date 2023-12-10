@@ -50,7 +50,7 @@ export class TDropdown extends LitElement {
 
   private handleTitleIteraction(event: CustomEvent) {
     console.log("handleTitleIteraction");
-    this.dList.collapsed = event.detail.state.collapsed
+    this.dList.active = event.detail.state.collapsed
   }
 
   private handleListIteraction(_: CustomEvent) {

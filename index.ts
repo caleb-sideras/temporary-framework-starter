@@ -40,6 +40,11 @@ import './src/components/t-navigation-drawer'
 import './src/components/t-navigation-drawer-list'
 import './src/components/t-navigation-drawer-list-item'
 
+import './src/components/t-dropdown'
+import './src/components/t-dropdown-title'
+import './src/components/t-dropdown-list'
+import './src/components/t-dropdown-list-item'
+
 // import './src/app/example/t-navigation-drawer'
 // import './src/app/example/t-navigation-list'
 // import './src/app/example/t-navigation-tab'
