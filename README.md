@@ -1,3 +1,7 @@
+# TODO
+
+- DefaultHandler broken (no w, r params = duplicate page)
+
 # Ideas
 
 ## Components

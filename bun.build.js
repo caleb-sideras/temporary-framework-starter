@@ -1,5 +1,5 @@
 const appDir = {
-  entrypoints: ['src/app/example/page.ts', 'src/app/home_/page.ts'],
+  entrypoints: ['src/app/home_/page.ts'],
   outdir: 'static/js',
   format: "esm",
   naming: "[dir]/[name].[ext]", // default
@@ -24,8 +24,8 @@ function printResult(result, out){
   }
 }
 
-const appResult = await Bun.build(appDir)
+// const appResult = await Bun.build(appDir)
 const globalResult = await Bun.build(globalDir)
 
-printResult(appResult, "App Directory")
+// printResult(appResult, "App Directory")
 printResult(globalResult, "Global Directory")

@@ -1,0 +1,49 @@
+package server
+
+type ProjectTabType struct {
+	Title      string
+	ProjectURL string
+	ReadMeURL  string
+	VideoURL   string
+}
+
+templ ProjectTab(project ProjectTabType) {
+	<div style="flex-direction: column; display: flex;">
+		<t-header href={ project.ProjectURL } heading={ project.Title }></t-header>
+		<div hx-get={ project.ReadMeURL } hx-trigger="load" hx-target="#example-body" hx-swap="innerHTML" hx-indicator="#spinner"></div>
+		<md-tabs activeTabIndex="0">
+			<md-primary-tab inline-icon hx-get={ project.ReadMeURL } hx-target="#example-body" hx-swap="innerHTML">
+				<md-icon slot="icon">
+					<span
+ 						class="material-symbols-outlined"
+ 						style="font-variation-settings: &#39;FILL&#39; 0, &#39;wght&#39; 400, &#39;GRAD&#39; 0, &#39;opsz&#39; 48;"
+					>
+						markdown
+					</span>
+				</md-icon>
+				ReadME.md
+			</md-primary-tab>
+			<md-primary-tab inline-icon hx-get={ project.VideoURL } hx-target="#example-body" hx-swap="innerHTML">
+				<md-icon slot="icon">
+					<span
+ 						class="material-symbols-outlined"
+ 						style="font-variation-settings: &#39;FILL&#39; 0, &#39;wght&#39; 400, &#39;GRAD&#39; 0, &#39;opsz&#39; 48;"
+					>
+						movie
+					</span>
+				</md-icon>
+				Videos
+			</md-primary-tab>
+		</md-tabs>
+		<div id="example-body" style="display:flex; justify-content: center;">
+			<md-circular-progress
+ 				slot="trailing-icon"
+ 				indeterminate
+ 				class="htmx-indicator m-auto"
+ 				id="spinner"
+ 				role="status"
+ 				aria-hidden="true"
+			></md-circular-progress>
+		</div>
+	</div>
+}

@@ -1,0 +1,16 @@
+package server
+
+type ProjectType struct {
+	Title      string
+	ProjectURL string
+	Body       templ.Component
+}
+
+templ Project(project ProjectType) {
+	<div style="flex-direction: column; display: flex;">
+		<t-header href={ project.ProjectURL } heading={ project.Title }></t-header>
+		<div id="example-body" style="display:flex; justify-content: center;">
+			@project.Body
+		</div>
+	</div>
+}

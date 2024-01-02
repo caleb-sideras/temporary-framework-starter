@@ -27,7 +27,7 @@ func main() {
 
 		case "run":
 			g := gox.NewGox(HTML_OUT_DIR)
-			g.Build(APP_DIR, PROJECT_PACKAGE_DIR)
+			// g.Build(APP_DIR, PROJECT_PACKAGE_DIR)
 
 			http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 

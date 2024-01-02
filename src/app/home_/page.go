@@ -1,13 +1,12 @@
 package home
 
 import (
+	"net/http"
+
 	"github.com/a-h/templ"
-	components "github.com/caleb-sideras/gox2/src/app/home_/components"
 )
 
-// Server Component
-func Page_() templ.Component {
-	// perform server-side logic -> fetch data, mutations, etc
+func Page(w http.ResponseWriter, r *http.Request) templ.Component {
 
-	return components.HomeTempl(VarHomeCards, VarHomeSections)
+	return HomeTempl()
 }
