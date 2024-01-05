@@ -26,7 +26,14 @@ export class TNavigationDrawerList extends TDrawerList {
   static override styles = [
     css`
       :host{
-        --md-list-container-color: var(--t-navigation-drawer-container-color, var(--md-sys-color-surface, #fef7ff));
+        --md-list-container-color: var(--t-navigation-drawer-list-container-color, #ffffff);
+        font-family: var(--t-navigation-drawer-list-container-font, 'Roboto Mono, monospace');
+        gap: var(--t-navigation-drawer-list-container-gap, 0px);
+        padding-right: var(--t-navigation-drawer-list-container-padding-right, 0px !important);
+        padding-left: var(--t-navigation-drawer-list-container-padding-left, 0px) !important;
+        padding-top: var(--t-navigation-drawer-list-container-padding-top, 8px) !important;
+        padding-bottom: var(--t-navigation-drawer-list-container-padding-bottom, 0px) !important;
+        width: var(--t-navigation-drawer-list-container-width, 165px);
       }
       :host([tabindex="-1"]){
        display: none !important; 

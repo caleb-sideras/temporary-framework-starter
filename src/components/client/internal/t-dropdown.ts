@@ -11,28 +11,6 @@ export class TDropdown extends LitElement {
   @queryAssignedElements({ flatten: true, slot: 'title' })
   private readonly dropdownTitle: TDropdownTitle[];
 
-
-  // many solutions -- non ideal. thinking...
-  //1. make dropdown itself the controller, add another state?
-  // 2. just add a listener on the title to emit an event on change? -- doesnt make sense since why should an external controller query the title opposed to the parent?
-
-  // WOW -- an interesting solution is simply to store the LISTS in the controller and then using the items to reurn the items then iterate over them for a match????????? once a match is found you simply set parent collapsed to true/false
-  // removes the need for storing induvidual items->title map
-  // adds a global control mechanism
-  // BUT adds another state in dropdown - ehg
-  // ok but how does this scale?
-  // idk - wouldnt scale with nested unless
-
-
-  // OK BUT IT ISNT - no need to explictly highlight the title if the list/dropdown can detect a highlighted child. ok this is the solution. interesting. so the ListItem would need to emit an event when the tabIndex is changed externally 'external-activation' -> np!!! 
-  // this scales well! can even OPEN the list based on external activation - easy
-  // only downside is that i would need to create a new dropdown-list-element! np bossmen
-
-  // only issue i see is that you cannot use your own components - have to use mine!
-
-  // ISSUE - this approach will create an loop?
-  // case request-activation -> activates -> updated -> external-activation -- ok not really an issue just messy
-
   @queryAssignedElements({ flatten: true, slot: 'content' })
   private readonly dropdownList: TDropdownList[];
 
@@ -69,18 +47,20 @@ export class TDropdown extends LitElement {
 
   handleTitleIteraction() {
     this.dList.collapsed = this.dTitle.collapsed;
-    console.log(this.dTitle.tabIndex, this.dList.collapsed);
+    console.log(this.dTitle.collapsed, this.dList.collapsed);
   }
 
   /** 
   * case where an external listController changes a dropdown-list-item tabIndex
   */
+  // TODO: spooky action activating the title tabIndex - something about the initialization stage with the title not being in a list
   handleExternalActivation(event: Event) {
     const eventItem = event.target as TDropdownListItem;
     if (eventItem.tabIndex === -1) {
       this.dTitle.tabIndex = -1;
     } else if (eventItem.tabIndex === 0) {
       this.dTitle.tabIndex = 0;
+      if (this.dTitle.collapsed) this.dTitle.collapsed = false;
       if (this.dList.collapsed) this.dList.collapsed = false;
     }
   }

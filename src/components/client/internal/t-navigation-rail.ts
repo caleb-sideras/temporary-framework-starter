@@ -10,6 +10,7 @@ export class TNavigationRail extends MdList {
     css`
       :host {
         width: auto !important;
+        gap: var(--t-navigation-drawer-rail-container-gap, 16px);
       }
   `,
     ...MdList.styles
@@ -28,6 +29,7 @@ export class TNavigationRail extends MdList {
   activateItemFromId(href: string) {
     for (const item of this.items as ListItem[]) {
       if (this.removeFirstLastSlash(item.href) === this.removeFirstLastSlash(href)) {
+        console.log(item, item.href);
         const activationEvent = new Event('request-activation', { bubbles: true, composed: true });
         Object.defineProperty(activationEvent, 'target', { value: item });
         this.listController.onRequestActivation(activationEvent);

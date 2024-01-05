@@ -15,13 +15,13 @@ export class TDropdownList extends MdList {
         width: auto !important;
         display: flex !important;
 
-        --t-list-container-color: var(--t-navigation-dropdown-list-container-color, #ffffff);
-        --t-list-container-font: var(--t-navigation-dropdown-list-container-font, 'Roboto Mono, monospace');
-        --t-list-container-gap: var(--t-navigation-dropdown-list-container-gap, 4px);
-        --t-list-container-padding-right: var(--t-navigation-dropdown-list-container-padding-right, 0px);
-        --t-list-container-padding-left: var(--t-navigation-dropdown-list-container-padding-left, 16px);
-        --t-list-container-padding-top: var(--t-navigation-dropdown-list-container-padding-top, 4px);
-        --t-list-container-padding-bottom: var(--t-navigation-dropdown-list-container-padding-bottom, 0px);
+        --md-list-container-color: var(--t-navigation-dropdown-list-container-color, #ffffff);
+        font-family: var(--t-navigation-dropdown-list-container-font, 'Roboto Mono, monospace');
+        gap: var(--t-navigation-dropdown-list-container-gap, 4px);
+        padding-right: var(--t-navigation-dropdown-list-container-padding-right, 0px !important);
+        padding-left: var(--t-navigation-dropdown-list-container-padding-left, 16px) !important;
+        padding-top: var(--t-navigation-dropdown-list-container-padding-top, 4px) !important;
+        padding-bottom: var(--t-navigation-dropdown-list-container-padding-bottom, 0px) !important;
       }  
   `,
     ...MdList.styles

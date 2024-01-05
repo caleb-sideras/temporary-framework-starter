@@ -14,8 +14,6 @@ import { queryAssignedElements, property } from 'lit/decorators.js';
 import { ListController, ListControllerConfig, NavigableKeys } from '@material/web/list/internal/list-controller.js';
 import { ListItem as SharedListItem } from '@material/web/list/internal/list-navigation-helpers.js';
 import { List } from '@material/web/list/internal/list';
-import { TDropdown } from '../t-dropdown';
-import { TDropdownTitle } from '../t-dropdown-title';
 
 
 /** TEMPORARY UI -- START **/
@@ -157,7 +155,6 @@ export class TDrawerList extends LitElement {
     // activate matchingItem 
     if (matchingItem !== null) {
       this.activateItem(matchingItem);
-      // this.activateTitle(matchingItem);
     }
 
     // reset url
@@ -206,11 +203,9 @@ export class TDrawerList extends LitElement {
     isItem: (item: HTMLElement): item is ListItem => this.itemAttributes.some((condition) => item.localName === condition), isList: (item: HTMLElement): item is List => this.listAttributes.some((condition) => item.localName === condition), getPossibleItems: () => this.slotItems,
     isRtl: () => getComputedStyle(this).direction === 'rtl',
     deactivateItem: (item) => {
-      // this.deactivateTitle(item);
       item.tabIndex = -1;
     },
     activateItem: (item) => {
-      // this.activateTitle(item);
       item.tabIndex = 0;
     },
     isNavigableKey: (key) => NAVIGABLE_KEY_SET.has(key),

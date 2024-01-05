@@ -1,7 +1,7 @@
 {
   "name": "temporary",
   "version": "1.0.0",
-  "description": "Website for the Temporary Framework",
+  "description": "Personal Website",
   "main": "index.ts",
   "scripts": {
     "tailwind-dev": "bun run tailwindcss -i ./src/styles/app.css -o ./static/css/output.css --watch",

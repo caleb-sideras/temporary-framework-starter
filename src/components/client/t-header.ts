@@ -24,7 +24,13 @@ export class THeader extends LitElement {
       font-weight: 500;
       text-align: center;
       margin: 0;
-      }
+    }
+    @media screen and (max-width: 1024px) {
+      h1 {
+        font-size: 3.25rem;
+        line-height: 3.75rem;
+      }    
+    }
   `
 
   @property({ type: String, attribute: 'href' }) href = '';

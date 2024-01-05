@@ -8,8 +8,9 @@ import { ListItem } from "./internal/t-list";
 export class TNavigation extends LitElement {
   static styles = css`
     :host{
-      display: flex;
+      display: none;
       gap: 8px;
+      height: 100%;
     }
   `;
 

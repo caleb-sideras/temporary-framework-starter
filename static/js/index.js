@@ -4572,15 +4572,14 @@ class TLink extends HTMXElement {
   static styles = i`
 		:host{	
 			flex-basis: 50%;
+		  box-sizing: border-box;
 		}
 		a:hover h2,
 		a:hover p {
 			color: var(--md-sys-color-primary) !important;
     }		
-		a:hover .image{
-			border:var(--md-sys-color-primary) !important;
-			border-style: solid !important;
-			border-width: 2px !important;
+		a:hover img{
+			border-color:var(--md-sys-color-primary) !important;
 		}
 		a{
 			text-decoration: none;
@@ -4600,6 +4599,9 @@ class TLink extends HTMXElement {
 		}
 		img {
 			width: 100%;
+			border-color: transparent;
+			border-style: solid !important;
+			border-width: 2px !important;
 		}		
 	`;
   render() {
@@ -4610,13 +4612,11 @@ class TLink extends HTMXElement {
 			<p>
 				${this.description}
 			</p>
-			<div class="image">
-				<img
-					loading="lazy"
-					src="${this.imgSrc}"
-					alt="${this.imgAlt}"
-				/>     
-			</div>
+			<img
+				loading="lazy"
+				src="${this.imgSrc}"
+				alt="${this.imgAlt}"
+			/>     
     `);
   }
 }
@@ -4663,7 +4663,13 @@ class THeader extends s3 {
       font-weight: 500;
       text-align: center;
       margin: 0;
-      }
+    }
+    @media screen and (max-width: 1024px) {
+      h1 {
+        font-size: 3.25rem;
+        line-height: 3.75rem;
+      }    
+    }
   `;
   render() {
     return x`
@@ -4696,7 +4702,6 @@ class TListItem extends MdListItem {
       }
 
       :host([tabindex="-1"]) { 
-            background-color: var(--t-list-item-container-color, var(--md-sys-color-primary-container, #f5f5f5));
         --md-list-item-label-text-color	: var(--t-list-item-color, var(--md-sys-color-on-primary-container, #000000));
         --md-list-item-trailing-icon-color: var(--t-list-item-color, var(--md-sys-color-on-primary-container, #000000));
         border-radius: var(--t-list-item-border-radius, 32px) !important;
@@ -4716,6 +4721,29 @@ class TListItem extends MdListItem {
     `,
     ...MdListItem.styles
   ];
+  renderListItem(content) {
+    this.type = "button";
+    const isAnchor = false;
+    let tag = s4`button`;
+    const isInteractive = true;
+    const target = isAnchor && !!this.target ? this.target : T;
+    return n6`
+      <${tag}
+        id="item"
+        tabindex="${this.isDisabled || !isInteractive ? -1 : 0}"
+        ?disabled=${this.isDisabled}
+        role="listitem"
+        aria-selected=${this.ariaSelected || T}
+        aria-checked=${this.ariaChecked || T}
+        aria-expanded=${this.ariaExpanded || T}
+        aria-haspopup=${this.ariaHasPopup || T}
+        class="list-item ${e8(this.getRenderClasses())}"
+        href=${this.href || T}
+        target=${target}
+        @focus=${this.onFocus}
+      >${content}</${tag}>
+    `;
+  }
 }
 TListItem = __legacyDecorateClassTS([
   t("t-list-item")
@@ -4754,8 +4782,9 @@ class TNavigation extends s3 {
   }
   static styles = i`
     :host{
-      display: flex;
+      display: none;
       gap: 8px;
+      height: 100%;
     }
   `;
   navRail;
@@ -4852,6 +4881,7 @@ class TNavigationRail extends MdList {
     i`
       :host {
         width: auto !important;
+        gap: var(--t-navigation-drawer-rail-container-gap, 16px);
       }
   `,
     ...MdList.styles
@@ -4866,6 +4896,7 @@ class TNavigationRail extends MdList {
   activateItemFromId(href) {
     for (const item3 of this.items) {
       if (this.removeFirstLastSlash(item3.href) === this.removeFirstLastSlash(href)) {
+        console.log(item3, item3.href);
         const activationEvent = new Event("request-activation", { bubbles: true, composed: true });
         Object.defineProperty(activationEvent, "target", { value: item3 });
         this.listController.onRequestActivation(activationEvent);
@@ -5022,7 +5053,14 @@ class TNavigationDrawerList extends TDrawerList {
   static styles = [
     i`
       :host{
-        --md-list-container-color: var(--t-navigation-drawer-container-color, var(--md-sys-color-surface, #fef7ff));
+        --md-list-container-color: var(--t-navigation-drawer-list-container-color, #ffffff);
+        font-family: var(--t-navigation-drawer-list-container-font, 'Roboto Mono, monospace');
+        gap: var(--t-navigation-drawer-list-container-gap, 0px);
+        padding-right: var(--t-navigation-drawer-list-container-padding-right, 0px !important);
+        padding-left: var(--t-navigation-drawer-list-container-padding-left, 0px) !important;
+        padding-top: var(--t-navigation-drawer-list-container-padding-top, 8px) !important;
+        padding-bottom: var(--t-navigation-drawer-list-container-padding-bottom, 0px) !important;
+        width: var(--t-navigation-drawer-list-container-width, 165px);
       }
       :host([tabindex="-1"]){
        display: none !important; 
@@ -5039,6 +5077,20 @@ TNavigationDrawerList = __legacyDecorateClassTS([
 
 // node_modules/lit-html/directive-helpers.js.jsus-ring-
 class TNavigationDrawer extends MdList {
+  static styles = [
+    i`
+      :host{
+        --md-list-container-color: var(--t-navigation-drawer-container-color, #ffffff);
+        font-family: var(--t-navigation-drawer-container-font, 'Roboto Mono, monospace');
+        gap: var(--t-navigation-drawer-container-gap, 0px);
+        padding-right: var(--t-navigation-drawer-container-padding-right, 0px !important);
+        padding-left: var(--t-navigation-drawer-container-padding-left, 0px) !important;
+        padding-top: var(--t-navigation-drawer-container-padding-top, 0px) !important;
+        padding-bottom: var(--t-navigation-drawer-container-padding-bottom, 0px) !important;
+      }
+      `,
+    ...MdList.styles
+  ];
   constructor() {
     super();
     this.url = "";
@@ -5130,7 +5182,7 @@ class TDropdown extends s3 {
   }
   handleTitleIteraction() {
     this.dList.collapsed = this.dTitle.collapsed;
-    console.log(this.dTitle.tabIndex, this.dList.collapsed);
+    console.log(this.dTitle.collapsed, this.dList.collapsed);
   }
   handleExternalActivation(event) {
     const eventItem = event.target;
@@ -5138,6 +5190,8 @@ class TDropdown extends s3 {
       this.dTitle.tabIndex = -1;
     } else if (eventItem.tabIndex === 0) {
       this.dTitle.tabIndex = 0;
+      if (this.dTitle.collapsed)
+        this.dTitle.collapsed = false;
       if (this.dList.collapsed)
         this.dList.collapsed = false;
     }
@@ -5169,13 +5223,13 @@ class TDropdownList extends MdList {
         width: auto !important;
         display: flex !important;
 
-        --t-list-container-color: var(--t-navigation-dropdown-list-container-color, #ffffff);
-        --t-list-container-font: var(--t-navigation-dropdown-list-container-font, 'Roboto Mono, monospace');
-        --t-list-container-gap: var(--t-navigation-dropdown-list-container-gap, 4px);
-        --t-list-container-padding-right: var(--t-navigation-dropdown-list-container-padding-right, 0px);
-        --t-list-container-padding-left: var(--t-navigation-dropdown-list-container-padding-left, 16px);
-        --t-list-container-padding-top: var(--t-navigation-dropdown-list-container-padding-top, 4px);
-        --t-list-container-padding-bottom: var(--t-navigation-dropdown-list-container-padding-bottom, 0px);
+        --md-list-container-color: var(--t-navigation-dropdown-list-container-color, #ffffff);
+        font-family: var(--t-navigation-dropdown-list-container-font, 'Roboto Mono, monospace');
+        gap: var(--t-navigation-dropdown-list-container-gap, 4px);
+        padding-right: var(--t-navigation-dropdown-list-container-padding-right, 0px !important);
+        padding-left: var(--t-navigation-dropdown-list-container-padding-left, 16px) !important;
+        padding-top: var(--t-navigation-dropdown-list-container-padding-top, 4px) !important;
+        padding-bottom: var(--t-navigation-dropdown-list-container-padding-bottom, 0px) !important;
       }  
   `,
     ...MdList.styles
@@ -5211,7 +5265,7 @@ TDropdownListItem = __legacyDecorateClassTS([
 ], TDropdownListItem);
 
 // node_modules/lit-html/directive-helpers.js.jsus-ri
-class TDropdownTitle extends TListItem {
+class TDropdownTitle extends TListItem2 {
   render() {
     return this.renderListItem(x`
       <md-item>
@@ -5239,7 +5293,6 @@ class TDropdownTitle extends TListItem {
     this.collapsed = true;
     this.addEventListener("click", (_2) => {
       this.collapsed = !this.collapsed;
-      console.log(this.collapsed);
       this.dispatchEvent(new Event("title-activation", { bubbles: true, composed: true }));
     });
   }

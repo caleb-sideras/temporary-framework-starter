@@ -13,7 +13,6 @@ export class TListItem extends MdListItem {
       }
 
       :host([tabindex="-1"]) { 
-            background-color: var(--t-list-item-container-color, var(--md-sys-color-primary-container, #f5f5f5));
         --md-list-item-label-text-color	: var(--t-list-item-color, var(--md-sys-color-on-primary-container, #000000));
         --md-list-item-trailing-icon-color: var(--t-list-item-color, var(--md-sys-color-on-primary-container, #000000));
         border-radius: var(--t-list-item-border-radius, 32px) !important;
@@ -34,44 +33,32 @@ export class TListItem extends MdListItem {
     ...MdListItem.styles,
   ];
 
-  // protected renderListItem(content: unknown) {
-  //   this.type = "text";
+  protected renderListItem(content: unknown) {
+    this.type = "button";
 
-  //   const isAnchor = this.type === 'link';
-  //   let tag: StaticValue;
-  //   switch (this.type) {
-  //     case 'link':
-  //       tag = literal`li`;
-  //       break;
-  //     case 'button':
-  //       tag = literal`button`;
-  //       break;
-  //     default:
-  //     case 'text':
-  //       tag = literal`li`;
-  //       break;
-  //   }
+    const isAnchor = false;
+    let tag: StaticValue = literal`button`;
 
-  //   const isInteractive = this.type !== 'text';
-  //   // TODO(b/265339866): announce "button"/"link" inside of a list item. Until
-  //   // then all are "listitem" roles for correct announcement.
-  //   const target = isAnchor && !!this.target ? this.target : nothing;
-  //   return staticHtml`
-  //     <${tag}
-  //       id="item"
-  //       tabindex="${this.isDisabled || !isInteractive ? -1 : 0}"
-  //       ?disabled=${this.isDisabled}
-  //       role="listitem"
-  //       aria-selected=${(this as ARIAMixinStrict).ariaSelected || nothing}
-  //       aria-checked=${(this as ARIAMixinStrict).ariaChecked || nothing}
-  //       aria-expanded=${(this as ARIAMixinStrict).ariaExpanded || nothing}
-  //       aria-haspopup=${(this as ARIAMixinStrict).ariaHasPopup || nothing}
-  //       class="list-item ${classMap(this.getRenderClasses())}"
-  //       href=${this.href || nothing}
-  //       target=${target}
-  //       @focus=${this.onFocus}
-  //     >${content}</${tag}>
-  //   `;
-  // }
+    const isInteractive = true;
+    // TODO(b/265339866): announce "button"/"link" inside of a list item. Until
+    // then all are "listitem" roles for correct announcement.
+    const target = isAnchor && !!this.target ? this.target : nothing;
+    return staticHtml`
+      <${tag}
+        id="item"
+        tabindex="${this.isDisabled || !isInteractive ? -1 : 0}"
+        ?disabled=${this.isDisabled}
+        role="listitem"
+        aria-selected=${(this as ARIAMixinStrict).ariaSelected || nothing}
+        aria-checked=${(this as ARIAMixinStrict).ariaChecked || nothing}
+        aria-expanded=${(this as ARIAMixinStrict).ariaExpanded || nothing}
+        aria-haspopup=${(this as ARIAMixinStrict).ariaHasPopup || nothing}
+        class="list-item ${classMap(this.getRenderClasses())}"
+        href=${this.href || nothing}
+        target=${target}
+        @focus=${this.onFocus}
+      >${content}</${tag}>
+    `;
+  }
 
 }

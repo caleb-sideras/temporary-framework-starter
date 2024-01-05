@@ -1,4 +1,4 @@
-## AudioProcessor
+## Audio Processor
 
 The AudioProcessor class is a high-level interface for processing audio files. It is designed to analyze and segment audio files, transcribe vocals, and convert the accompaniment to MIDI files. This class makes use of several libraries including librosa, spleeter, and AudioToMidiMelodia.
 

@@ -201,7 +201,6 @@ CAAS is an audio segmentation algorithm that iteratively finds the best interval
 CAAS provides visualizations to help understand the different stages of the initial audio segmentation process.
 
 1. **Waveform**: Displays the waveform of the input audio signal.
-
     ![Waveform](https://raw.githubusercontent.com/caleb-sideras/CAAS/main/figures/waveform.png)
 
 2. **Constant-Q Transform (CQT)**: Displays the CQT of the input audio signal, which represents the frequency content of the signal over time.

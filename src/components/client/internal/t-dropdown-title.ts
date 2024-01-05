@@ -1,9 +1,9 @@
 import { customElement, property } from 'lit/decorators.js';
 import { html } from 'lit';
-import { TListItem } from './t-list-item';
+import { TListItem2 } from './t-list-item-2';
 
 @customElement('t-dropdown-title')
-export class TDropdownTitle extends TListItem {
+export class TDropdownTitle extends TListItem2 {
 
   @property({ type: Boolean, reflect: true }) collapsed = true;
 
@@ -40,7 +40,6 @@ export class TDropdownTitle extends TListItem {
     this.addEventListener('click', (_) => {
 
       this.collapsed = !this.collapsed;
-      console.log(this.collapsed);
       this.dispatchEvent(new Event('title-activation', { bubbles: true, composed: true }));
     });
   }

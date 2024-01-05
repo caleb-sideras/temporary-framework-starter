@@ -1,4 +1,4 @@
-## AudioCluster
+## Audio Cluster
 
 The AudioCluster class takes an audio file as input and segments it into sections based on similarity. Then, it clusters these segments to group similar sections together.
 

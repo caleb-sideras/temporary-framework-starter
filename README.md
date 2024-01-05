@@ -1,6 +1,65 @@
 # TODO
 
-- DefaultHandler broken (no w, r params = duplicate page)
+- Finish all pages - experience, blog
+- add own docs -> video button
+- fix static render
+- upcoming projects (disabled)
+-bugs with navigation -> going back/forward breaks it, using tab/enter breaks it
+- Mobile Navigation hard
+- add transitions?
+- remove redudant files
+
+
+AFTER LAUNCH
+- add slugs 
+- add ssr url to navigation - NOT DOING THIS; want to serve static pages for speed, as this will be on a EC2 micro :)) $5 month
+
+FINISHED
+
+- change image (cdn?) - NO NEED TO OVERCOMPLICATE...
+- add disclaimer for ui/framework - DONE
+- add fixed width for drawer - DONE
+- fix border shrink issue - DONE
+- Hide Desktop Navigtaion
+
+NOTES
+
+- Provide w and r objects to the index -> if so, all static pages will be rendered on build-time and inserted on request time
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Ideas
 

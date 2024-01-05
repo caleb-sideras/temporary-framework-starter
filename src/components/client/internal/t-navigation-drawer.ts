@@ -1,11 +1,26 @@
 import { MdList } from "@material/web/list/list";
-import { PropertyValueMap, html } from "lit";
+import { PropertyValueMap, html, css } from "lit";
 import { TNavigationDrawerList } from "./t-navigation-drawer-list";
 import { property, customElement } from "lit/decorators.js";
 import { ListItem } from "./internal/t-list";
 
 @customElement('t-navigation-drawer')
 export class TNavigationDrawer extends MdList {
+
+  static styles = [
+    css`
+      :host{
+        --md-list-container-color: var(--t-navigation-drawer-container-color, #ffffff);
+        font-family: var(--t-navigation-drawer-container-font, 'Roboto Mono, monospace');
+        gap: var(--t-navigation-drawer-container-gap, 0px);
+        padding-right: var(--t-navigation-drawer-container-padding-right, 0px !important);
+        padding-left: var(--t-navigation-drawer-container-padding-left, 0px) !important;
+        padding-top: var(--t-navigation-drawer-container-padding-top, 0px) !important;
+        padding-bottom: var(--t-navigation-drawer-container-padding-bottom, 0px) !important;
+      }
+      `,
+    ...MdList.styles,
+  ]
 
   @property({ type: String }) url = '';
 
@@ -23,7 +38,7 @@ export class TNavigationDrawer extends MdList {
       const rootUrl = this.getRootNodeUrl(this.url);
       // const removedRootUrl = this.popRootNodeUrl(this.url);
 
-      console.log("rootUrl", rootUrl )
+      console.log("rootUrl", rootUrl)
       // console.log("removedRootUrl", removedRootUrl)
 
       this.listController.onDeactivateItems();

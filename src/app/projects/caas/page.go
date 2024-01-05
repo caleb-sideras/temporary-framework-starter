@@ -9,9 +9,10 @@ import (
 func Page(w http.ResponseWriter, r *http.Request) templ.Component {
 
 	return server.ProjectTab(server.ProjectTabType{
-		Title:      "CAAS",
-		ProjectURL: "https://github.com/caleb-sideras/caas",
-		ReadMeURL:  "/projects/caas/readme",
-		VideoURL:   "/projects/caas/videos",
+		Title:       "CAAS",
+		ProjectURL:  "https://github.com/caleb-sideras/caas",
+		ReadMeURL:   "/projects/caas/readme",
+		VideoURL:    "/projects/caas/videos",
+		InitialBody: Readme(),
 	})
 }

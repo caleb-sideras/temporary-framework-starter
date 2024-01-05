@@ -8,15 +8,14 @@ export class TLink extends HTMXElement {
 	static styles = css`
 		:host{	
 			flex-basis: 50%;
+		  box-sizing: border-box;
 		}
 		a:hover h2,
 		a:hover p {
 			color: var(--md-sys-color-primary) !important;
     }		
-		a:hover .image{
-			border:var(--md-sys-color-primary) !important;
-			border-style: solid !important;
-			border-width: 2px !important;
+		a:hover img{
+			border-color:var(--md-sys-color-primary) !important;
 		}
 		a{
 			text-decoration: none;
@@ -36,6 +35,9 @@ export class TLink extends HTMXElement {
 		}
 		img {
 			width: 100%;
+			border-color: transparent;
+			border-style: solid !important;
+			border-width: 2px !important;
 		}		
 	`
 	@property({ type: String, attribute: 'src' }) imgSrc = '';
@@ -54,13 +56,11 @@ export class TLink extends HTMXElement {
 			<p>
 				${this.description}
 			</p>
-			<div class="image">
-				<img
-					loading="lazy"
-					src="${this.imgSrc}"
-					alt="${this.imgAlt}"
-				/>     
-			</div>
+			<img
+				loading="lazy"
+				src="${this.imgSrc}"
+				alt="${this.imgAlt}"
+			/>     
     `)
 	}
 }
