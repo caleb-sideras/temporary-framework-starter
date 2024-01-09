@@ -512,6 +512,7 @@ func (g *Gox) renderStaticFiles() error {
 		if err != nil {
 			return err
 		}
+		fmt.Println("LOG 1:", pathAndTagPage)
 		output += pathAndTagPage
 
 		// page-body.html
@@ -530,6 +531,7 @@ func (g *Gox) renderStaticFiles() error {
 		if err != nil {
 			return err
 		}
+		fmt.Println("LOG 2:", pathAndTagPage)
 		output += pathAndTagBody
 
 	}

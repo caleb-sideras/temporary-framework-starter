@@ -67,7 +67,11 @@ export class TNavigation extends LitElement {
   }
 
   detectNavigation() {
-    this.url = this.getBrowerHistory();
+
+    const path = window.location.pathname;
+    const cleanPath = path.split(/[?#]/)[0];
+    this.url = cleanPath;
+    // this.url = this.getBrowerHistory();
   }
 
   protected separateURL(url: string): string[] {

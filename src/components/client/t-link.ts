@@ -10,6 +10,10 @@ export class TLink extends HTMXElement {
 			flex-basis: 50%;
 		  box-sizing: border-box;
 		}
+		:host([disabled]) {
+	    pointer-events: none;
+	    filter: grayscale(100%);
+	  }
 		a:hover h2,
 		a:hover p {
 			color: var(--md-sys-color-primary) !important;
@@ -47,6 +51,8 @@ export class TLink extends HTMXElement {
 	@property({ type: String, attribute: 'title' }) title = '';
 
 	@property({ type: String, attribute: 'description' }) description = '';
+
+	@property({ type: Boolean, reflect: true }) disabled = false;
 
 	render() {
 		return this.renderAnchor(html`

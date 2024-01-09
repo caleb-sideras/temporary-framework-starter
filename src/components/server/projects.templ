@@ -1,0 +1,13 @@
+package server
+
+import (
+	"github.com/caleb-sideras/gox2/src/utils"
+)
+
+templ GridTitles(title []string, videoList [][]utils.TLinkContent) {
+	<div>
+		for i := range title {
+			@GridTitle(title[i], videoList[i])
+		}
+	</div>
+}

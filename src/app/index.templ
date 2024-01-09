@@ -77,11 +77,6 @@ templ IndexTempl() {
 								PeoplePedia
 							</t-list-item-2>
 						</t-navigation-drawer-list>
-						<t-navigation-drawer-list id="experience">
-							<t-list-item-2 interactive type="text" href="/experience" hx-get="/experience" hx-target="main" hx-push-url="true">
-								Experience Overview
-							</t-list-item-2>
-						</t-navigation-drawer-list>
 					</t-navigation-drawer>
 				</t-navigation>
 			</header>
@@ -92,7 +87,7 @@ templ IndexTempl() {
 				justify-content: center;
 			"
 			>
-				<main style="max-width: 1240px;">
+				<main style="max-width: 1240px;" id="fade-me-in">
 					{ children... }
 				</main>
 			</div>

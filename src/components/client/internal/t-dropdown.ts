@@ -18,11 +18,14 @@ export class TDropdown extends LitElement {
   protected dList: TDropdownList;
 
   protected override firstUpdated(_changedProperties: PropertyValueMap<TDropdown>): void {
-    super.firstUpdated(_changedProperties)
     this.layout()
   }
 
   get items(): ListItem[] {
+    if (!this.dList) {
+      // console.log("Dropdown does NOT dList:", this.dList, "returning []");
+      return [];
+    }
     return this.dList.items;
   }
 
@@ -36,6 +39,9 @@ export class TDropdown extends LitElement {
 
     this.dTitle = this.dropdownTitle[0];
     this.dList = this.dropdownList[0];
+    // console.log(this.dTitle);
+    // console.log(this.dList);
+    // console.log(this.dList.items);
   }
 
   render() {
@@ -55,11 +61,14 @@ export class TDropdown extends LitElement {
   */
   // TODO: spooky action activating the title tabIndex - something about the initialization stage with the title not being in a list
   handleExternalActivation(event: Event) {
+    console.log("handleExternalActivation()");
     const eventItem = event.target as TDropdownListItem;
     if (eventItem.tabIndex === -1) {
       this.dTitle.tabIndex = -1;
+      console.log("deactivate");
     } else if (eventItem.tabIndex === 0) {
       this.dTitle.tabIndex = 0;
+      console.log("activate");
       if (this.dTitle.collapsed) this.dTitle.collapsed = false;
       if (this.dList.collapsed) this.dList.collapsed = false;
     }

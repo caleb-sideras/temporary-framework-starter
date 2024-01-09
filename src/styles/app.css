@@ -1,3 +1,7 @@
+/**
+  * --- FONT & ICONS ---
+**/
+
 @font-face {
   font-family: 'Google';
   src: url("https://fonts.gstatic.com/s/googlesanstext/v21/5aUu9-KzpRiLCAt4Unrc-xIKmCU5qEp2i0VBuxM.woff2");
@@ -31,6 +35,10 @@
     'GRAD' 0,
     'opsz' 24
 }
+
+/**
+  * --- LIGHT & DARK---
+**/
 
 .dark {
   --md-sys-color-on-surface-variant-2: linear-gradient(0deg, rgba(196, 200, 187, .08), rgba(196, 200, 187, .08));
@@ -240,6 +248,9 @@ body {
   margin: 0px;
 }
 
+/**
+  * --- GLOBAL MEDIA QUERIES --- change to local
+**/
 
 @media screen and (min-width: 1024px) {
   :root {
@@ -292,7 +303,6 @@ body {
   * --- HOME CLASSES ---
 **/
 
-/* Define a class for the container div */
 .home_container {
   max-width: 1240px;
   display: flex;
@@ -322,6 +332,7 @@ body {
   font-size: 5.25rem;
   line-height: 5.75rem;
   font-family: Roboto Mono, monospace;
+  text-align: start;
   font-weight: 500;
 }
 
@@ -350,6 +361,40 @@ body {
   margin-top: 24px;
 }
 
+/**
+  * --- EXPERIENCE ---
+**/
+
+.experience_container {
+  border: solid;
+  border-width: 2px;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-top: 32px;
+}
+
+/**
+  * --- GLOBAL SERVER COMPONENTS ---
+**/
+
+h1 {
+  font-variation-settings: "wght" 100, "wdth" 100, "opsz" 8;
+  font-size: 5.25rem;
+  line-height: 5.75rem;
+  font-weight: 500;
+  text-align: center;
+  margin: 0px;
+}
+
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.grid {
+  display: grid;
+}
+
 @media screen and (max-width: 768px) {
 
   .home_bio {
@@ -376,13 +421,9 @@ body {
   }
 }
 
-.grid-cols-1 {
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-}
-
-.grid {
-  display: grid;
-}
+/**
+  * --- MARKDOWN ---
+**/
 
 #markdown h1 {
   margin-bottom: 32px;
@@ -490,6 +531,10 @@ body {
   position: relative;
   margin-bottom: 16px;
 }
+
+/**
+  * --- KEYFRAMES & TRANSITIONS---
+**/
 
 @keyframes fade-in {
   from {

@@ -41,6 +41,7 @@ class ExtendedListController<Item extends ListItem> extends ListController<Item>
   * overriding items function to add child items
   **/
   get items(): Item[] {
+    console.log("get items() called TList");
     const maybeItemOrList = this.getPossibleItems();
     const items: Item[] = [];
 
@@ -51,9 +52,12 @@ class ExtendedListController<Item extends ListItem> extends ListController<Item>
         continue;
       }
 
-      if (this.isList(itemOrList)) {
+      if (this.isList(itemOrList) && itemOrList) {
+        const listItems = itemOrList.items;
+        console.log("Has DROPDOWN", itemOrList, "of items:", listItems);
         // @ts-ignore
-        items.push(...itemOrList.items);
+        if (listItems)  items.push(...listItems);
+
         continue;
       }
 
@@ -123,6 +127,7 @@ export class TDrawerList extends LitElement {
     * finds matching ids and activates the respective item
     **/
   protected updateListItems() {
+    console.log("updateListItems() called on TList");
     if (!this.url) {
       return;
     };

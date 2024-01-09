@@ -1,0 +1,14 @@
+package server
+
+import (
+	"github.com/caleb-sideras/gox2/src/utils"
+)
+
+templ GridTitle(title string, videos []utils.TLinkContent) {
+	<div>
+		<h1>
+			{ title }
+		</h1>
+		@Grid(videos)
+	</div>
+}

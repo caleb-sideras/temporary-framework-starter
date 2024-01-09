@@ -4568,12 +4568,17 @@ class TLink extends HTMXElement {
     this.imgAlt = "";
     this.title = "";
     this.description = "";
+    this.disabled = false;
   }
   static styles = i`
 		:host{	
 			flex-basis: 50%;
 		  box-sizing: border-box;
 		}
+		:host([disabled]) {
+	    pointer-events: none;
+	    filter: grayscale(100%);
+	  }
 		a:hover h2,
 		a:hover p {
 			color: var(--md-sys-color-primary) !important;
@@ -4632,6 +4637,9 @@ __legacyDecorateClassTS([
 __legacyDecorateClassTS([
   n3({ type: String, attribute: "description" })
 ], TLink.prototype, "description", undefined);
+__legacyDecorateClassTS([
+  n3({ type: Boolean, reflect: true })
+], TLink.prototype, "disabled", undefined);
 TLink = __legacyDecorateClassTS([
   t("t-link")
 ], TLink);
@@ -4689,6 +4697,45 @@ __legacyDecorateClassTS([
 THeader = __legacyDecorateClassTS([
   t("t-header")
 ], THeader);
+
+// node_modules/lit-html/directive-hel
+class TExperience extends s3 {
+  constructor() {
+    super(...arguments);
+    this.company = "";
+    this.position = "";
+    this.date = "";
+  }
+  static styles = i`
+  h2 {  
+    color: var(--md-sys-color-primary);
+  }
+  span {
+    color: black;
+    font-weight: normal;
+    font-style: italic;
+  }
+  `;
+  render() {
+    return x`
+      <h2>${this.company} <span>${this.position}</span></h2>
+      <p>${this.date}</p>
+      <slot name="list"></slot>
+    `;
+  }
+}
+__legacyDecorateClassTS([
+  n3({ type: String })
+], TExperience.prototype, "company", undefined);
+__legacyDecorateClassTS([
+  n3({ type: String })
+], TExperience.prototype, "position", undefined);
+__legacyDecorateClassTS([
+  n3({ type: String })
+], TExperience.prototype, "date", undefined);
+TExperience = __legacyDecorateClassTS([
+  t("t-experience")
+], TExperience);
 
 // node_modules/lit-html/directive-helpers.js.js
 class TListItem extends MdListItem {
@@ -4823,7 +4870,9 @@ class TNavigation extends s3 {
     return cleanPath;
   }
   detectNavigation() {
-    this.url = this.getBrowerHistory();
+    const path = window.location.pathname;
+    const cleanPath = path.split(/[?#]/)[0];
+    this.url = cleanPath;
   }
   separateURL(url) {
     const trimmedUrl = url.replace(/^\/|\/$/g, "");
@@ -4920,6 +4969,7 @@ class ExtendedListController extends ListController {
     this.isList = config.isList;
   }
   get items() {
+    console.log("get items() called TList");
     const maybeItemOrList = this.getPossibleItems();
     const items = [];
     for (const itemOrList of maybeItemOrList) {
@@ -4927,8 +4977,11 @@ class ExtendedListController extends ListController {
         items.push(itemOrList);
         continue;
       }
-      if (this.isList(itemOrList)) {
-        items.push(...itemOrList.items);
+      if (this.isList(itemOrList) && itemOrList) {
+        const listItems = itemOrList.items;
+        console.log("Has DROPDOWN", itemOrList, "of items:", listItems);
+        if (listItems)
+          items.push(...listItems);
         continue;
       }
     }
@@ -4947,6 +5000,7 @@ class TDrawerList extends s3 {
     }
   }
   updateListItems() {
+    console.log("updateListItems() called on TList");
     if (!this.url) {
       return;
     }
@@ -5103,7 +5157,9 @@ class TNavigationDrawer extends MdList {
       console.log("drawer", this.url);
       const rootUrl = this.getRootNodeUrl(this.url);
       console.log("rootUrl", rootUrl);
+      console.log("onDeactivateItems");
       this.listController.onDeactivateItems();
+      console.log("iterating over the items", this);
       for (const item3 of this.items) {
         if (item3.id === rootUrl) {
           item3.tabIndex = 0;
@@ -5157,10 +5213,12 @@ class TDropdown extends s3 {
   dTitle;
   dList;
   firstUpdated(_changedProperties) {
-    super.firstUpdated(_changedProperties);
     this.layout();
   }
   get items() {
+    if (!this.dList) {
+      return [];
+    }
     return this.dList.items;
   }
   get dtitle() {
@@ -5185,11 +5243,14 @@ class TDropdown extends s3 {
     console.log(this.dTitle.collapsed, this.dList.collapsed);
   }
   handleExternalActivation(event) {
+    console.log("handleExternalActivation()");
     const eventItem = event.target;
     if (eventItem.tabIndex === -1) {
       this.dTitle.tabIndex = -1;
+      console.log("deactivate");
     } else if (eventItem.tabIndex === 0) {
       this.dTitle.tabIndex = 0;
+      console.log("activate");
       if (this.dTitle.collapsed)
         this.dTitle.collapsed = false;
       if (this.dList.collapsed)
@@ -5253,6 +5314,7 @@ class TDropdownListItem extends TListItem2 {
   attributeChangedCallback(name, oldValue, newValue) {
     super.attributeChangedCallback(name, oldValue, newValue);
     if (name === "tabindex" && oldValue != newValue) {
+      console.log("tabindex changed from", oldValue, "to", newValue, "on item", this);
       this.dispatchEvent(this.createExternalActivationEvent());
     }
   }

@@ -14,7 +14,7 @@ export class TDropdownListItem extends TListItem2 {
     super.attributeChangedCallback(name, oldValue, newValue);
 
     if (name === "tabindex" && oldValue != newValue) {
-      // console.log("tabindex changed from", oldValue, "to", newValue);
+      console.log("tabindex changed from", oldValue, "to", newValue, "on item", this);
 
       this.dispatchEvent(this.createExternalActivationEvent());
     }

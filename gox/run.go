@@ -97,12 +97,13 @@ func (g *Gox) handleRouteRender(r *mux.Router, eTags map[string]string) {
 func (g *Gox) createPageHandler(route string, eTags map[string]string) pageHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Println("- - - - - - - - - - - -")
-		eTagPath := filepath.Join(r.URL.Path, PAGE_BODY_OUT_FILE)
-		pagePath := filepath.Join(g.OutputDir, eTagPath)
+		eTagPath := ""
+		pagePath := ""
 
 		handlePage := func() {
 			log.Println("Partial")
-			eTagPath, pagePath = filepath.Join(r.URL.Path, PAGE_BODY_OUT_FILE), filepath.Join(g.OutputDir, eTagPath)
+			eTagPath = filepath.Join(r.URL.Path, PAGE_BODY_OUT_FILE)
+			pagePath = filepath.Join(g.OutputDir, eTagPath)
 		}
 
 		handleBPage := func() {
@@ -112,7 +113,8 @@ func (g *Gox) createPageHandler(route string, eTags map[string]string) pageHandl
 
 		handleIndex := func() {
 			log.Println("Full-Page")
-			eTagPath, pagePath = filepath.Join(r.URL.Path, PAGE_OUT_FILE), filepath.Join(g.OutputDir, eTagPath)
+			eTagPath = filepath.Join(r.URL.Path, PAGE_OUT_FILE)
+			pagePath = filepath.Join(g.OutputDir, eTagPath)
 		}
 
 		formatRequest(w, r, handlePage, handleBPage, handleIndex, handleIndex)
@@ -242,7 +244,6 @@ func (g *Gox) createRouteRenderHandler(route string, eTags map[string]string) pa
 
 		setRouteRenderHeaders(w, eTagPath, eTags)
 
-		http.ServeFile(w, r, pagePath)
 		http.ServeFile(w, r, pagePath)
 	}
 }

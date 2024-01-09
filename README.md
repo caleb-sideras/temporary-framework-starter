@@ -1,14 +1,10 @@
 # TODO
 
-- Finish all pages - experience, blog
-- add own docs -> video button
-- fix static render
-- upcoming projects (disabled)
+- add own docs -> video button ???
 -bugs with navigation -> going back/forward breaks it, using tab/enter breaks it
 - Mobile Navigation hard
-- add transitions?
 - remove redudant files
-
+- add transitions? not sure
 
 AFTER LAUNCH
 - add slugs 
@@ -21,6 +17,7 @@ FINISHED
 - add fixed width for drawer - DONE
 - fix border shrink issue - DONE
 - Hide Desktop Navigtaion
+- fix static render
 
 NOTES
 

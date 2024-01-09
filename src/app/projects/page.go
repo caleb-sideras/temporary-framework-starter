@@ -43,6 +43,20 @@ func Page(w http.ResponseWriter, r *http.Request) templ.Component {
 			Src:         "https://opengraph.githubassets.com/bc52bfa035af32496e45f674130251555d2549ca38d8b333461df836979cebbb/caleb-sideras/tweetailyze-frontend",
 			Alt:         "Tweetailyze Github",
 		},
+		{
+			Title:       "Temporary Framework",
+			Description: "A framework designed to enforce my temporary web standard. Utilizes HTMX, Go & Templ.",
+			Src:         "/static/assets/coming_soon.jpg",
+			Alt:         "Coming Soon",
+			Disabled:    true,
+		},
+		{
+			Title:       "Temporary UI",
+			Description: "A UI library built on top of Material 3.",
+			Src:         "/static/assets/coming_soon.jpg",
+			Alt:         "Coming Soon",
+			Disabled:    true,
+		},
 	}
 
 	return server.Grid(tLinkList)

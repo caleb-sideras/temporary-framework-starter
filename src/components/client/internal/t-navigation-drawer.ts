@@ -38,11 +38,13 @@ export class TNavigationDrawer extends MdList {
       const rootUrl = this.getRootNodeUrl(this.url);
       // const removedRootUrl = this.popRootNodeUrl(this.url);
 
-      console.log("rootUrl", rootUrl)
+      console.log("rootUrl", rootUrl);
       // console.log("removedRootUrl", removedRootUrl)
 
+      console.log("onDeactivateItems");
       this.listController.onDeactivateItems();
 
+      console.log("iterating over the items", this);
       for (const item of this.items as ListItem[]) {
         if (item.id === rootUrl) {
           item.tabIndex = 0;

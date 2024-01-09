@@ -1,0 +1,26 @@
+package server
+
+type JobExperience struct {
+	Position    string
+	Company     string
+	Date        string
+	List        []string
+	Description string
+}
+
+templ Experience(experience []JobExperience) {
+	for _, e:= range experience {
+		<div class="experience_container">
+			<t-experience position={ e.Position } company={ e.Company } date={ e.Date }>
+				<ul slot="list">
+					for _, l := range e.List {
+						<li>{ l }</li>
+					}
+				</ul>
+			</t-experience>
+			<p>
+				{ e.Description  }
+			</p>
+		</div>
+	}
+}

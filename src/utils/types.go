@@ -7,4 +7,5 @@ type TLinkContent struct {
 	Alt         string
 	Href        string
 	Boost       string
+	Disabled    bool
 }

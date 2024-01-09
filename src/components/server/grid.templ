@@ -3,10 +3,21 @@ package server
 import (
 	"github.com/caleb-sideras/gox2/src/utils"
 )
+
 templ Grid(videos []utils.TLinkContent) {
-	<div class="grid-cols-2 grid" >
+	<div class="grid-cols-2 grid">
 		for _, item :=range videos {
-			<t-link title={ item.Title } description={ item.Description } src={ item.Src } alt={ item.Alt } href={ item.Href } hx-boost={ item.Boost }></t-link>
+			<t-link
+ 				title={ item.Title }
+ 				description={ item.Description }
+ 				src={ item.Src }
+ 				alt={ item.Alt }
+ 				href={ item.Href }
+ 				hx-boost={ item.Boost }
+ 				if item.Disabled {
+					disabled
+				}
+			></t-link>
 		}
 	</div>
 }
