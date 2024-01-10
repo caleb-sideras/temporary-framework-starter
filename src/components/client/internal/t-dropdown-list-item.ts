@@ -13,16 +13,12 @@ export class TDropdownListItem extends TListItem2 {
 
     super.attributeChangedCallback(name, oldValue, newValue);
 
-    if (name === "tabindex" && oldValue != newValue) {
-      console.log("tabindex changed from", oldValue, "to", newValue, "on item", this);
-
+    if (oldValue && name === "tabindex" && oldValue != newValue) {
       this.dispatchEvent(this.createExternalActivationEvent());
     }
   }
 
   createExternalActivationEvent() {
-    // console.log("createExternalActivationEvent");
-
     return new Event('external-activation', { bubbles: true, composed: true });
   }
 }

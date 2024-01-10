@@ -27,23 +27,57 @@ export class TNavigation extends LitElement {
   navRail: TNavigationRail;
   navDrawer: TNavigationDrawer;
 
-  protected firstUpdated(_changedProperties: PropertyValueMap<TNavigation>): void {
+
+  /**
+    * This is needed to allow children to mount/render/update (i.e. run their logic) before parent accesses their computed properties
+    * Rendering order mainly an issue when using browser forward/back button (i.e popstate)
+  **/
+  async getUpdateComplete() {
+    await super.getUpdateComplete();
+
+    // `@queryAssignedElements` are run when accessed 
+    this.layout()
+
+    // updateComplete -> when getUpdateComplete resolves a promise
+    await this.navRail.updateComplete;
+    await this.navDrawer.updateComplete;
+
+    return true;
+  }
+
+  protected async firstUpdated(_changedProperties: PropertyValueMap<TNavigation>) {
     super.firstUpdated(_changedProperties);
-    this.layout();
-    if (this.reactive === true) {
-      this.detectNavigation();
-      window.addEventListener('popstate', this.detectNavigation);
+
+    // getUpdateComplete logic defined above
+    await this.updateComplete;
+
+    if (this.reactive) {
+      this.updateURL();
     }
   }
 
   protected updated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
-    if (_changedProperties.has('url')) {
+    if (_changedProperties.has('url') && this.url !== "") {
       this.navRail.url = this.getRootNodeUrl(this.url);
       this.navDrawer.url = this.url;
     }
   }
 
-  protected splitLeafUrl(url: string): string[] {
+
+  /**
+    * Public Functions
+  **/
+
+  layout() {
+    if (!this.rail) return;
+    if (!this.drawer) return;
+
+    if (this.rail.length === 1) this.navRail = this.rail[0];
+    if (this.drawer.length === 1) this.navDrawer = this.drawer[0];
+  }
+
+
+  splitLeafUrl(url: string): string[] {
     const trimmedUrl = url.replace(/^\/|\/$/g, '');
     const words = trimmedUrl.split('/');
 
@@ -53,7 +87,7 @@ export class TNavigation extends LitElement {
     return words
   }
 
-  protected getRootNodeUrl(url: string): string {
+  getRootNodeUrl(url: string): string {
     const urls = this.splitLeafUrl(url);
     if (!urls || urls.length <= 0) return '';
 
@@ -66,15 +100,13 @@ export class TNavigation extends LitElement {
     return cleanPath;
   }
 
-  detectNavigation() {
-
+  updateURL() {
     const path = window.location.pathname;
     const cleanPath = path.split(/[?#]/)[0];
     this.url = cleanPath;
-    // this.url = this.getBrowerHistory();
   }
 
-  protected separateURL(url: string): string[] {
+  separateURL(url: string): string[] {
     const trimmedUrl = url.replace(/^\/|\/$/g, '');
     const words = trimmedUrl.split('/');
     if (words.length === 1 && words[0] === '') {
@@ -83,15 +115,7 @@ export class TNavigation extends LitElement {
     return words;
   }
 
-  protected layout() {
-    if (!this.rail) return;
-    if (!this.drawer) return;
-
-    if (this.rail.length === 1) this.navRail = this.rail[0];
-    if (this.drawer.length === 1) this.navDrawer = this.drawer[0];
-  }
-
-  protected handleRailInteraction(event: Event) {
+  handleRailInteraction(event: Event) {
     const target = event.target as ListItem;
     const href = target.href;
     this.navDrawer.url = href;

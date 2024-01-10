@@ -3,6 +3,7 @@ import { PropertyValueMap, html, css } from "lit";
 import { TNavigationDrawerList } from "./t-navigation-drawer-list";
 import { property, customElement } from "lit/decorators.js";
 import { ListItem } from "./internal/t-list";
+import { Item } from "@material/web/labs/item/internal/item";
 
 @customElement('t-navigation-drawer')
 export class TNavigationDrawer extends MdList {
@@ -26,37 +27,62 @@ export class TNavigationDrawer extends MdList {
 
   constructor() {
     super();
+
+    // override default behavior of `isItem` from listController
+    // @ts-ignore
     this.listController.isItem = (item: HTMLElement): item is TNavigationDrawerList => {
       return (item.localName === 't-navigation-drawer-list');
     }
   }
 
+  /**
+    * This is needed to allow children to mount/render/update (i.e. run their logic) before parent accesses their computed properties
+    * Rendering order mainly an issue when using browser forward/back button (i.e popstate)
+  **/
+  async getUpdateComplete() {
+    await super.getUpdateComplete();
+
+    // @ts-ignore
+    await Promise.all(this.items.map(c => c.updateComplete));
+
+    return true;
+  }
+
+  protected async firstUpdated(_changedProperties: PropertyValueMap<TNavigationDrawer>) {
+    super.firstUpdated(_changedProperties);
+
+    // getUpdateComplete logic defined above
+    await this.updateComplete;
+  }
+
   protected updated(_changedProperties: PropertyValueMap<TNavigationDrawer>): void {
-    if (_changedProperties.has('url')) {
-      console.log("drawer", this.url)
+    if (_changedProperties.has('url') && this.url !== "") {
+      console.log(`TNavigationDrawer: url -> ${this.url}`)
 
-      const rootUrl = this.getRootNodeUrl(this.url);
-      // const removedRootUrl = this.popRootNodeUrl(this.url);
-
-      console.log("rootUrl", rootUrl);
-      // console.log("removedRootUrl", removedRootUrl)
-
-      console.log("onDeactivateItems");
+      // @ts-ignore
       this.listController.onDeactivateItems();
 
-      console.log("iterating over the items", this);
-      for (const item of this.items as ListItem[]) {
-        if (item.id === rootUrl) {
-          item.tabIndex = 0;
-          item.url = this.url;
-          console.log("drawer list ->", item);
+
+      // @ts-ignore
+      for (const drawerList of this.items as TNavigationDrawerList[]) {
+        const drawerListItems: ListItem[] = drawerList.items;
+        const item = drawerList.findMatchingItem(this.url, drawerListItems);
+
+        if (item) {
+          // @ts-ignore
+          this.listController.activateItem(drawerList);
+          drawerList.url = this.url;
           return;
         }
       }
     }
   }
 
-  protected splitLeafUrl(url: string): string[] {
+  /**
+    * Public Functions
+  **/
+
+  splitLeafUrl(url: string): string[] {
     const trimmedUrl = url.replace(/^\/|\/$/g, '');
     const words = trimmedUrl.split('/');
 
@@ -66,7 +92,7 @@ export class TNavigationDrawer extends MdList {
     return words
   }
 
-  protected popRootNodeUrl(url: string): string {
+  popRootNodeUrl(url: string): string {
     const urls = this.splitLeafUrl(url);
     if (!urls || urls.length <= 1) return '';
 
@@ -76,7 +102,7 @@ export class TNavigationDrawer extends MdList {
     return poppedUrl;
   }
 
-  protected getRootNodeUrl(url: string): string {
+  getRootNodeUrl(url: string): string {
     const urls = this.splitLeafUrl(url);
     if (!urls || urls.length <= 0) return '';
 

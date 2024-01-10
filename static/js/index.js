@@ -4836,19 +4836,35 @@ class TNavigation extends s3 {
   `;
   navRail;
   navDrawer;
-  firstUpdated(_changedProperties) {
-    super.firstUpdated(_changedProperties);
+  async getUpdateComplete() {
+    await super.getUpdateComplete();
     this.layout();
-    if (this.reactive === true) {
-      this.detectNavigation();
-      window.addEventListener("popstate", this.detectNavigation);
+    await this.navRail.updateComplete;
+    await this.navDrawer.updateComplete;
+    return true;
+  }
+  async firstUpdated(_changedProperties) {
+    super.firstUpdated(_changedProperties);
+    await this.updateComplete;
+    if (this.reactive) {
+      this.updateURL();
     }
   }
   updated(_changedProperties) {
-    if (_changedProperties.has("url")) {
+    if (_changedProperties.has("url") && this.url !== "") {
       this.navRail.url = this.getRootNodeUrl(this.url);
       this.navDrawer.url = this.url;
     }
+  }
+  layout() {
+    if (!this.rail)
+      return;
+    if (!this.drawer)
+      return;
+    if (this.rail.length === 1)
+      this.navRail = this.rail[0];
+    if (this.drawer.length === 1)
+      this.navDrawer = this.drawer[0];
   }
   splitLeafUrl(url) {
     const trimmedUrl = url.replace(/^\/|\/$/g, "");
@@ -4869,7 +4885,7 @@ class TNavigation extends s3 {
     const cleanPath = path.split(/[?#]/)[0];
     return cleanPath;
   }
-  detectNavigation() {
+  updateURL() {
     const path = window.location.pathname;
     const cleanPath = path.split(/[?#]/)[0];
     this.url = cleanPath;
@@ -4881,16 +4897,6 @@ class TNavigation extends s3 {
       return ["/"];
     }
     return words;
-  }
-  layout() {
-    if (!this.rail)
-      return;
-    if (!this.drawer)
-      return;
-    if (this.rail.length === 1)
-      this.navRail = this.rail[0];
-    if (this.drawer.length === 1)
-      this.navDrawer = this.drawer[0];
   }
   handleRailInteraction(event) {
     const target = event.target;
@@ -4936,22 +4942,22 @@ class TNavigationRail extends MdList {
     ...MdList.styles
   ];
   updated(_changedProperties) {
-    if (_changedProperties.has("url"))
-      this.activateItemFromId(this.url);
+    if (_changedProperties.has("url") && this.url !== "") {
+      this.activateItemFromHref(this.url);
+    }
   }
-  removeFirstLastSlash(text) {
-    return text.replace(/^\/|\/$/g, "");
-  }
-  activateItemFromId(href) {
+  activateItemFromHref(href) {
     for (const item3 of this.items) {
       if (this.removeFirstLastSlash(item3.href) === this.removeFirstLastSlash(href)) {
-        console.log(item3, item3.href);
         const activationEvent = new Event("request-activation", { bubbles: true, composed: true });
         Object.defineProperty(activationEvent, "target", { value: item3 });
         this.listController.onRequestActivation(activationEvent);
         return;
       }
     }
+  }
+  removeFirstLastSlash(text) {
+    return text.replace(/^\/|\/$/g, "");
   }
 }
 __legacyDecorateClassTS([
@@ -4969,7 +4975,6 @@ class ExtendedListController extends ListController {
     this.isList = config.isList;
   }
   get items() {
-    console.log("get items() called TList");
     const maybeItemOrList = this.getPossibleItems();
     const items = [];
     for (const itemOrList of maybeItemOrList) {
@@ -4978,10 +4983,8 @@ class ExtendedListController extends ListController {
         continue;
       }
       if (this.isList(itemOrList) && itemOrList) {
-        const listItems = itemOrList.items;
-        console.log("Has DROPDOWN", itemOrList, "of items:", listItems);
-        if (listItems)
-          items.push(...listItems);
+        items.push(...itemOrList.items);
+        console.log("Has LIST", itemOrList, "of items:", itemOrList.items);
         continue;
       }
     }
@@ -4995,12 +4998,11 @@ class TDrawerList extends s3 {
   listAttributes = [];
   updated(_changedProperties) {
     super.updated(_changedProperties);
-    if (_changedProperties.has("url")) {
+    if (_changedProperties.has("url") && this.url !== "") {
       this.updateListItems();
     }
   }
   updateListItems() {
-    console.log("updateListItems() called on TList");
     if (!this.url) {
       return;
     }
@@ -5011,7 +5013,7 @@ class TDrawerList extends s3 {
     const matchingItem = this.findMatchingItem(this.url, items);
     console.log(`Url Processing: ${this.url}`);
     console.log("Iterating Over:", items);
-    console.log(`Matching Parent Items: ${parentItems}`);
+    console.log("Matching Parent Items:", parentItems);
     console.log("Matching Item:", matchingItem);
     this.ListController.onDeactivateItems();
     for (const item3 of parentItems) {
@@ -5021,12 +5023,6 @@ class TDrawerList extends s3 {
       this.activateItem(matchingItem);
     }
     this.url = "";
-  }
-  isActive(item3) {
-    return item3.tabIndex === 0;
-  }
-  activateItem(item3) {
-    return item3.tabIndex = 0;
   }
   findParentItems(href, listItems) {
     const matchingItems = [];
@@ -5048,6 +5044,12 @@ class TDrawerList extends s3 {
   }
   removeFirstLastSlash(text) {
     return text.replace(/^\/|\/$/g, "");
+  }
+  isActive(item3) {
+    return item3.tabIndex === 0;
+  }
+  activateItem(item3) {
+    return item3.tabIndex = 0;
   }
   ListControllerConfig = {
     isItem: (item3) => this.itemAttributes.some((condition) => item3.localName === condition),
@@ -5152,19 +5154,25 @@ class TNavigationDrawer extends MdList {
       return item3.localName === "t-navigation-drawer-list";
     };
   }
+  async getUpdateComplete() {
+    await super.getUpdateComplete();
+    await Promise.all(this.items.map((c4) => c4.updateComplete));
+    return true;
+  }
+  async firstUpdated(_changedProperties) {
+    super.firstUpdated(_changedProperties);
+    await this.updateComplete;
+  }
   updated(_changedProperties) {
-    if (_changedProperties.has("url")) {
-      console.log("drawer", this.url);
-      const rootUrl = this.getRootNodeUrl(this.url);
-      console.log("rootUrl", rootUrl);
-      console.log("onDeactivateItems");
+    if (_changedProperties.has("url") && this.url !== "") {
+      console.log(`TNavigationDrawer: url -> ${this.url}`);
       this.listController.onDeactivateItems();
-      console.log("iterating over the items", this);
-      for (const item3 of this.items) {
-        if (item3.id === rootUrl) {
-          item3.tabIndex = 0;
-          item3.url = this.url;
-          console.log("drawer list ->", item3);
+      for (const drawerList of this.items) {
+        const drawerListItems = drawerList.items;
+        const item3 = drawerList.findMatchingItem(this.url, drawerListItems);
+        if (item3) {
+          this.listController.activateItem(drawerList);
+          drawerList.url = this.url;
           return;
         }
       }
@@ -5216,9 +5224,8 @@ class TDropdown extends s3 {
     this.layout();
   }
   get items() {
-    if (!this.dList) {
+    if (!this.dList)
       return [];
-    }
     return this.dList.items;
   }
   get dtitle() {
@@ -5247,10 +5254,10 @@ class TDropdown extends s3 {
     const eventItem = event.target;
     if (eventItem.tabIndex === -1) {
       this.dTitle.tabIndex = -1;
-      console.log("deactivate");
+      console.log("deactivate", eventItem, eventItem.tabIndex);
     } else if (eventItem.tabIndex === 0) {
       this.dTitle.tabIndex = 0;
-      console.log("activate");
+      console.log("activate", eventItem, eventItem.tabIndex);
       if (this.dTitle.collapsed)
         this.dTitle.collapsed = false;
       if (this.dList.collapsed)
@@ -5313,8 +5320,7 @@ class TDropdownListItem extends TListItem2 {
   }
   attributeChangedCallback(name, oldValue, newValue) {
     super.attributeChangedCallback(name, oldValue, newValue);
-    if (name === "tabindex" && oldValue != newValue) {
-      console.log("tabindex changed from", oldValue, "to", newValue, "on item", this);
+    if (oldValue && name === "tabindex" && oldValue != newValue) {
       this.dispatchEvent(this.createExternalActivationEvent());
     }
   }

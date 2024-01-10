@@ -19,22 +19,31 @@ export class TNavigationRail extends MdList {
   @property({ type: String }) url = '';
 
   protected override updated(_changedProperties: PropertyValues<TNavigationRail>) {
-    if (_changedProperties.has('url')) this.activateItemFromId(this.url);
+    if (_changedProperties.has('url') && this.url !== '') {
+      this.activateItemFromHref(this.url);
+    }
+  }
+
+  /**
+    * Public Functions
+  **/
+
+  activateItemFromHref(href: string) {
+    for (const item of this.items as ListItem[]) {
+      if (this.removeFirstLastSlash(item.href) === this.removeFirstLastSlash(href)) {
+
+        const activationEvent = new Event('request-activation', { bubbles: true, composed: true });
+        Object.defineProperty(activationEvent, 'target', { value: item });
+
+        // @ts-ignore
+        this.listController.onRequestActivation(activationEvent);
+
+        return;
+      }
+    }
   }
 
   removeFirstLastSlash(text: string) {
     return text.replace(/^\/|\/$/g, "");
-  }
-
-  activateItemFromId(href: string) {
-    for (const item of this.items as ListItem[]) {
-      if (this.removeFirstLastSlash(item.href) === this.removeFirstLastSlash(href)) {
-        console.log(item, item.href);
-        const activationEvent = new Event('request-activation', { bubbles: true, composed: true });
-        Object.defineProperty(activationEvent, 'target', { value: item });
-        this.listController.onRequestActivation(activationEvent);
-        return;
-      }
-    }
   }
 }

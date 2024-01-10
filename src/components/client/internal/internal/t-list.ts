@@ -4,9 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-// i didn't want to have to clone this... but google forced my hand...
-// why can't you design this in a way to allow maximum extensibility? i'm sure there's a complicated answer :/
-// anyways - gunna be a nightmare to maintain -> public code -> public properties!
+/** 
+  * i didn't want to have to clone this... but google forced my hand...
+  * why can't you design this in a way to allow maximum extensibility? i'm sure there's a complicated answer :/
+  * anyways - gunna be a nightmare to maintain
+  * TODO: bring all controlling logic inside of ExtendedListController and make it public to prevent all of @ts-ignore stuff 
+**/
 
 import { html, isServer, LitElement, PropertyValueMap } from 'lit';
 import { queryAssignedElements, property } from 'lit/decorators.js';
@@ -19,8 +22,8 @@ import { List } from '@material/web/list/internal/list';
 /** TEMPORARY UI -- START **/
 
 /** 
-* extending ListControllerConfig to add additional properties/methods 
-**/
+  * Extending ListControllerConfig to add additional properties/methods 
+  */
 interface ExtendedListControllerConfig<Item extends ListItem> extends ListControllerConfig<Item> {
   /**
     * A function that determines whether or not the given element is an List
@@ -28,6 +31,9 @@ interface ExtendedListControllerConfig<Item extends ListItem> extends ListContro
   isList: (list: HTMLElement) => list is List;
 }
 
+/** 
+  * Extending ListController to add and initialize properties/methods 
+  */
 class ExtendedListController<Item extends ListItem> extends ListController<Item> {
 
   isList: (list: HTMLElement) => list is List;
@@ -38,25 +44,28 @@ class ExtendedListController<Item extends ListItem> extends ListController<Item>
   }
 
   /**
-  * overriding items function to add child items
-  **/
+    * Overriding items function to add child items
+    */
   get items(): Item[] {
-    console.log("get items() called TList");
+
+    // @ts-ignore
     const maybeItemOrList = this.getPossibleItems();
     const items: Item[] = [];
 
     for (const itemOrList of maybeItemOrList) {
 
+      // If item, add to list
       if (this.isItem(itemOrList)) {
         items.push(itemOrList);
         continue;
       }
 
+      // If list, add items to list
       if (this.isList(itemOrList) && itemOrList) {
-        const listItems = itemOrList.items;
-        console.log("Has DROPDOWN", itemOrList, "of items:", listItems);
+
         // @ts-ignore
-        if (listItems)  items.push(...listItems);
+        items.push(...itemOrList.items)
+        console.log("Has LIST", itemOrList, "of items:", itemOrList.items);
 
         continue;
       }
@@ -72,10 +81,8 @@ class ExtendedListController<Item extends ListItem> extends ListController<Item>
       //   childItems.push(...subItem.items);
       // }
     }
-
     return items;
   }
-
 }
 
 /** TEMPORARY UI -- END **/
@@ -103,31 +110,35 @@ export class TDrawerList extends LitElement {
   protected slotItems!: Array<ListItem | (HTMLElement & { item?: ListItem })>;
 
   /** TEMPORARY UI -- START **/
+
   @property({ type: String })
   url: string = '';
 
   /**
-  * HTML DOM attributes used for items
-  **/
+    * HTML DOM attributes used for items
+    */
   public itemAttributes: string[] = [];
 
   /**
-  * HTML DOM attributes used for lists with items
-  **/
+    * HTML DOM attributes used for lists with items
+    */
   public listAttributes: string[] = [];
 
   protected updated(_changedProperties: PropertyValueMap<TDrawerList>): void {
     super.updated(_changedProperties);
-    if (_changedProperties.has('url')) {
+    if (_changedProperties.has('url') && this.url !== "") {
       this.updateListItems();
     }
   }
 
   /**
-    * finds matching ids and activates the respective item
-    **/
-  protected updateListItems() {
-    console.log("updateListItems() called on TList");
+    * PUBLIC FUNCTIONS
+    */
+
+  /**
+    * Finds matching hrefs and activates the respective item
+    */
+  updateListItems() {
     if (!this.url) {
       return;
     };
@@ -140,16 +151,14 @@ export class TDrawerList extends LitElement {
 
     console.log(`Url Processing: ${this.url}`)
     console.log("Iterating Over:", items)
-    console.log(`Matching Parent Items: ${parentItems}`);
+    console.log("Matching Parent Items:", parentItems);
     console.log("Matching Item:", matchingItem);
 
     this.ListController.onDeactivateItems();
 
     /** 
     * TODO
-    * the issue here is that if there are nested lists/dropdowns -> only the LAST title will be highlighted. 
-    * later on work on making the listcontroller AND dropdown to support indefinite nesting 
-    * this is very messy!!!
+    * Work on making listController support indefinite nesting of lists 
     */
 
     // activate all parentItems
@@ -166,15 +175,7 @@ export class TDrawerList extends LitElement {
     this.url = "";
   }
 
-  protected isActive(item: ListItem) {
-    return item.tabIndex === 0;
-  }
-
-  protected activateItem(item: ListItem) {
-    return item.tabIndex = 0;
-  }
-
-  protected findParentItems(href: string, listItems: ListItem[]): ListItem[] {
+  findParentItems(href: string, listItems: ListItem[]): ListItem[] {
     const matchingItems: ListItem[] = [];
 
     const idSegments = this.removeFirstLastSlash(href).split('/');
@@ -193,19 +194,33 @@ export class TDrawerList extends LitElement {
     return matchingItems;
   }
 
-  protected findMatchingItem(href: string, listItems: ListItem[]): ListItem | null {
+  findMatchingItem(href: string, listItems: ListItem[]): ListItem | null {
     for (const item of listItems) {
       if (this.removeFirstLastSlash(item.href) === this.removeFirstLastSlash(href)) return item;
     }
     return null;
   }
 
-  protected removeFirstLastSlash(text: string) {
+  removeFirstLastSlash(text: string) {
     return text.replace(/^\/|\/$/g, "");
   }
 
+  isActive(item: ListItem) {
+    return item.tabIndex === 0;
+  }
+
+  activateItem(item: ListItem) {
+    return item.tabIndex = 0;
+  }
+
+
+  /** 
+    * Initializing Extended ListController
+    */
   private readonly ListControllerConfig: ExtendedListControllerConfig<ListItem> = {
-    isItem: (item: HTMLElement): item is ListItem => this.itemAttributes.some((condition) => item.localName === condition), isList: (item: HTMLElement): item is List => this.listAttributes.some((condition) => item.localName === condition), getPossibleItems: () => this.slotItems,
+    isItem: (item: HTMLElement): item is ListItem => this.itemAttributes.some((condition) => item.localName === condition), 
+    isList: (item: HTMLElement): item is List => this.listAttributes.some((condition) => item.localName === condition),
+    getPossibleItems: () => this.slotItems,
     isRtl: () => getComputedStyle(this).direction === 'rtl',
     deactivateItem: (item) => {
       item.tabIndex = -1;
@@ -237,25 +252,6 @@ export class TDrawerList extends LitElement {
       this.addEventListener('keydown', this.ListController.handleKeydown);
     }
   }
-
-  // protected activateTitle(item: ListItem) {
-  //   this.handleTitleInteraction(item, 0);
-  // }
-
-  // protected deactivateTitle(item: ListItem) {
-  //   this.handleTitleInteraction(item, -1);
-  // }
-
-  // protected handleTitleInteraction(item: ListItem, index: number) {
-  //   console.log("handleTitleInteraction");
-  //   const title = this.ListController.titleMap.get(item);
-  //   console.log(title);
-  //   if (title) {
-  //     title.tabIndex = index;
-  //     title.collapsed = index === 0 ? false : true;
-  //     console.log(title.tabIndex, title.collapsed);
-  //   }
-  // }
 
   protected override render() {
     return html`

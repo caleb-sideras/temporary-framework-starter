@@ -1,6 +1,5 @@
 import { css } from 'lit';
-import { property, customElement } from 'lit/decorators.js';
-
+import { customElement } from 'lit/decorators.js';
 import { TDrawerList } from './internal/t-list';
 import { styles } from '@material/web/list/internal/list-styles.css.js';
 
@@ -11,11 +10,10 @@ declare global {
 }
 
 /**
- * @summary DrawerList is an extension of MdList - aimed at adding extra functionality - such as dropdown and interop with DrawerRail
+ * @summary DrawerList is an extension of MdList - aimed at adding extra functionality - such as allowing both items and lists
  *
  * @description
- * DrawerList embodies the 'smart-parent, dumb-child' implementation. The parent controls almost all business logic allowing the child components to be used on other places. The only thing the child does, is offer all their respective childeren up to the parent.
- * three-line.
+ * DrawerList handles all of the items de/activations so the child components can be used in other places. The child simply offers all its respective childeren up to the parent and handles other activation states.
  *
  * @final
  * @suppress {visibility}
@@ -44,4 +42,5 @@ export class TNavigationDrawerList extends TDrawerList {
 
   override itemAttributes: string[] = ['t-list-item', 't-list-item-2'];
   override listAttributes: string[] = ['t-dropdown'];
+
 }
