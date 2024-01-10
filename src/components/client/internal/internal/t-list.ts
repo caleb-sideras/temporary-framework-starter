@@ -65,8 +65,6 @@ class ExtendedListController<Item extends ListItem> extends ListController<Item>
 
         // @ts-ignore
         items.push(...itemOrList.items)
-        console.log("Has LIST", itemOrList, "of items:", itemOrList.items);
-
         continue;
       }
 
@@ -149,10 +147,8 @@ export class TDrawerList extends LitElement {
     const parentItems: ListItem[] = this.findParentItems(this.url, items);
     const matchingItem: ListItem | null = this.findMatchingItem(this.url, items);
 
-    console.log(`Url Processing: ${this.url}`)
-    console.log("Iterating Over:", items)
-    console.log("Matching Parent Items:", parentItems);
-    console.log("Matching Item:", matchingItem);
+    console.log("TNavigationDrawerList: Matching Parent Items -> ", parentItems);
+    console.log("TNavigationDrawerList: Matching Item -> ", matchingItem);
 
     this.ListController.onDeactivateItems();
 

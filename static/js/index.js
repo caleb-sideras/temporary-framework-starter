@@ -4984,7 +4984,6 @@ class ExtendedListController extends ListController {
       }
       if (this.isList(itemOrList) && itemOrList) {
         items.push(...itemOrList.items);
-        console.log("Has LIST", itemOrList, "of items:", itemOrList.items);
         continue;
       }
     }
@@ -5011,10 +5010,8 @@ class TDrawerList extends s3 {
       return;
     const parentItems = this.findParentItems(this.url, items);
     const matchingItem = this.findMatchingItem(this.url, items);
-    console.log(`Url Processing: ${this.url}`);
-    console.log("Iterating Over:", items);
-    console.log("Matching Parent Items:", parentItems);
-    console.log("Matching Item:", matchingItem);
+    console.log("TNavigationDrawerList: Matching Parent Items -> ", parentItems);
+    console.log("TNavigationDrawerList: Matching Item -> ", matchingItem);
     this.ListController.onDeactivateItems();
     for (const item3 of parentItems) {
       this.activateItem(item3);
@@ -5250,14 +5247,11 @@ class TDropdown extends s3 {
     console.log(this.dTitle.collapsed, this.dList.collapsed);
   }
   handleExternalActivation(event) {
-    console.log("handleExternalActivation()");
     const eventItem = event.target;
     if (eventItem.tabIndex === -1) {
       this.dTitle.tabIndex = -1;
-      console.log("deactivate", eventItem, eventItem.tabIndex);
     } else if (eventItem.tabIndex === 0) {
       this.dTitle.tabIndex = 0;
-      console.log("activate", eventItem, eventItem.tabIndex);
       if (this.dTitle.collapsed)
         this.dTitle.collapsed = false;
       if (this.dList.collapsed)
