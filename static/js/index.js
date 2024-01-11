@@ -5210,6 +5210,230 @@ TNavigationDrawer = __legacyDecorateClassTS([
   t("t-navigation-drawer")
 ], TNavigationDrawer);
 
+// node_modules/lit-html/directive-helpers.js.jsus-ring-
+class TMobileNavigation extends MdNavigationDrawerModal {
+  constructor() {
+    super(...arguments);
+  }
+  rail;
+  drawers = [];
+  railAttribute = "t-mobile-navigation-rail";
+  drawerAttribute = "t-mobile-navigation-drawer";
+  async getUpdateComplete() {
+    await super.getUpdateComplete();
+    this.layout();
+    await this.rail.updateComplete;
+    await Promise.all(this.drawers.map((c4) => c4.updateComplete));
+    return true;
+  }
+  async firstUpdated(_changedProperties) {
+    super.firstUpdated(_changedProperties);
+    await this.updateComplete;
+    this.closeModal();
+    this.activateRail();
+    this.drawers.map((drawer) => drawer.active = false);
+  }
+  layout() {
+    if (!this.railItems || this.railItems.length > 1)
+      return;
+    if (!this.drawerItems)
+      return;
+    const mobileItems = [...this.railItems, ...this.drawerItems].filter(this.isMobileNavigationContainer);
+    this.rail = mobileItems[0];
+    this.drawers.push(...mobileItems.slice(1));
+  }
+  isMobileNavigationContainer(item3) {
+    return item3.localName === "t-mobile-navigation-rail" || item3.localName === "t-mobile-navigation-drawer";
+  }
+  onActivateDrawer(e10) {
+    const item3 = e10.target;
+    for (const drawer of this.drawers) {
+      const hasMatching = drawer.findMatchingParentItem(item3.href, drawer.items);
+      if (hasMatching) {
+        this.onActivateItem(drawer);
+        return;
+      }
+    }
+  }
+  onActivateRail() {
+    this.deactivateDrawers();
+    this.activateItem(this.rail);
+  }
+  onActivateItem(item3) {
+    this.deactivateItems();
+    this.activateItem(item3);
+  }
+  deactivateDrawers() {
+    this.drawers.map((drawer) => this.deactivateItem(drawer));
+  }
+  activateRail() {
+    this.activateItem(this.rail);
+  }
+  deactivateRail() {
+    this.deactivateItem(this.rail);
+  }
+  closeModal() {
+    this.opened = false;
+  }
+  openModal() {
+    this.opened = true;
+  }
+  deactivateItems() {
+    this.deactivateRail();
+    this.deactivateDrawers();
+  }
+  deactivateItem(item3) {
+    item3.active = false;
+  }
+  activateItem(item3) {
+    item3.active = true;
+  }
+  render() {
+    const ariaExpanded = this.opened ? "true" : "false";
+    const ariaHidden = !this.opened ? "true" : "false";
+    const { ariaLabel, ariaModal } = this;
+    return x`
+      <div
+        class="md3-navigation-drawer-modal__scrim ${this.getScrimClasses()}"
+        @click="${this.handleScrimClick}">
+      </div>
+      <div
+        aria-expanded=${ariaExpanded}
+        aria-hidden=${ariaHidden}
+        aria-label=${ariaLabel || T}
+        aria-modal=${ariaModal || T}
+        class="md3-navigation-drawer-modal ${this.getRenderClasses()}"
+        @keydown="${this.handleKeyDown}"
+        role="dialog"
+        ><div class="md3-elevation-overlay"></div>
+        <div class="md3-navigation-drawer-modal__slot-content">
+          <slot name="rail" @request-activation="${this.onActivateDrawer}" @close-navigation="${this.closeModal}"></slot>
+          <slot name="drawer" @request-activation="${this.closeModal}" @activate-rail="${this.onActivateRail}" @close-navigation="${this.closeModal}"></slot>
+        </div>
+      </div>
+    `;
+  }
+}
+__legacyDecorateClassTS([
+  o4({ flatten: true, slot: "rail" })
+], TMobileNavigation.prototype, "railItems", undefined);
+__legacyDecorateClassTS([
+  o4({ flatten: true, slot: "drawer" })
+], TMobileNavigation.prototype, "drawerItems", undefined);
+TMobileNavigation = __legacyDecorateClassTS([
+  t("t-mobile-navigation")
+], TMobileNavigation);
+
+// node_modules/lit-html/directive-helpers.js.jsus-ring-styles.css
+class TMobileNavigationContainer extends MdList {
+  constructor() {
+    super(...arguments);
+    this.active = false;
+  }
+  static styles = [
+    i`
+      :host{
+        display: none !important; 
+        --md-list-container-color: var(--t-navigation-drawer-list-container-color, #ffffff);
+        font-family: var(--t-navigation-drawer-list-container-font, 'Roboto Mono, monospace');
+        gap: var(--t-navigation-drawer-list-container-gap, 0px);
+        padding-right: var(--t-navigation-drawer-list-container-padding-right, 0px !important);
+        padding-left: var(--t-navigation-drawer-list-container-padding-left, 0px) !important;
+        padding-top: var(--t-navigation-drawer-list-container-padding-top, 8px) !important;
+        padding-bottom: var(--t-navigation-drawer-list-container-padding-bottom, 0px) !important;
+        width: var(--t-navigation-drawer-list-container-width, 165px);
+      }
+      :host([active]){
+        display: flex !important; 
+      }
+    `,
+    ...MdList.styles
+  ];
+  updated(_changedProperties) {
+    if (_changedProperties.has("active") && this.active) {
+      console.log("MobileNavigationContainer -> active:", this.active);
+      this.listController.onDeactivateItems();
+      const url = this.getBrowerHistory();
+      const listItem = this.findMatchingParentItem(url, this.items);
+      console.log("MobileNavigationContainer -> listItem:", listItem);
+      if (listItem) {
+        this.listController.activateItem(listItem);
+      }
+    }
+  }
+  getBrowerHistory() {
+    const path = window.location.pathname;
+    const cleanPath = path.split(/[?#]/)[0];
+    return cleanPath;
+  }
+  findMatchingParentItem(url, listItems) {
+    const cleanUrl = this.removeFirstLastSlash(url).split("/");
+    console.log("cleanUrl", cleanUrl);
+    for (const item3 of listItems) {
+      const cleanItemHref = this.removeFirstLastSlash(item3.href).split("/");
+      console.log("cleanItemHref ", cleanItemHref);
+      if (cleanUrl.slice(0, cleanItemHref.length).join("/") === cleanItemHref.join("/")) {
+        return item3;
+      }
+    }
+    return null;
+  }
+  removeFirstLastSlash(text) {
+    return text.replace(/^\/|\/$/g, "");
+  }
+}
+__legacyDecorateClassTS([
+  n3({ type: Boolean, reflect: true })
+], TMobileNavigationContainer.prototype, "active", undefined);
+
+// node_modules/lit-html/directive-helpers.js.jsus-ring-style
+class TMobileNavigationRail extends TMobileNavigationContainer {
+  constructor() {
+    super(...arguments);
+  }
+}
+TMobileNavigationRail = __legacyDecorateClassTS([
+  t("t-mobile-navigation-rail")
+], TMobileNavigationRail);
+
+// node_modules/lit-html/directive-helpers.js.jsus-ring-styles.
+class TMobileNavigationDrawer extends TMobileNavigationContainer {
+  constructor() {
+    super(...arguments);
+  }
+  findMatchingParentItem(url, listItems) {
+    const cleanUrl = this.removeFirstLastSlash(url).split("/");
+    console.log("cleanUrl", cleanUrl);
+    for (const item3 of listItems) {
+      const cleanItemHref = this.removeFirstLastSlash(item3.href).split("/");
+      console.log("cleanItemHref ", cleanItemHref);
+      if (cleanUrl.join("/") === cleanItemHref.join("/")) {
+        return item3;
+      }
+    }
+    return null;
+  }
+  activateRail() {
+    this.dispatchEvent(new CustomEvent(`activate-rail`, {
+      detail: { state: this },
+      bubbles: true,
+      composed: true
+    }));
+  }
+  render() {
+    return x`
+			<t-list-item interactive type="button" @click="${this.activateRail}">
+				Main Menu
+				<md-icon slot="start" class="material-symbols-filled">arrow_back</md-icon>
+			</t-list-item>
+      ${super.render()}
+      `;
+  }
+}
+TMobileNavigationDrawer = __legacyDecorateClassTS([
+  t("t-mobile-navigation-drawer")
+], TMobileNavigationDrawer);
+
 // node_modules/lit-html/directive-helpers.js.j
 class TDropdown extends s3 {
   constructor() {

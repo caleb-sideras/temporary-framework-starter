@@ -65,6 +65,7 @@ class ExtendedListController<Item extends ListItem> extends ListController<Item>
 
         // @ts-ignore
         items.push(...itemOrList.items)
+
         continue;
       }
 

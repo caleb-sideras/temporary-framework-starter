@@ -1,8 +1,7 @@
 # TODO
 
-- add own docs -> video button ???
--bugs with navigation -> going back/forward breaks it, using tab/enter breaks it
 - Mobile Navigation hard
+- add own docs -> video button ???
 - remove redudant files
 - add transitions? not sure
 
@@ -18,6 +17,7 @@ FINISHED
 - fix border shrink issue - DONE
 - Hide Desktop Navigtaion
 - fix static render
+-bugs with navigation -> going back/forward breaks it, using tab/enter breaks it
 
 NOTES
 

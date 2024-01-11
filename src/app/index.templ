@@ -79,6 +79,43 @@ templ IndexTempl() {
 						</t-navigation-drawer-list>
 					</t-navigation-drawer>
 				</t-navigation>
+				<t-mobile-navigation reactive>
+					<t-mobile-navigation-rail slot="rail">
+						<t-list-item interactive type="button" href="/" hx-get="/" hx-target="main" hx-push-url="true">
+							Home
+							<md-icon slot="start" class="material-symbols-filled">crop_square</md-icon>
+						</t-list-item>
+						<t-list-item interactive type="text" href="/projects" hx-get="/projects" hx-target="main" hx-push-url="true">
+							Projects
+							<md-icon slot="start" class="material-symbols-filled">code_blocks</md-icon>
+						</t-list-item>
+						<t-list-item interactive type="text" href="/experience" hx-get="/experience" hx-target="main" hx-push-url="true">
+							Experience
+							<md-icon slot="start" class="material-symbols-filled">developer_guide</md-icon>
+						</t-list-item>
+						<t-list-item interactive type="text" href="/blog" hx-get="/blog" hx-target="main" hx-push-url="true">
+							Blog
+							<md-icon slot="start" class="material-symbols-filled">article</md-icon>
+						</t-list-item>
+					</t-mobile-navigation-rail>
+						<t-mobile-navigation-drawer slot="drawer">
+							<t-list-item-2 interactive type="text" href="/projects" hx-get="/projects" hx-target="main" hx-push-url="true">
+								Projects Overview
+							</t-list-item-2>
+							<t-list-item-2 interactive type="text" href="/projects/musicgpt" hx-get="/projects/musicgpt" hx-target="main" hx-push-url="true">
+								MusicGPT
+							</t-list-item-2>
+							<t-list-item-2 interactive type="text" href="/projects/goxFramework" hx-get="/projects/goxFramework" hx-target="main" hx-push-url="true">
+								GoX
+							</t-list-item-2>
+							<t-list-item-2 interactive type="text" href="/projects/tweetailyze" hx-get="/projects/tweetailyze" hx-target="main" hx-push-url="true">
+								TweetAIlyze
+							</t-list-item-2>
+							<t-list-item-2 interactive type="text" href="/projects/peoplepedia" hx-get="/projects/peoplepedia" hx-target="main" hx-push-url="true">
+								PeoplePedia
+							</t-list-item-2>
+						</t-mobile-navigation-drawer>
+				</t-mobile-navigation>
 			</header>
 			<div
  				style="

@@ -34,6 +34,10 @@ import './src/components/client/internal/t-navigation-rail'
 import './src/components/client/internal/t-navigation-drawer-list'
 import './src/components/client/internal/t-navigation-drawer'
 
+import './src/components/client/internal/t-mobile-navigation'
+import './src/components/client/internal/t-mobile-navigation-rail'
+import './src/components/client/internal/t-mobile-navigation-drawer'
+
 import './src/components/client/internal/t-dropdown'
 import './src/components/client/internal/t-dropdown-list'
 import './src/components/client/internal/t-dropdown-list-item'
