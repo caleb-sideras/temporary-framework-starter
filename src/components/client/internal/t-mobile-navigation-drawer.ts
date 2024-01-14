@@ -48,10 +48,10 @@ export class TMobileNavigationDrawer extends TMobileNavigationContainer {
 
   override render() {
     return html`
-			<t-list-item interactive type="button" @click="${this.activateRail}" tabindex="0">
+			<temporary-list-item interactive type="button" @click="${this.activateRail}" tabindex="0" hide-event>
 				Main Menu
 				<md-icon slot="start" class="material-symbols-filled">arrow_back</md-icon>
-			</t-list-item>
+			</temporary-list-item>
       ${super.render()}
       `
   }

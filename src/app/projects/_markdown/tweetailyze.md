@@ -285,7 +285,7 @@ Api calls to OpenAI 'text-curie-001' to classify the topic of a cluster based on
 ### Environment Variables (Examples)
 
 ```env
-DATABASE_URL=postgresql+psycopg2://postgres:password@db:5432/example_db
+DATABASE_URL=postgresql+psycopg2:// postgres:password@db:5432/ example_db
 DB_USER=postgres
 DB_PASSWORD=password
 DB_NAME=example_db

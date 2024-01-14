@@ -246,6 +246,8 @@
 
 body {
   margin: 0px;
+  display: flex;
+  flex-direction: row;
 }
 
 /**
@@ -281,7 +283,7 @@ body {
 }
 
 @media screen and (max-width: 1024px) {
-  body {
+  main {
     padding-left: 16px;
     padding-right: 16px;
   }
@@ -296,6 +298,10 @@ body {
 
   #markdown code {
     font-size: 0.8rem;
+  }
+
+  body {
+    flex-direction: column;
   }
 }
 
