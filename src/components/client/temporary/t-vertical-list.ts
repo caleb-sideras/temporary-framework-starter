@@ -14,6 +14,6 @@ import { customElement } from 'lit/decorators.js';
 export class TVerticalList extends TList{ 
   static override styles = [styles];
 
-  public itemAttributes: string[] = ['temporary-list-item', 'temporary-list-item-2']
-  public listAttributes: string[] = ['temporary-dropdown']
+  public itemAttributes: string[] = ['temporary-list-item', 't-dropdown-list-item']
+  public listAttributes: string[] = ['t-dropdown']
 }

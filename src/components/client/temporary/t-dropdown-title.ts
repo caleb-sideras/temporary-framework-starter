@@ -1,11 +1,12 @@
 import { customElement, property } from 'lit/decorators.js';
 import { html } from 'lit';
-import { TListItem2 } from './t-list-item-2';
+import { TListItem } from './t-list-item';
+import { createRequestActivationEvent, } from '@material/web/list/internal/list-navigation-helpers.js';
 
 @customElement('t-dropdown-title')
-export class TDropdownTitle extends TListItem2 {
+export class TDropdownTitle extends TListItem {
 
-  @property({ type: Boolean, reflect: true }) collapsed = true;
+  @property({ type: Boolean, reflect: true }) open = false;
 
   protected override render() {
     return this.renderListItem(html`
@@ -15,7 +16,7 @@ export class TDropdownTitle extends TListItem2 {
         </div>
         <slot name="start" slot="start"></slot>
         <slot name="end" slot="end">  
-          ${this.collapsed ? this.inactiveSlot : this.activeSlot}
+          ${this.active ? this.inactiveSlot : this.activeSlot}
         </slot>
         ${this.renderBody()}
       </md-item>
@@ -30,19 +31,11 @@ export class TDropdownTitle extends TListItem2 {
     return html`<slot name="inactive"></slot>`;
   }
 
-  protected override onFocus() {
-    // LMAO - chuckled
-    // NUKED for now - till i figure out how click works
+  protected override onClick() {
+    console.log("CLICK")
+    super.onClick();
+
+    this.open = !this.open;
+    this.dispatchEvent(new Event('title-activation', { bubbles: true, composed: true }));
   }
-
-  constructor() {
-    super();
-
-    this.addEventListener('click', (_) => {
-
-      this.collapsed = !this.collapsed;
-      this.dispatchEvent(new Event('title-activation', { bubbles: true, composed: true }));
-    });
-  }
-
 }

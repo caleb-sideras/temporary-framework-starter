@@ -40,9 +40,17 @@ export class TListItem extends ListItem {
         --md-list-item-label-text-color: var(--t-list-item-active-color, var(--md-sys-color-primary, #743342));
         --md-list-item-trailing-icon-color: var(--t-list-item-active-color, var(--md-sys-color-primary, #743342));
       }
+
+      :host([active][border]) {
+        border: var(--t-dropdown-list-item-border, solid);        
+        border-width: var(--t-dropdown-list-item-border-width, 1px);
+        border-color: var(--t-dropdown-list-item-active-color, var(--md-sys-color-primary, #743342));
+      }
     `
   ];
 
+  @property({ type: Boolean, reflect: true }) active = false;
+  @property({ type: Boolean, reflect: true }) border = false;
   @property({ type: Boolean, reflect: true, attribute: 'hide-event' }) hideEvent = false;
 
   protected override willUpdate(changed: PropertyValues<ListItem>) {
@@ -54,8 +62,6 @@ export class TListItem extends ListItem {
     }
 
   }
-
-  @property({ type: Boolean, reflect: true }) active = false;
 
   protected override renderListItem(content: unknown) {
     const isAnchor = this.type === 'link';
@@ -105,20 +111,20 @@ export class TListItem extends ListItem {
   */
   // @focus=${this.onFocus}
   // protected override onFocus() {
-    /** 
-    * NOTE
-    * Prevents focused re-presses
-    */
+  /** 
+  * NOTE
+  * Prevents focused re-presses
+  */
 
-    // if (this.tabIndex !== -1) {
-    //   return;
-    // }
+  // if (this.tabIndex !== -1) {
+  //   return;
+  // }
 
-    /**
-    * NOTE
-    * Google claim this "Handles the case where the user clicks on the element and then tabs." Based on 'list-navigation-helpers' it just activates the item on focus, which is on every navigation and click. 
-    */
+  /**
+  * NOTE
+  * Google claim this "Handles the case where the user clicks on the element and then tabs." Based on 'list-navigation-helpers' it just activates the item on focus, which is on every navigation and click. 
+  */
 
-    // this.dispatchEvent(createRequestActivationEvent());
+  // this.dispatchEvent(createRequestActivationEvent());
   // }
 }

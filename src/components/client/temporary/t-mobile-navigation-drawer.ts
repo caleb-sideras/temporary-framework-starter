@@ -34,10 +34,10 @@ export class TMobileNavigationDrawer extends TNavigationContainer {
 
   override render() {
     return html`
-			<t-list-item interactive type="button" @click="${this.activateRail}" tabindex="0">
+			<temporary-list-item interactive hide-event type="button" @click="${this.activateRail}" tabindex="0">
 				Main Menu
 				<md-icon slot="start" class="material-symbols-filled">arrow_back</md-icon>
-			</t-list-item>
+			</temporary-list-item>
       <div class="t-mobile-navigation-drawer-content">
         ${super.render()}
       </div>
