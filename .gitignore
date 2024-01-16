@@ -48,6 +48,7 @@ static/css/o*
 static/html/*
 static/js/*
 src/out
+msc/*
 
 bin/
 pkg/
