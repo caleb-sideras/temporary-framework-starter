@@ -5154,7 +5154,7 @@ class TDropdownTitle extends TListItem {
         </div>
         <slot name="start" slot="start"></slot>
         <slot name="end" slot="end">  
-          ${this.open ? this.inactiveSlot : this.activeSlot}
+          ${this.open ? this.activeSlot : this.inactiveSlot}
         </slot>
         ${this.renderBody()}
       </md-item>
@@ -5167,7 +5167,6 @@ class TDropdownTitle extends TListItem {
     return x`<slot name="inactive"></slot>`;
   }
   onClick() {
-    console.log("CLICK");
     super.onClick();
     this.open = !this.open;
     this.dispatchEvent(new Event("title-activation", { bubbles: true, composed: true }));

@@ -1,7 +1,6 @@
 import { customElement, property } from 'lit/decorators.js';
 import { html } from 'lit';
 import { TListItem } from './t-list-item';
-import { createRequestActivationEvent, } from '@material/web/list/internal/list-navigation-helpers.js';
 
 @customElement('t-dropdown-title')
 export class TDropdownTitle extends TListItem {
@@ -16,7 +15,7 @@ export class TDropdownTitle extends TListItem {
         </div>
         <slot name="start" slot="start"></slot>
         <slot name="end" slot="end">  
-          ${this.open ? this.inactiveSlot : this.activeSlot}
+          ${this.open ? this.activeSlot : this.inactiveSlot}
         </slot>
         ${this.renderBody()}
       </md-item>
@@ -32,7 +31,6 @@ export class TDropdownTitle extends TListItem {
   }
 
   protected override onClick() {
-    console.log("CLICK")
     super.onClick();
 
     this.open = !this.open;

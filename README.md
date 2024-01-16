@@ -1,5 +1,7 @@
 # TODO
 
+- finish blog
+- add links
 - fix highlighting of focused color
 - add own docs -> video button ???
 - remove redudant files
