@@ -10,6 +10,8 @@ import { TListItem } from "./t-list";
 /**
  * NOTE
  * I will learn Google's scss styling later & attempt to fix the spaghetti styling below
+ * BUG
+ * Mobile navigation drawer/rail do not revalidate on browser 'popstate' events. They only revalidate on user interaction. Issues can arise then routes can hx-get or hx-boost pages (returns body) and the drawer/rail doesn't update 
  */
 @customElement('t-mobile-navigation')
 export class TMobileNavigation extends MdNavigationDrawerModal {
@@ -72,8 +74,7 @@ export class TMobileNavigation extends MdNavigationDrawerModal {
     await this.updateComplete;
 
     // TODO: refactor this so that if there is match in drawers, it'll be inited
-    this.activateRail();
-    this.deactivateDrawers();
+    this.onActivateRail();
   }
 
 
@@ -106,11 +107,15 @@ export class TMobileNavigation extends MdNavigationDrawerModal {
     */
   onActivateDrawer(e: Event) {
     const item = e.target as TListItem;
-    console.log("onActivateDrawer", item);
     for (const drawer of this.drawers) {
+
+      // Checks if we need to open a drawer
       const matchingItem = drawer.listController.getListItem(item.href);
+      // If we do, use brower state to current item
       if (matchingItem) {
-        this.onActivateItem(drawer);
+        drawer.revalidateFromBrower();
+        this.deactivateRail();
+        this.activateItem(drawer);
         return;
       }
     }
@@ -122,8 +127,8 @@ export class TMobileNavigation extends MdNavigationDrawerModal {
   }
 
   onActivateRail() {
-    console.log("onActivateRail");
     this.deactivateDrawers();
+    this.rail.revalidateFromBrower();
     this.activateItem(this.rail);
   }
 
@@ -159,7 +164,6 @@ export class TMobileNavigation extends MdNavigationDrawerModal {
     * Modal Hanlders
     */
   closeModal() {
-    console.log("closeModal");
     this.opened = false;
   }
 

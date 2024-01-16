@@ -16,7 +16,7 @@ export class TDropdownTitle extends TListItem {
         </div>
         <slot name="start" slot="start"></slot>
         <slot name="end" slot="end">  
-          ${this.active ? this.inactiveSlot : this.activeSlot}
+          ${this.open ? this.inactiveSlot : this.activeSlot}
         </slot>
         ${this.renderBody()}
       </md-item>

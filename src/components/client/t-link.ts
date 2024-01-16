@@ -55,18 +55,37 @@ export class TLink extends HTMXElement {
 	@property({ type: Boolean, reflect: true }) disabled = false;
 
 	render() {
-		return this.renderAnchor(html`
-			<h2>
-				${this.title}
-			</h2>
-			<p>
-				${this.description}
-			</p>
-			<img
-				loading="lazy"
-				src="${this.imgSrc}"
-				alt="${this.imgAlt}"
-			/>     
-    `)
+		return html`
+			<a>
+				<h2>
+					${this.title}
+				</h2>
+				<p>
+					${this.description}
+				</p>
+				<img
+					loading="lazy"
+					src="${this.imgSrc}"
+					alt="${this.imgAlt}"
+				/>     
+			</a>
+    `
 	}
+
+	// When HTMX supports shadow DOM we change back to this
+	// render() {
+	// 	return this.renderAnchor(html`
+	// 		<h2>
+	// 			${this.title}
+	// 		</h2>
+	// 		<p>
+	// 			${this.description}
+	// 		</p>
+	// 		<img
+	// 			loading="lazy"
+	// 			src="${this.imgSrc}"
+	// 			alt="${this.imgAlt}"
+	// 		/>     
+ //    `)
+	// }
 }

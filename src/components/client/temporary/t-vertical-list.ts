@@ -11,7 +11,7 @@ import { customElement } from 'lit/decorators.js';
  * @suppress {visibility}
  */
 @customElement('temporary-list')
-export class TVerticalList extends TList{ 
+export class TVerticalList extends TList {
   static override styles = [styles];
 
   public itemAttributes: string[] = ['temporary-list-item', 't-dropdown-list-item']

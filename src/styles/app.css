@@ -271,15 +271,14 @@ body {
     height: 100vh;
   }
 
-  t-navigation {
-    display: flex;
-  }
-
   #markdown picture img,
   #markdown p>img {
     max-height: 384px;
   }
 
+  t-mobile-top-app-bar {
+    display: none !important;
+  }
 }
 
 @media screen and (max-width: 1024px) {
@@ -302,6 +301,10 @@ body {
 
   body {
     flex-direction: column;
+  }
+
+  t-navigation {
+    display: none !important;
   }
 }
 

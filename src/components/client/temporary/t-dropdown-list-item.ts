@@ -15,7 +15,7 @@ export class TDropdownListItem extends TListItem {
   ]
 
   protected updated(_changedProperties: PropertyValueMap<TDropdownListItem>): void {
-    if (_changedProperties.has('active') && this.active) {
+    if (_changedProperties.has('active')) {
       this.dispatchEvent(this.createExternalActivationEvent());
     }
   }

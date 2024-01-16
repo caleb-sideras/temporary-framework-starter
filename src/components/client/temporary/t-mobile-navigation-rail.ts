@@ -13,19 +13,19 @@ import { TNavigationContainer } from "./t-mobile-navigation-container";
  */
 @customElement('t-mobile-navigation-rail')
 export class TMobileNavigationRail extends TNavigationContainer {
-  protected updated(_changedProperties: PropertyValueMap<TNavigationContainer>): void {
+  // protected updated(_changedProperties: PropertyValueMap<TNavigationContainer>): void {
 
-    //TODO: sure there is a better way to do this
-    if (_changedProperties.has('active') && this.active) {
-      console.log("NavigationContainer -> active:", this.active)
+  //   //TODO: sure there is a better way to do this
+  //   if (_changedProperties.has('active') && this.active) {
+  //     console.log("NavigationContainer -> active:", this.active)
 
-      const listItem = this.listController.getListItem(this.getBrowerPathname(), true);
+  //     const listItem = this.listController.getListItem(this.getBrowerPathname(), true);
 
-      if (listItem) this.listController.requestHighlight(listItem);
+  //     if (listItem) this.listController.requestHighlight(listItem);
 
-      console.log("NavigationContainer -> listItem:", listItem);
-    }
-  }
+  //     console.log("NavigationContainer -> listItem:", listItem);
+  //   }
+  // }
 }
 
 

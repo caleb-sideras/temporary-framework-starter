@@ -1,6 +1,7 @@
 import { PropertyValueMap, css } from 'lit';
 import { property } from "lit/decorators.js";
 import { TVerticalList } from "./t-vertical-list";
+import { TListItem } from './t-list';
 
 /**
  * @summary TNavigationContainer is a base class for navigation
@@ -24,15 +25,11 @@ export class TNavigationContainer extends TVerticalList {
         padding-left: var(--t-navigation-container-padding-left, 0px) !important;
         padding-top: var(--t-navigation-container-padding-top, 8px) !important;
         padding-bottom: var(--t-navigation-container-padding-bottom, 0px) !important;
-        width: var(--t-navigation-container-width, 165px);
+        width: var(--t-navigation-container-width, 100%);
+        min-width: var(--t-navigation-container-min-width, 165px);
       }
       :host([active]){
         display: flex !important; 
-      }
-      @media screen and (max-width: 1024px) {
-        :host{
-          --t-navigation-container-width: 100%;
-        }      
       }
     `,
     ...TVerticalList.styles
@@ -40,22 +37,25 @@ export class TNavigationContainer extends TVerticalList {
 
   @property({ type: Boolean, reflect: true }) active = false;
 
-  protected updated(_changedProperties: PropertyValueMap<TNavigationContainer>): void {
-
-    if (_changedProperties.has('active') && this.active) {
-      console.log("NavigationContainer -> active:", this.active)
-
-      const listItem = this.listController.getListItem(this.getBrowerPathname());
-
-      if (listItem) {
-        this.listController.requestHighlight(listItem);
-      } else {
-        this.listController.onDeactivateItems();
-      }
-    }
+  public revalidateFromUrl(url: string) {
+    const matchingItem = this.listController.getListItem(url);
+    this.listController.onDeactivateItems();
+    if (matchingItem) this.listController.requestHighlight(matchingItem);
   }
 
-  getBrowerPathname(): string {
+  public revalidateFromBrower() {
+    const matchingItem = this.listController.getListItem(this.getBrowerPathname());
+    this.listController.onDeactivateItems();
+    if (matchingItem) this.listController.requestHighlight(matchingItem);
+
+  }
+
+  private needsRevalidation(listItem: TListItem): boolean {
+    if (listItem.active && this.active) return false;
+    return true;
+  }
+
+  private getBrowerPathname(): string {
     const path = window.location.pathname;
     const cleanPath = path.split(/[?#]/)[0];
     return cleanPath;

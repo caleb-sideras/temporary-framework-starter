@@ -81,6 +81,67 @@ templ IndexTempl() {
 						</temporary-list-item>
 					</t-mobile-navigation-drawer>
 				</t-mobile-navigation>
+
+				<t-navigation>
+
+					<t-navigation-rail slot="rail">
+						<temporary-list-item interactive type="button" href="/" hx-get="/" hx-target="main" hx-push-url="true">
+							Home
+							<md-icon slot="start" class="material-symbols-filled">crop_square</md-icon>
+						</temporary-list-item>
+						<temporary-list-item interactive type="button" href="/projects" hx-get="/projects" hx-target="main" hx-push-url="true">
+							Projects
+							<md-icon slot="start" class="material-symbols-filled">code_blocks</md-icon>
+						</temporary-list-item>
+						<temporary-list-item interactive type="button" href="/experience" hx-get="/experience" hx-target="main" hx-push-url="true">
+							Experience
+							<md-icon slot="start" class="material-symbols-filled">developer_guide</md-icon>
+						</temporary-list-item>
+						<temporary-list-item interactive type="button" href="/blog" hx-get="/blog" hx-target="main" hx-push-url="true">
+							Blog
+							<md-icon slot="start" class="material-symbols-filled">article</md-icon>
+						</temporary-list-item>
+					</t-navigation-rail>
+
+					<t-navigation-drawer slot="drawer">
+						<temporary-list-item interactive border type="button" href="/projects" hx-get="/projects" hx-target="main" hx-push-url="true">
+							Projects Overview
+						</temporary-list-item>
+						<temporary-list-item interactive border type="button" href="/projects/musicgpt" hx-get="/projects/musicgpt" hx-target="main" hx-push-url="true">
+							MusicGPT
+						</temporary-list-item>
+						<temporary-list-item interactive border type="button" href="/projects/goxFramework" hx-get="/projects/goxFramework" hx-target="main" hx-push-url="true">
+							GoX
+						</temporary-list-item>
+						<t-dropdown>
+							<t-dropdown-title border hide-event slot="title">
+								<div slot="headline">CAAS</div>
+								<md-icon slot="active">arrow_drop_up</md-icon>
+								<md-icon slot="inactive">arrow_drop_down</md-icon>
+							</t-dropdown-title>
+							<t-dropdown-list slot="content">
+								<t-dropdown-list-item interactive border type="text" href="/projects/caas" hx-get="/projects/caas" hx-target="main" hx-push-url="true">
+									Overview
+								</t-dropdown-list-item>
+								<t-dropdown-list-item interactive border type="text" href="/projects/caas/segmentation" hx-get="/projects/caas/segmentation" hx-target="main" hx-push-url="true">
+									Segmentation
+								</t-dropdown-list-item>
+								<t-dropdown-list-item interactive border type="text" href="/projects/caas/cluster" hx-get="/projects/caas/cluster" hx-target="main" hx-push-url="true">
+									Cluster
+								</t-dropdown-list-item>
+								<t-dropdown-list-item interactive border type="text" href="/projects/caas/processor" hx-get="/projects/caas/processor" hx-target="main" hx-push-url="true">
+									Processor
+								</t-dropdown-list-item>
+							</t-dropdown-list>
+						</t-dropdown>
+						<temporary-list-item interactive border type="button" href="/projects/tweetailyze" hx-get="/projects/tweetailyze" hx-target="main" hx-push-url="true">
+							TweetAIlyze
+						</temporary-list-item>
+						<temporary-list-item interactive border type="button" href="/projects/peoplepedia" hx-get="/projects/peoplepedia" hx-target="main" hx-push-url="true">
+							PeoplePedia
+						</temporary-list-item>
+					</t-navigation-drawer>
+				</t-navigation>
 			</header>
 			<div
  				style="

@@ -4610,19 +4610,21 @@ class TLink extends HTMXElement {
 		}		
 	`;
   render() {
-    return this.renderAnchor(x`
-			<h2>
-				${this.title}
-			</h2>
-			<p>
-				${this.description}
-			</p>
-			<img
-				loading="lazy"
-				src="${this.imgSrc}"
-				alt="${this.imgAlt}"
-			/>     
-    `);
+    return x`
+			<a>
+				<h2>
+					${this.title}
+				</h2>
+				<p>
+					${this.description}
+				</p>
+				<img
+					loading="lazy"
+					src="${this.imgSrc}"
+					alt="${this.imgAlt}"
+				/>     
+			</a>
+    `;
   }
 }
 __legacyDecorateClassTS([
@@ -4960,29 +4962,31 @@ class TNavigationContainer extends TVerticalList {
         padding-left: var(--t-navigation-container-padding-left, 0px) !important;
         padding-top: var(--t-navigation-container-padding-top, 8px) !important;
         padding-bottom: var(--t-navigation-container-padding-bottom, 0px) !important;
-        width: var(--t-navigation-container-width, 165px);
+        width: var(--t-navigation-container-width, 100%);
+        min-width: var(--t-navigation-container-min-width, 165px);
       }
       :host([active]){
         display: flex !important; 
       }
-      @media screen and (max-width: 1024px) {
-        :host{
-          --t-navigation-container-width: 100%;
-        }      
-      }
     `,
     ...TVerticalList.styles
   ];
-  updated(_changedProperties) {
-    if (_changedProperties.has("active") && this.active) {
-      console.log("NavigationContainer -> active:", this.active);
-      const listItem = this.listController.getListItem(this.getBrowerPathname());
-      if (listItem) {
-        this.listController.requestHighlight(listItem);
-      } else {
-        this.listController.onDeactivateItems();
-      }
-    }
+  revalidateFromUrl(url) {
+    const matchingItem = this.listController.getListItem(url);
+    this.listController.onDeactivateItems();
+    if (matchingItem)
+      this.listController.requestHighlight(matchingItem);
+  }
+  revalidateFromBrower() {
+    const matchingItem = this.listController.getListItem(this.getBrowerPathname());
+    this.listController.onDeactivateItems();
+    if (matchingItem)
+      this.listController.requestHighlight(matchingItem);
+  }
+  needsRevalidation(listItem) {
+    if (listItem.active && this.active)
+      return false;
+    return true;
   }
   getBrowerPathname() {
     const path = window.location.pathname;
@@ -4999,6 +5003,14 @@ class TDropdownList extends TNavigationContainer {
   constructor() {
     super(...arguments);
   }
+  static styles = [
+    i`
+      :host{
+        --md-list-container-color: var(--t-dropdown-list-container-color, var(--md-sys-color-on-primary, #ffffff)) !important;
+      }
+    `,
+    ...TNavigationContainer.styles
+  ];
 }
 TDropdownList = __legacyDecorateClassTS([
   t("t-dropdown-list")
@@ -5116,7 +5128,7 @@ class TDropdownListItem extends TListItem {
     ...TListItem.styles
   ];
   updated(_changedProperties) {
-    if (_changedProperties.has("active") && this.active) {
+    if (_changedProperties.has("active")) {
       this.dispatchEvent(this.createExternalActivationEvent());
     }
   }
@@ -5142,7 +5154,7 @@ class TDropdownTitle extends TListItem {
         </div>
         <slot name="start" slot="start"></slot>
         <slot name="end" slot="end">  
-          ${this.active ? this.inactiveSlot : this.activeSlot}
+          ${this.open ? this.inactiveSlot : this.activeSlot}
         </slot>
         ${this.renderBody()}
       </md-item>
@@ -5262,15 +5274,6 @@ class TMobileNavigationRail extends TNavigationContainer {
   constructor() {
     super(...arguments);
   }
-  updated(_changedProperties) {
-    if (_changedProperties.has("active") && this.active) {
-      console.log("NavigationContainer -> active:", this.active);
-      const listItem = this.listController.getListItem(this.getBrowerPathname(), true);
-      if (listItem)
-        this.listController.requestHighlight(listItem);
-      console.log("NavigationContainer -> listItem:", listItem);
-    }
-  }
 }
 TMobileNavigationRail = __legacyDecorateClassTS([
   t("t-mobile-navigation-rail")
@@ -5319,8 +5322,7 @@ class TMobileNavigation extends MdNavigationDrawerModal {
   async firstUpdated(_changedProperties) {
     super.firstUpdated(_changedProperties);
     await this.updateComplete;
-    this.activateRail();
-    this.deactivateDrawers();
+    this.onActivateRail();
   }
   layout() {
     if (!this.railItems || !this.drawerItems || this.railItems.length > 1 || !this.isMobileNaviationRail(this.railItems[0]) || !this.areMobileNaviationDrawers(this.drawerItems))
@@ -5336,19 +5338,20 @@ class TMobileNavigation extends MdNavigationDrawerModal {
   }
   onActivateDrawer(e10) {
     const item3 = e10.target;
-    console.log("onActivateDrawer", item3);
     for (const drawer of this.drawers) {
       const matchingItem = drawer.listController.getListItem(item3.href);
       if (matchingItem) {
-        this.onActivateItem(drawer);
+        drawer.revalidateFromBrower();
+        this.deactivateRail();
+        this.activateItem(drawer);
         return;
       }
     }
     this.closeModal();
   }
   onActivateRail() {
-    console.log("onActivateRail");
     this.deactivateDrawers();
+    this.rail.revalidateFromBrower();
     this.activateItem(this.rail);
   }
   onActivateItem(item3) {
@@ -5368,7 +5371,6 @@ class TMobileNavigation extends MdNavigationDrawerModal {
     this.deactivateItem(this.rail);
   }
   closeModal() {
-    console.log("closeModal");
     this.opened = false;
   }
   openModal() {
@@ -5422,6 +5424,198 @@ __legacyDecorateClassTS([
 TMobileNavigation = __legacyDecorateClassTS([
   t("t-mobile-navigation")
 ], TMobileNavigation);
+
+// node_modules/lit-html/directive-helpers.jstroll
+class TNavigation extends s3 {
+  constructor() {
+    super(...arguments);
+    this.url = "";
+  }
+  static styles = i`
+    :host{
+      display: flex;
+      height: 100%;
+      gap: 8px;
+    }
+  `;
+  rail;
+  drawers = [];
+  railAttribute = "t-navigation-rail";
+  drawerAttribute = "t-navigation-drawer";
+  connectedCallback() {
+    super.connectedCallback();
+    let mainElement = document.querySelector("main");
+    if (!mainElement)
+      return;
+    mainElement.addEventListener("htmx:beforeRequest", (e10) => {
+      this.htmxReValidate(e10);
+    });
+  }
+  disconnectedCallback() {
+    super.connectedCallback();
+    let mainElement = document.querySelector("main");
+    if (!mainElement)
+      return;
+    mainElement.removeEventListener("htmx:beforeRequest", (e10) => {
+      this.htmxReValidate(e10);
+    });
+  }
+  htmxReValidate(event) {
+    const target = event.target;
+    if (target.hasAttribute("hx-push-url") && target.getAttribute("hx-push-url") === "true") {
+      this.url = target.getAttribute("href");
+      this.initRail();
+      this.initDrawers();
+    }
+  }
+  async getUpdateComplete() {
+    await super.getUpdateComplete();
+    this.layout();
+    await this.rail.updateComplete;
+    await Promise.all(this.drawers.map((c4) => c4.updateComplete));
+    return true;
+  }
+  async firstUpdated(_changedProperties) {
+    super.firstUpdated(_changedProperties);
+    await this.updateComplete;
+    this.updateURL();
+    this.initRail();
+    this.initDrawers();
+  }
+  layout() {
+    if (!this.railItems || !this.drawerItems || this.railItems.length > 1 || !this.isMobileNaviationRail(this.railItems[0]) || !this.areMobileNaviationDrawers(this.drawerItems))
+      return;
+    this.rail = this.railItems[0];
+    this.drawers = this.drawerItems;
+  }
+  initDrawers() {
+    this.deactivateDrawers();
+    for (const drawer of this.drawers) {
+      const matchingItem = drawer.listController.getListItem(this.url);
+      if (matchingItem) {
+        drawer.revalidateFromUrl(this.url);
+        this.activateItem(drawer);
+        return;
+      }
+    }
+  }
+  isMobileNaviationRail(rail) {
+    console.log("this.rail", rail);
+    return rail.localName === this.railAttribute;
+  }
+  areMobileNaviationDrawers(drawers) {
+    return drawers.some((drawer) => drawer.localName === this.drawerAttribute);
+  }
+  onActivateDrawer(e10) {
+    this.deactivateDrawers();
+    const item3 = e10.target;
+    for (const drawer of this.drawers) {
+      const matchingItem = drawer.listController.getListItem(item3.href);
+      if (matchingItem) {
+        drawer.revalidateFromUrl(item3.href);
+        this.activateItem(drawer);
+        return;
+      }
+    }
+  }
+  initRail() {
+    const listItem = this.rail.listController.getListItem(this.getRootNodeUrl(this.url));
+    if (listItem)
+      this.rail.listController.requestHighlight(listItem);
+  }
+  activateRail() {
+    this.activateItem(this.rail);
+  }
+  deactivateDrawers() {
+    this.drawers.map((drawer) => this.deactivateItem(drawer));
+  }
+  activateDrawers() {
+    this.drawers.map((drawer) => this.activateItem(drawer));
+  }
+  deactivateItem(item3) {
+    item3.active = false;
+  }
+  activateItem(item3) {
+    item3.active = true;
+  }
+  updateURL() {
+    this.url = this.getURL();
+  }
+  getURL() {
+    const path = window.location.pathname;
+    const cleanPath = path.split(/[?#]/)[0];
+    return cleanPath;
+  }
+  getRootNodeUrl(url) {
+    const urls = this.splitLeafUrl(url);
+    if (!urls || urls.length <= 0)
+      return "";
+    return urls[0];
+  }
+  splitLeafUrl(url) {
+    const trimmedUrl = url.replace(/^\/|\/$/g, "");
+    const words = trimmedUrl.split("/");
+    if (words.length === 1 && words[0] === "") {
+      return ["/"];
+    }
+    return words;
+  }
+  render() {
+    return x`  
+      <slot name="rail" @request-activation="${this.onActivateDrawer}"></slot>
+      <slot name="drawer"></slot>        
+    `;
+  }
+}
+__legacyDecorateClassTS([
+  o4({ flatten: true, slot: "rail" })
+], TNavigation.prototype, "railItems", undefined);
+__legacyDecorateClassTS([
+  o4({ flatten: true, slot: "drawer" })
+], TNavigation.prototype, "drawerItems", undefined);
+__legacyDecorateClassTS([
+  n3({ type: String })
+], TNavigation.prototype, "url", undefined);
+TNavigation = __legacyDecorateClassTS([
+  t("t-navigation")
+], TNavigation);
+
+// node_modules/lit-html/directive-helpers.jstroller.ts
+class TNavigationRail extends TNavigationContainer {
+  constructor() {
+    super(...arguments);
+  }
+  static styles = [
+    i`
+      :host{
+        --t-navigation-container-gap: var(--t-navigation-rail-container-gap, 24px);
+      }
+    `,
+    ...TNavigationContainer.styles
+  ];
+  active = true;
+}
+TNavigationRail = __legacyDecorateClassTS([
+  t("t-navigation-rail")
+], TNavigationRail);
+
+// node_modules/lit-html/directive-helpers.jstroller.ts-s
+class TNavigationDrawer extends TNavigationContainer {
+  constructor() {
+    super(...arguments);
+  }
+  static styles = [
+    i`
+      :host{
+        --md-list-container-color: var(--t-navigation-drawer-container-color, var(--md-sys-color-on-primary, #ffffff)) !important;
+      }
+    `,
+    ...TNavigationContainer.styles
+  ];
+}
+TNavigationDrawer = __legacyDecorateClassTS([
+  t("t-navigation-drawer")
+], TNavigationDrawer);
 
 // node_modules/lit-html/directive-helpers.jstro
 class TListItem2 extends MdListItem {
@@ -5505,393 +5699,3 @@ class TListItem22 extends TListItem2 {
 TListItem22 = __legacyDecorateClassTS([
   t("t-list-item-2")
 ], TListItem22);
-
-// node_modules/lit-html/directive-helpers.jstrol
-class TNavigation extends s3 {
-  constructor() {
-    super(...arguments);
-    this.url = "";
-    this.reactive = false;
-  }
-  static styles = i`
-    :host{
-      display: none;
-      gap: 8px;
-      height: 100%;
-    }
-  `;
-  navRail;
-  navDrawer;
-  async getUpdateComplete() {
-    await super.getUpdateComplete();
-    this.layout();
-    await this.navRail.updateComplete;
-    await this.navDrawer.updateComplete;
-    return true;
-  }
-  async firstUpdated(_changedProperties) {
-    super.firstUpdated(_changedProperties);
-    await this.updateComplete;
-    if (this.reactive) {
-      this.updateURL();
-    }
-  }
-  updated(_changedProperties) {
-    if (_changedProperties.has("url") && this.url !== "") {
-      this.navRail.url = this.getRootNodeUrl(this.url);
-      this.navDrawer.url = this.url;
-    }
-  }
-  layout() {
-    if (!this.rail)
-      return;
-    if (!this.drawer)
-      return;
-    if (this.rail.length === 1)
-      this.navRail = this.rail[0];
-    if (this.drawer.length === 1)
-      this.navDrawer = this.drawer[0];
-  }
-  splitLeafUrl(url) {
-    const trimmedUrl = url.replace(/^\/|\/$/g, "");
-    const words = trimmedUrl.split("/");
-    if (words.length === 1 && words[0] === "") {
-      return ["/"];
-    }
-    return words;
-  }
-  getRootNodeUrl(url) {
-    const urls = this.splitLeafUrl(url);
-    if (!urls || urls.length <= 0)
-      return "";
-    return urls[0];
-  }
-  getBrowerHistory() {
-    const path = window.location.pathname;
-    const cleanPath = path.split(/[?#]/)[0];
-    return cleanPath;
-  }
-  updateURL() {
-    const path = window.location.pathname;
-    const cleanPath = path.split(/[?#]/)[0];
-    this.url = cleanPath;
-  }
-  separateURL(url) {
-    const trimmedUrl = url.replace(/^\/|\/$/g, "");
-    const words = trimmedUrl.split("/");
-    if (words.length === 1 && words[0] === "") {
-      return ["/"];
-    }
-    return words;
-  }
-  handleRailInteraction(event) {
-    const target = event.target;
-    const href = target.href;
-    this.navDrawer.url = href;
-  }
-  render() {
-    return x`
-      <slot name="rail" @request-activation=${this.handleRailInteraction}></slot>
-      <slot name="drawer"></slot>
-    `;
-  }
-}
-__legacyDecorateClassTS([
-  o4({ flatten: true, slot: "rail" })
-], TNavigation.prototype, "rail", undefined);
-__legacyDecorateClassTS([
-  o4({ flatten: true, slot: "drawer" })
-], TNavigation.prototype, "drawer", undefined);
-__legacyDecorateClassTS([
-  n3({ type: String })
-], TNavigation.prototype, "url", undefined);
-__legacyDecorateClassTS([
-  n3({ type: Boolean, reflect: true })
-], TNavigation.prototype, "reactive", undefined);
-TNavigation = __legacyDecorateClassTS([
-  t("t-navigation")
-], TNavigation);
-
-// node_modules/lit-html/directive-helpers.jstroller.t
-class TNavigationRail extends MdList {
-  constructor() {
-    super(...arguments);
-    this.url = "";
-  }
-  static styles = [
-    i`
-      :host {
-        width: auto !important;
-        gap: var(--t-navigation-drawer-rail-container-gap, 16px);
-      }
-  `,
-    ...MdList.styles
-  ];
-  updated(_changedProperties) {
-    if (_changedProperties.has("url") && this.url !== "") {
-      this.activateItemFromHref(this.url);
-    }
-  }
-  activateItemFromHref(href) {
-    for (const item3 of this.items) {
-      if (this.removeFirstLastSlash(item3.href) === this.removeFirstLastSlash(href)) {
-        const activationEvent = new Event("request-activation", { bubbles: true, composed: true });
-        Object.defineProperty(activationEvent, "target", { value: item3 });
-        this.listController.onRequestActivation(activationEvent);
-        return;
-      }
-    }
-  }
-  removeFirstLastSlash(text) {
-    return text.replace(/^\/|\/$/g, "");
-  }
-}
-__legacyDecorateClassTS([
-  n3({ type: String })
-], TNavigationRail.prototype, "url", undefined);
-TNavigationRail = __legacyDecorateClassTS([
-  t("t-navigation-rail")
-], TNavigationRail);
-
-// node_modules/lit-html/directive-helpers.jstroller
-class ExtendedListController extends ListController {
-  isList;
-  constructor(config) {
-    super(config);
-    this.isList = config.isList;
-  }
-  get items() {
-    const maybeItemOrList = this.getPossibleItems();
-    const items = [];
-    for (const itemOrList of maybeItemOrList) {
-      if (this.isItem(itemOrList)) {
-        items.push(itemOrList);
-        continue;
-      }
-      if (this.isList(itemOrList) && itemOrList) {
-        items.push(...itemOrList.items);
-        continue;
-      }
-    }
-    return items;
-  }
-}
-var NAVIGABLE_KEY_SET3 = new Set(Object.values(NavigableKeys));
-
-class TDrawerList extends s3 {
-  itemAttributes = [];
-  listAttributes = [];
-  updated(_changedProperties) {
-    super.updated(_changedProperties);
-    if (_changedProperties.has("url") && this.url !== "") {
-      this.updateListItems();
-    }
-  }
-  updateListItems() {
-    if (!this.url) {
-      return;
-    }
-    const items = this.ListController.items;
-    if (items.length <= 0)
-      return;
-    const parentItems = this.findParentItems(this.url, items);
-    const matchingItem = this.findMatchingItem(this.url, items);
-    console.log("TNavigationDrawerList: Matching Parent Items -> ", parentItems);
-    console.log("TNavigationDrawerList: Matching Item -> ", matchingItem);
-    this.ListController.onDeactivateItems();
-    for (const item3 of parentItems) {
-      this.activateItem(item3);
-    }
-    if (matchingItem !== null) {
-      this.activateItem(matchingItem);
-    }
-    this.url = "";
-  }
-  findParentItems(href, listItems) {
-    const matchingItems = [];
-    const idSegments = this.removeFirstLastSlash(href).split("/");
-    for (const parentId of listItems) {
-      const parentSegments = this.removeFirstLastSlash(parentId.href).split("/");
-      if (parentSegments.length < idSegments.length && idSegments.slice(0, parentSegments.length).join("/") === parentId.id) {
-        matchingItems.push(parentId);
-      }
-    }
-    return matchingItems;
-  }
-  findMatchingItem(href, listItems) {
-    for (const item3 of listItems) {
-      if (this.removeFirstLastSlash(item3.href) === this.removeFirstLastSlash(href))
-        return item3;
-    }
-    return null;
-  }
-  removeFirstLastSlash(text) {
-    return text.replace(/^\/|\/$/g, "");
-  }
-  isActive(item3) {
-    return item3.tabIndex === 0;
-  }
-  activateItem(item3) {
-    return item3.tabIndex = 0;
-  }
-  ListControllerConfig = {
-    isItem: (item3) => this.itemAttributes.some((condition) => item3.localName === condition),
-    isList: (item3) => this.listAttributes.some((condition) => item3.localName === condition),
-    getPossibleItems: () => this.slotItems,
-    isRtl: () => getComputedStyle(this).direction === "rtl",
-    deactivateItem: (item3) => {
-      item3.tabIndex = -1;
-    },
-    activateItem: (item3) => {
-      item3.tabIndex = 0;
-    },
-    isNavigableKey: (key) => NAVIGABLE_KEY_SET3.has(key),
-    isActivatable: (item3) => !item3.disabled && item3.type !== "text"
-  };
-  ListController = new ExtendedListController(this.ListControllerConfig);
-  get items() {
-    return this.ListController.items;
-  }
-  internals = this.attachInternals();
-  constructor() {
-    super();
-    this.url = "";
-    if (!o6) {
-      this.internals.role = "list";
-      this.addEventListener("keydown", this.ListController.handleKeydown);
-    }
-  }
-  render() {
-    return x`
-      <slot
-        @deactivate-items=${this.ListController.onDeactivateItems}
-        @request-activation=${this.ListController.onRequestActivation}
-        @slotchange=${this.ListController.onSlotchange}>
-      </slot>
-    `;
-  }
-  activateNextItem() {
-    return this.ListController.activateNextItem();
-  }
-  activatePreviousItem() {
-    return this.ListController.activatePreviousItem();
-  }
-}
-__legacyDecorateClassTS([
-  o4({ flatten: true })
-], TDrawerList.prototype, "slotItems", undefined);
-__legacyDecorateClassTS([
-  n3({ type: String })
-], TDrawerList.prototype, "url", undefined);
-
-// node_modules/lit-html/directive-helpers.jstroller.ts-style
-class TNavigationDrawerList extends TDrawerList {
-  constructor() {
-    super(...arguments);
-  }
-  static styles = [
-    i`
-      :host{
-        --md-list-container-color: var(--t-navigation-drawer-list-container-color, #ffffff);
-        font-family: var(--t-navigation-drawer-list-container-font, 'Roboto Mono, monospace');
-        gap: var(--t-navigation-drawer-list-container-gap, 0px);
-        padding-right: var(--t-navigation-drawer-list-container-padding-right, 0px !important);
-        padding-left: var(--t-navigation-drawer-list-container-padding-left, 0px) !important;
-        padding-top: var(--t-navigation-drawer-list-container-padding-top, 8px) !important;
-        padding-bottom: var(--t-navigation-drawer-list-container-padding-bottom, 0px) !important;
-        width: var(--t-navigation-drawer-list-container-width, 165px);
-      }
-      :host([tabindex="-1"]){
-       display: none !important; 
-      }
-    `,
-    styles32
-  ];
-  itemAttributes = ["t-list-item", "t-list-item-2"];
-  listAttributes = ["t-dropdown"];
-}
-TNavigationDrawerList = __legacyDecorateClassTS([
-  t("t-navigation-drawer-list")
-], TNavigationDrawerList);
-
-// node_modules/lit-html/directive-helpers.jstroller.ts-
-class TNavigationDrawer extends MdList {
-  static styles = [
-    i`
-      :host{
-        --md-list-container-color: var(--t-navigation-drawer-container-color, #ffffff);
-        font-family: var(--t-navigation-drawer-container-font, 'Roboto Mono, monospace');
-        gap: var(--t-navigation-drawer-container-gap, 0px);
-        padding-right: var(--t-navigation-drawer-container-padding-right, 0px !important);
-        padding-left: var(--t-navigation-drawer-container-padding-left, 0px) !important;
-        padding-top: var(--t-navigation-drawer-container-padding-top, 0px) !important;
-        padding-bottom: var(--t-navigation-drawer-container-padding-bottom, 0px) !important;
-      }
-      `,
-    ...MdList.styles
-  ];
-  constructor() {
-    super();
-    this.url = "";
-    this.listController.isItem = (item3) => {
-      return item3.localName === "t-navigation-drawer-list";
-    };
-  }
-  async getUpdateComplete() {
-    await super.getUpdateComplete();
-    await Promise.all(this.items.map((c4) => c4.updateComplete));
-    return true;
-  }
-  async firstUpdated(_changedProperties) {
-    super.firstUpdated(_changedProperties);
-    await this.updateComplete;
-  }
-  updated(_changedProperties) {
-    if (_changedProperties.has("url") && this.url !== "") {
-      console.log(`TNavigationDrawer: url -> ${this.url}`);
-      this.listController.onDeactivateItems();
-      for (const drawerList of this.items) {
-        const drawerListItems = drawerList.items;
-        const item3 = drawerList.findMatchingItem(this.url, drawerListItems);
-        if (item3) {
-          this.listController.activateItem(drawerList);
-          drawerList.url = this.url;
-          return;
-        }
-      }
-    }
-  }
-  splitLeafUrl(url) {
-    const trimmedUrl = url.replace(/^\/|\/$/g, "");
-    const words = trimmedUrl.split("/");
-    if (words.length === 1 && words[0] === "") {
-      return ["/"];
-    }
-    return words;
-  }
-  popRootNodeUrl(url) {
-    const urls = this.splitLeafUrl(url);
-    if (!urls || urls.length <= 1)
-      return "";
-    const poppedUrls = urls.slice(1);
-    const poppedUrl = poppedUrls.join("/");
-    return poppedUrl;
-  }
-  getRootNodeUrl(url) {
-    const urls = this.splitLeafUrl(url);
-    if (!urls || urls.length <= 0)
-      return "";
-    return urls[0];
-  }
-  render() {
-    return x`
-      <slot></slot>
-    `;
-  }
-}
-__legacyDecorateClassTS([
-  n3({ type: String })
-], TNavigationDrawer.prototype, "url", undefined);
-TNavigationDrawer = __legacyDecorateClassTS([
-  t("t-navigation-drawer")
-], TNavigationDrawer);
