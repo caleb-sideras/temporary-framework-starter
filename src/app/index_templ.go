@@ -419,7 +419,7 @@ func IndexTempl() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item></t-navigation-drawer></t-navigation></header><div style=\"\n		    display: flex;\n				width: 100%;\n				justify-content: center;\n			\"><main style=\"max-width: 1240px;\" id=\"fade-me-in\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item></t-navigation-drawer></t-navigation></header><div class=\"main_container\"><main>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -244,10 +244,23 @@
   --md-list-item-one-line-container-height: 42px;
 }
 
+/**
+  * --- GLOBAL CLASSES ---
+**/
 body {
   margin: 0px;
   display: flex;
   flex-direction: row;
+}
+
+main {
+  max-width: 1240px;
+}
+
+.main_container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
 }
 
 /**

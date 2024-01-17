@@ -5323,6 +5323,16 @@ class TMobileNavigation extends MdNavigationDrawerModal {
     await this.updateComplete;
     this.onActivateRail();
   }
+  updated(changedProperties) {
+    if (changedProperties.has("opened")) {
+      if (this.opened) {
+        document.body.style.overflow = "auto";
+      } else {
+        document.body.style.overflow = "hidden";
+      }
+      console.log(document.body.style.overflow);
+    }
+  }
   layout() {
     if (!this.railItems || !this.drawerItems || this.railItems.length > 1 || !this.isMobileNaviationRail(this.railItems[0]) || !this.areMobileNaviationDrawers(this.drawerItems))
       return;

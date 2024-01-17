@@ -1,7 +1,5 @@
 # TODO
 
-- mobile rail highlighting
-- mobile dropdownlist color 
 - finish blog
 - add links
 - fix highlighting of focused color
@@ -23,6 +21,8 @@ FINISHED
 - fix static render
 - bugs with navigation -> going back/forward breaks it, using tab/enter breaks it
 - Mobile Navigation hard
+- mobile rail highlighting
+- mobile dropdownlist color 
 
 NOTES
 

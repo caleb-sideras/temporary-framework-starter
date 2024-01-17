@@ -6,6 +6,7 @@ import { TNavigationContainer } from "./t-mobile-navigation-container";
 import { TMobileNavigationRail } from "./t-mobile-navigation-rail";
 import { TMobileNavigationDrawer } from "./t-mobile-navigation-drawer";
 import { TListItem } from "./t-list";
+import { NavigationDrawerModal } from "@material/web/labs/navigationdrawer/internal/navigation-drawer-modal";
 
 /**
  * NOTE
@@ -75,6 +76,16 @@ export class TMobileNavigation extends MdNavigationDrawerModal {
 
     // TODO: refactor this so that if there is match in drawers, it'll be inited
     this.onActivateRail();
+  }
+
+  protected updated(changedProperties: PropertyValueMap<NavigationDrawerModal>): void {
+    if (changedProperties.has('opened')) {
+      if (this.opened) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = 'auto';
+      }
+    }
   }
 
 
