@@ -5326,11 +5326,10 @@ class TMobileNavigation extends MdNavigationDrawerModal {
   updated(changedProperties) {
     if (changedProperties.has("opened")) {
       if (this.opened) {
-        document.body.style.overflow = "auto";
-      } else {
         document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "auto";
       }
-      console.log(document.body.style.overflow);
     }
   }
   layout() {

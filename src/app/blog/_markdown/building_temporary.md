@@ -36,21 +36,76 @@ Don't use a JavaScript backend
 
 ## How do we achieve this?
 
-Based on the some of the ideas outligned above we need a backend language that has good templating, a front-end framework that can have state be initialized on the server and a tools to aid this interaction. So basically Go, Lit-Elements, HTMX and some code I cobbled up together.
+Based on the some of the ideas outligned above we need a backend language that has good templating, a front-end framework that can have state be initialized on the server and tools to aid this interaction. I chose Go, Templ, Lit-Elements, HTMX and some code I cobbled up together.
+
+- **HTMX**: Allows you to perform AJAX requests which return HTML that be injected in the DOM
+- **Lit-Elements**: Builds on-top of native browser web-components but with property based reactivity 
+- **Go**: Well the greatest language on earth
+- **Templ**: Go-like syntax for HTML templating
 
 ## Temporary Framework (back-end)
 
-For the love of God, please do not use this framework. If you've gotten over this small insignificant detail, let's move on. This framework, while being an extension of my first framework [GoX](https://gox-framework.org) 💀💀💀, aims to create a tightly coupled experience when working with [HTMX](https://htmx.org/), [Go](https://go.dev/) and [Templ](https://templ.guide/). It employs file-based routing, naming conventions similar to [Next.js](https://nextjs.org/), a dynamic server router and some extensions to the Templ library. 
+For the love of God, please do not use this framework. If you've gotten over this small insignificant detail, let's move on. This framework, while being an extension of my first framework [GoX](https://gox-framework.org) 💀💀💀, aims to create a tightly coupled experience when working with [HTMX](https://htmx.org/), [Go](https://go.dev/) and [Templ](https://templ.guide/). It employs file-based routing, naming conventions similar to [Next.js](https://nextjs.org/), a dynamic server router and some extensions to the Templ library. Below contains some very primitive examples
 
-I'm not really bothered to reveal much now, but feel free to watch an explanation of my first framework and a euphoric moment when I first discovered templ.
+### Server Components
 
-[![Introducing GoX](https://img.youtube.com/vi/_gDwxfE5KKU/hqdefault.jpg)](https://www.youtube.com/watch?v=_gDwxfE5KKU)
+[Templ](https://templ.guide/) provides us a way to encapsulate our render logic and [Go](https://go.dev/) allows us to fetch our data. So we get nice separation of concerns for our server components. Consider the following:
 
-[![Working on a Templ Framework](https://img.youtube.com/vi/TtAHz7azOqs/hqdefault.jpg)](https://www.youtube.com/watch?v=TtAHz7azOqs)
+```go
+package home
 
-## Temporary UI (front-end)
+import (
+	"net/http"
+	"github.com/a-h/templ"
+)
 
-A UI library built on top of Google's [Material 3](https://m3.material.io/) design standard using [Lit-Elements](https://lit.dev/). Besides styling them to fit my aesthetic, I will be extending them to build small and large components that fit the server/client state ideas mentioned above.
+func Page(w http.ResponseWriter, r *http.Request) templ.Component {
+	someData := fetchData()
+
+	// perform some validation
+
+	return HomeTempl(someData)
+}
+```
+
+```go
+package home
+
+templ HomeTempl(names []string) {
+	<ul>
+		for i := range names {
+			<li>
+				{ title }
+			</li>
+		}
+	</ul>
+}
+```
+
+Apart from the super clean abstraction, you may notice that the `Page()` function returns a `templ.Component`. You may be thinking where does this get rendered and served to the user? Well carry on reading.
+
+### Routing
+
+The below directory structure:
+
+```
+app               (1)
+ ├─ index.go
+ ├─ index.templ
+ ├─ home          (2)
+ │  └─ page.go
+ │  └─ page.templ
+ └─ docs          (3)
+    └─ page.go
+    └─ page.templ
+```
+
+Resolves to:
+
+1. *__/home__* &larr; `index.go` (1) &larr; `page.go` (2)
+2. *__/docs__* &larr; `index.go` (1) &larr; `page.go` (3)
+
+The `temporary framework` employs file based routing and will group and serve pages based on directory structure. Additionally, both /home and /docs use the same `index.go`, so navigation between these routes with `hx-boost` will always return the needed HTML partials, replacing the body and thus maintaining state and client smoothness.
 
 ### Consider the following example
 
@@ -80,6 +135,16 @@ At first glance after seeing the `hx-boost` attribute you might assume I am doin
   ...
 </t-navigation-rail>
 ```
+
+I'm not really bothered to reveal much now, but feel free to watch an explanation of my first framework and a euphoric moment when I first discovered templ.
+
+[![Introducing GoX](https://img.youtube.com/vi/_gDwxfE5KKU/hqdefault.jpg)](https://www.youtube.com/watch?v=_gDwxfE5KKU)
+
+[![Working on a Templ Framework](https://img.youtube.com/vi/TtAHz7azOqs/hqdefault.jpg)](https://www.youtube.com/watch?v=TtAHz7azOqs)
+
+## Temporary UI (front-end)
+
+A UI library built on top of Google's [Material 3](https://m3.material.io/) design standard using [Lit-Elements](https://lit.dev/). Besides styling them to fit my aesthetic, I will be extending them to build small and large components that fit the server/client state ideas mentioned above.
 
 ## Conclusion
 
