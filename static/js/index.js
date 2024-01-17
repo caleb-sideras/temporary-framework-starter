@@ -5006,7 +5006,7 @@ class TDropdownList extends TNavigationContainer {
   static styles = [
     i`
       :host{
-        --md-list-container-color: var(--t-dropdown-list-container-color, var(--md-sys-color-on-primary, #ffffff)) !important;
+        --md-list-container-color: var(--t-dropdown-list-container-color, transparent) !important;
       }
     `,
     ...TNavigationContainer.styles
@@ -5350,7 +5350,7 @@ class TMobileNavigation extends MdNavigationDrawerModal {
   }
   onActivateRail() {
     this.deactivateDrawers();
-    this.rail.revalidateFromBrower();
+    this.rail.revalidateFromUrl(this.getRootNodeUrl(this.getURL()));
     this.activateItem(this.rail);
   }
   onActivateItem(item3) {
@@ -5384,6 +5384,25 @@ class TMobileNavigation extends MdNavigationDrawerModal {
   }
   activateItem(item3) {
     item3.active = true;
+  }
+  getURL() {
+    const path = window.location.pathname;
+    const cleanPath = path.split(/[?#]/)[0];
+    return cleanPath;
+  }
+  getRootNodeUrl(url) {
+    const urls = this.splitLeafUrl(url);
+    if (!urls || urls.length <= 0)
+      return "";
+    return urls[0];
+  }
+  splitLeafUrl(url) {
+    const trimmedUrl = url.replace(/^\/|\/$/g, "");
+    const words = trimmedUrl.split("/");
+    if (words.length === 1 && words[0] === "") {
+      return ["/"];
+    }
+    return words;
   }
   render() {
     const ariaExpanded = this.opened ? "true" : "false";

@@ -8,7 +8,7 @@ export class TDropdownList extends TNavigationContainer {
   static override styles = [
     css`
       :host{
-        --md-list-container-color: var(--t-dropdown-list-container-color, var(--md-sys-color-on-primary, #ffffff)) !important;
+        --md-list-container-color: var(--t-dropdown-list-container-color, transparent) !important;
       }
     `,
     ...TNavigationContainer.styles

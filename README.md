@@ -1,5 +1,7 @@
 # TODO
 
+- mobile rail highlighting
+- mobile dropdownlist color 
 - finish blog
 - add links
 - fix highlighting of focused color

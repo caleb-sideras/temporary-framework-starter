@@ -128,7 +128,8 @@ export class TMobileNavigation extends MdNavigationDrawerModal {
 
   onActivateRail() {
     this.deactivateDrawers();
-    this.rail.revalidateFromBrower();
+    // this.rail.revalidateFromBrower();
+    this.rail.revalidateFromUrl(this.getRootNodeUrl(this.getURL()));
     this.activateItem(this.rail);
   }
 
@@ -185,6 +186,33 @@ export class TMobileNavigation extends MdNavigationDrawerModal {
 
   private activateItem(item: TNavigationContainer) {
     item.active = true;
+  }
+
+  /**
+    * URL Handlers
+    */
+
+  getURL(): string {
+    const path = window.location.pathname;
+    const cleanPath = path.split(/[?#]/)[0];
+    return cleanPath;
+  }
+
+  getRootNodeUrl(url: string): string {
+    const urls = this.splitLeafUrl(url);
+    if (!urls || urls.length <= 0) return '';
+
+    return urls[0];
+  }
+
+  splitLeafUrl(url: string): string[] {
+    const trimmedUrl = url.replace(/^\/|\/$/g, '');
+    const words = trimmedUrl.split('/');
+
+    if (words.length === 1 && words[0] === "") {
+      return ['/']
+    }
+    return words
   }
 
   protected override render() {
