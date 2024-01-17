@@ -8,4 +8,4 @@ require (
 	github.com/gorilla/mux v1.8.1
 )
 
-require github.com/yuin/goldmark v1.6.0 // indirect
+require github.com/yuin/goldmark v1.6.0

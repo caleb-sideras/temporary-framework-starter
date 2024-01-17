@@ -52,6 +52,3 @@ msc/*
 
 bin/
 pkg/
-
-# templ
-*_templ.go
