@@ -1,6 +1,7 @@
-import { html, css } from "lit"
+import { css, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { HTMXElement } from "./t-htmx";
+import { literal, StaticValue, html as staticHtml } from 'lit/static-html.js';
 
 @customElement('t-link')
 export class TLink extends HTMXElement {
@@ -14,14 +15,14 @@ export class TLink extends HTMXElement {
 	    pointer-events: none;
 	    filter: grayscale(100%);
 	  }
-		a:hover h2,
-		a:hover p {
+		.link_container:hover h2,
+		.link_container:hover p {
 			color: var(--md-sys-color-primary) !important;
     }		
-		a:hover img{
+		.link_container:hover img{
 			border-color:var(--md-sys-color-primary) !important;
 		}
-		a{
+		.link_container{
 			text-decoration: none;
 			color: #212121;
 		}
@@ -55,8 +56,15 @@ export class TLink extends HTMXElement {
 	@property({ type: Boolean, reflect: true }) disabled = false;
 
 	render() {
-		return html`
-			<a>
+		let tag: StaticValue;
+		if (!this.href || this.href === "") {
+			tag = literal`div`;
+		} else {
+			tag = literal`a`;
+		}
+
+		return staticHtml`
+			<${tag} href=${this.href || nothing} class="link_container">
 				<h2>
 					${this.title}
 				</h2>
@@ -68,7 +76,7 @@ export class TLink extends HTMXElement {
 					src="${this.imgSrc}"
 					alt="${this.imgAlt}"
 				/>     
-			</a>
+			</${tag}>
     `
 	}
 
@@ -86,6 +94,6 @@ export class TLink extends HTMXElement {
 	// 			src="${this.imgSrc}"
 	// 			alt="${this.imgAlt}"
 	// 		/>     
- //    `)
+	//    `)
 	// }
 }

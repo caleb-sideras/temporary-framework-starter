@@ -26,5 +26,5 @@ func Videos() templ.Component {
 			Href:        "https://www.youtube.com/watch?v=5Cp4Hsy1cpI",
 		},
 	}
-	return server.Grid(tLinkList)
+	return server.GridVideos(tLinkList)
 }

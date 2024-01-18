@@ -4579,14 +4579,14 @@ class TLink extends HTMXElement {
 	    pointer-events: none;
 	    filter: grayscale(100%);
 	  }
-		a:hover h2,
-		a:hover p {
+		.link_container:hover h2,
+		.link_container:hover p {
 			color: var(--md-sys-color-primary) !important;
     }		
-		a:hover img{
+		.link_container:hover img{
 			border-color:var(--md-sys-color-primary) !important;
 		}
-		a{
+		.link_container{
 			text-decoration: none;
 			color: #212121;
 		}
@@ -4610,8 +4610,14 @@ class TLink extends HTMXElement {
 		}		
 	`;
   render() {
-    return x`
-			<a>
+    let tag;
+    if (!this.href || this.href === "") {
+      tag = s4`div`;
+    } else {
+      tag = s4`a`;
+    }
+    return n6`
+			<${tag} href=${this.href || T} class="link_container">
 				<h2>
 					${this.title}
 				</h2>
@@ -4623,7 +4629,7 @@ class TLink extends HTMXElement {
 					src="${this.imgSrc}"
 					alt="${this.imgAlt}"
 				/>     
-			</a>
+			</${tag}>
     `;
   }
 }

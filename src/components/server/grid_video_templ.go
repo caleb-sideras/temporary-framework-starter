@@ -14,7 +14,7 @@ import (
 	"github.com/caleb-sideras/gox2/src/utils"
 )
 
-func Grid(videos []utils.TLinkContent) templ.Component {
+func GridVideos(videos []utils.TLinkContent) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -32,15 +32,7 @@ func Grid(videos []utils.TLinkContent) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		for _, item := range videos {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<t-link hx-get=\"")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(item.Href))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"main\" hx-push-url=\"true\" title=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<t-link title=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -72,11 +64,11 @@ func Grid(videos []utils.TLinkContent) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-boost=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" href=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(item.Boost))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(item.Href))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
