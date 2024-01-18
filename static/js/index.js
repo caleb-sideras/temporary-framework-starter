@@ -5058,7 +5058,9 @@ class TListItem extends ListItemEl {
   ];
   willUpdate(changed) {
     super.willUpdate(changed);
-    if (this.href) {
+    if (this.href && this.href[0] === "h") {
+      this.type = "link";
+    } else {
       this.type = "button";
     }
   }
@@ -5464,6 +5466,13 @@ class TNavigation extends s3 {
       height: 100%;
       gap: 8px;
     }
+    .t-navigation-rail-container{
+      display: flex;
+      height: 100%;
+      flex-direction: column;
+      justify-content: space-between;
+      background: var(--md-sys-color-secondary);
+    }
   `;
   rail;
   drawers = [];
@@ -5589,7 +5598,10 @@ class TNavigation extends s3 {
   }
   render() {
     return x`  
-      <slot name="rail" @request-activation="${this.onActivateDrawer}"></slot>
+      <div class="t-navigation-rail-container">
+        <slot name="rail" @request-activation="${this.onActivateDrawer}"></slot>
+        <slot name="footer"></slot>
+      </div>
       <slot name="drawer"></slot>        
     `;
   }

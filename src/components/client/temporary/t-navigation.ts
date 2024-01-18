@@ -18,6 +18,13 @@ export class TNavigation extends LitElement {
       height: 100%;
       gap: 8px;
     }
+    .t-navigation-rail-container{
+      display: flex;
+      height: 100%;
+      flex-direction: column;
+      justify-content: space-between;
+      background: var(--md-sys-color-secondary);
+    }
   `
 
   @queryAssignedElements({ flatten: true, slot: 'rail' })
@@ -211,7 +218,10 @@ export class TNavigation extends LitElement {
 
   override render() {
     return html`  
-      <slot name="rail" @request-activation="${this.onActivateDrawer}"></slot>
+      <div class="t-navigation-rail-container">
+        <slot name="rail" @request-activation="${this.onActivateDrawer}"></slot>
+        <slot name="footer"></slot>
+      </div>
       <slot name="drawer"></slot>        
     `
   }

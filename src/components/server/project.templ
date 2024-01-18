@@ -7,9 +7,9 @@ type ProjectType struct {
 }
 
 templ Project(project ProjectType) {
-	<div style="flex-direction: column; display: flex;">
+	<div>
 		<t-header href={ project.ProjectURL } heading={ project.Title }></t-header>
-		<div id="example-body" style="display:flex; justify-content: center;">
+		<div id="example-body">
 			@project.Body
 		</div>
 	</div>

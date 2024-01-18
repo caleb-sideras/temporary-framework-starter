@@ -36,6 +36,14 @@
     'opsz' 24
 }
 
+.material-symbols-filled-light {
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 200,
+    'GRAD' 0,
+    'opsz' 24
+}
+
 /**
   * --- LIGHT & DARK---
 **/

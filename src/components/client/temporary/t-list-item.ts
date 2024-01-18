@@ -56,8 +56,10 @@ export class TListItem extends ListItem {
   protected override willUpdate(changed: PropertyValues<ListItem>) {
     super.willUpdate(changed);
 
-    // fix until htmx supports shadowDOM
-    if (this.href) {
+    // fix until htmx supports shadowDOM. LMAO
+    if (this.href && this.href[0] === 'h') {
+      this.type = 'link';
+    } else {
       this.type = 'button';
     }
 
