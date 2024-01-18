@@ -12,7 +12,7 @@ There are many examples I can provide that fit the criteria above, such as:
 
 **But specifically, I am referring to the efforts we've gone to, in the name of reactivity, to duplicate state on both the server and the client**
 
-As a young developer who started working with React more recently, I have heard stories of the comedic struggle from my more experienced colleagues as they have had to migrate between React patterns over the years. The grumblings about having to convert all their class components to functional components with hooks. I heard tales of the old battles - class vs function, confusion over lifecycle methods, the growing pains of adopting hooks. Hooks feel quite natural to me now as they are all i've ever know, but I can sympathize with how challenging it must have been to refactor your mind as well as a complex codebase.
+As a young developer who started working with React more recently, I have heard stories of the comedic struggle from my more experienced colleagues as they have had to migrate between React patterns over the years. The grumblings about having to convert all their class components to functional components with hooks, confusion over lifecycle methods and much more. Hooks feel quite natural to me now as they are all i've ever know, but I can sympathize with how challenging it must have been to refactor your mind as well as a complex codebase.
 
 I came face-to-face with this with React Server Components. Of course, the promise was improved performance and developer experience once adopted, but that did not make the task any less exhausting. Moving everything from the pages router to the new app router in Next.js has really been a fundamental shift in my mental model of the web. But Caleb you say, this is the last of the fundamental changes! We are finally here! Sure... One day, as my collegues complained to me about class components, I will complain to my own about RSCs.
 
@@ -38,7 +38,7 @@ Don't use a JavaScript backend
 
 Based on the some of the ideas outligned above we need a backend language that has good templating, a front-end framework that can have state be initialized on the server and tools to aid this interaction. I chose Go, Templ, Lit-Elements, HTMX and some code I cobbled up together.
 
-- **HTMX**: Allows you to perform AJAX requests which return HTML that be injected in the DOM
+- **HTMX**: Allows you to perform AJAX requests which return HTML that can be injected in the DOM
 - **Lit-Elements**: Builds on-top of native browser web-components but with property based reactivity 
 - **Go**: Well the greatest language on earth
 - **Templ**: Go-like syntax for HTML templating
