@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/caleb-sideras/gox2/gox"
 	"github.com/gorilla/mux"
-	"log"
 	"net/http"
 	"os"
 	"strings"
