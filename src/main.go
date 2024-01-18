@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"github.com/caleb-sideras/gox2/gox"
 	"github.com/gorilla/mux"
+	"log"
 	"net/http"
 	"os"
+	"strings"
 )
 
 const (
@@ -32,6 +34,7 @@ func main() {
 			http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
 			r := mux.NewRouter()
+			r.Use(detectSafari)
 			g.Run(r, ":8000", HTML_SERVE_PATH)
 
 		default:
@@ -40,4 +43,17 @@ func main() {
 	} else {
 		fmt.Println("Please provide an argument: 'build' or 'run'.")
 	}
+}
+
+func detectSafari(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		userAgent := r.Header.Get("User-Agent")
+
+		if strings.Contains(userAgent, "Safari") && !strings.Contains(userAgent, "Chrome") {
+			http.Error(w, "i do not support safari. please use chrome or firefox", http.StatusBadRequest)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }
