@@ -33,7 +33,7 @@ func main() {
 			http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
 			r := mux.NewRouter()
-			r.Use(detectSafari)
+			// r.Use(detectSafari)
 			g.Run(r, ":8000", HTML_SERVE_PATH)
 
 		default:
