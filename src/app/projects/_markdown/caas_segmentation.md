@@ -5,13 +5,21 @@ The AudioSegmentation class that takes an audio file or an audio waveform as inp
 The AudioSegmentation class works by analyzing the audio input and segmenting it into sections based on similarity. Here's an overview of how the algorithm works in steps:
 
 1. **Load and preprocess the audio**: The input audio is loaded using librosa. If a file path is provided, the audio is loaded directly. If a waveform is provided, the sampling rate must also be given. The audio is then converted to mono, trimmed, and normalized.
+
 2. **Compute the Constant-Q Transform (CQT)**: The CQT of the preprocessed audio is calculated, which is a time-frequency representation that provides a more perceptually meaningful representation of the audio. The CQT is then normalized along the frequency axis.
+
 3. **Compute the binary result**: The similarity matrix is calculated by computing the dot product of the normalized CQT with itself. A 2D convolution is then performed on the similarity matrix with an identity kernel, and a threshold is applied to create a binary result matrix.
+
 4. **Find the new interval**: The algorithm calculates the cosine similarity between different chunks of the binary result matrix to find the time interval that results in the highest penalized cosine similarity.
+
 5. **Compute the adaptive threshold**: Based on the mean and standard deviation of the cosine similarities computed so far, the algorithm calculates a threshold that adjusts dynamically.
+
 6. **Determine if a new segment should be created**: The algorithm checks if the cosine similarity between two consecutive chunks is below the adaptive threshold, which indicates that a new segment should be created.
+
 7. **Find the largest cosine change**: If a new segment is to be created, the algorithm finds the largest change in cosine similarity within the current segment to determine the exact time to create the new segment.
+
 8. **Segment the audio**: The start and end times of the segments are recorded in a list of tuples. The process is repeated until the entire audio has been analyzed and segmented.
+
 9. **Output the segmented audio**: The algorithm returns a list of tuples representing the start and end times of each audio segment.
 
 ### Dependencies
@@ -47,8 +55,13 @@ audio_segmentation = AudioSegmentation(
 
 1. **audio**: The audio file path or a numpy array containing the audio waveform.
 sr: The sampling rate of the audio waveform. Required if the input is a numpy array.
+
 2. **segment_duration**: The duration of each segment in seconds. Default is 59 seconds.
+
 3. **k**: A parameter that affects the penalization of larger standard deviations. Default is 1.5.
+
 4. **penalize_factor**: A factor that affects the penalization of larger time intervals. Default is 0.1.
+
 5. **kernel_size**: The size of the kernel used in the 2D convolution. Default is 10.
+
 6. **q**: The percentile value used for threshold

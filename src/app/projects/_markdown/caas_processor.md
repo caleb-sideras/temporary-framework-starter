@@ -15,9 +15,13 @@ The AudioProcessor class is a high-level interface for processing audio files. I
 The AudioProcessor class follows these steps:
 
 1. Initialize the instance with the audio directory, an option to extract vocals or not, output directory, and the OpenAI API key (if needed).
+
 2. `process_audio()` method is called for a specific audio file.
+
 3. The AudioCluster class segments the audio file into different clusters based on the audio features. These clusters represent different sections of the audio file.
+
 4. For the longest segment in each cluster, the following steps are performed: If vocals=True, the audio file is separated into vocals and accompaniment using spleeter. The vocals are transcribed using OpenAI's Whisper ASR. The accompaniment is converted into a MIDI file using the AudioToMidiMelodia algorithm. MFCCs, spectral contrast, and chroma features are extracted using the librosa library.
+
 5. All extracted data and features are saved as a JSON file in the output directory.
 
 ### Example usage

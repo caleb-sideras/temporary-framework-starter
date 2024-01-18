@@ -6,8 +6,11 @@ Being a novice in this field of software development hasn't stopped me from noti
 There are many examples I can provide that fit the criteria above, such as:
  
 1. Abstracting database access with ORMs can make simple queries easy but complex queries verbose and hard to debug. An abstraction meant to simplify can overcomplicate in the name of 'type safety'.
+
 2. Creating many layers of inheritance in OOP can obscure where behavior is actually coming from. An abstraction meant to encapsulate can confuse.
+
 3. Inventing new frameworks to fix limitations of old frameworks, which then gain limitations of their own over time. The cycle never ends (I am contributing to this).
+
 4. GraphQL... API churn
 
 **But specifically, I am referring to the efforts we've gone to, in the name of reactivity, to duplicate state on both the server and the client**
@@ -103,6 +106,7 @@ app               (1)
 Resolves to:
 
 1. *__/home__* &larr; `index.go` (1) &larr; `page.go` (2)
+
 2. *__/docs__* &larr; `index.go` (1) &larr; `page.go` (3)
 
 The `temporary framework` employs file based routing and will group and serve pages based on directory structure. Additionally, both /home and /docs use the same `index.go`, so navigation between these routes with `hx-boost` will always return the needed HTML partials, replacing the body and thus maintaining state and client smoothness.

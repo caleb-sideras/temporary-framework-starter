@@ -7,13 +7,20 @@ Summarizes a Twitter account's tweets through embedding/clustering of tweets, w/
 ### How it works
 
 1. The app takes a POST request of a Twitter account's username and gets the most recent X tweets using the tweepy package.
+
 2. The text of each tweet is preprocessed using the nltk package.
 3. The preprocessed text is transformed into embeddings using OpenAI model 'text-embedding-ada-002'
+
 4. The embeddings are clustered using agglomerative clustering with cosine metric and average linkage.
+
 5. The tweets are separated into clusters based on their cluster labels.
+
 6. Sentiment analysis is performed using the VADER sentiment analyzer.
+
 7. Topic modeling is performed using non-negative matrix factorization (NMF) from the scikit-learn package.
+
 8. The top words for each topic are classified using the OpenAI model 'text-curie-001'.
+
 9. Results are stored to Postgres and returned.
 
 ### API Endpoint
