@@ -510,6 +510,8 @@ h1 {
   color: var(--md-sys-color-on-primary-container);
   padding-left: 0.25rem;
   padding-right: 0.25rem;
+  word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 #markdown pre {
