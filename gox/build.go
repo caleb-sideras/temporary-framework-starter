@@ -44,6 +44,7 @@ func (g *Gox) Build(startDir string, packageDir string) {
 
 	fmt.Println("-------------------------EXTRACTING YOUR CODE-------------------------")
 	imports, indexGroup, pageRenderFunctions, pageHandleFunctions, routeRenderFunctions, routeHandleFunctions := getSortedFunctions(dirFiles, startDir, packageDir)
+	fmt.Println(pageHandleFunctions)
 
 	fmt.Println("-----------------------RENDERING SORTED FUNCTIONS----------------------")
 	code, err := renderSortedFunctions(imports, indexGroup, pageRenderFunctions, pageHandleFunctions, routeRenderFunctions, routeHandleFunctions)
@@ -68,7 +69,7 @@ func walkDirectoryStructure(startDir string) (map[string]map[string][]goxDir, er
 			return err
 		}
 
-		if info.IsDir() && strings.HasPrefix(info.Name(), "_") {
+		if info.IsDir() && strings.HasPrefix(info.Name(), "_") && !strings.HasSuffix(info.Name(), "_") {
 			return filepath.SkipDir
 		}
 
@@ -77,7 +78,7 @@ func walkDirectoryStructure(startDir string) (map[string]map[string][]goxDir, er
 
 			filepath.Walk(path, func(innerPath string, innerInfo os.FileInfo, innerErr error) error {
 
-				if innerInfo.IsDir() && strings.HasPrefix(innerInfo.Name(), "_") {
+				if innerInfo.IsDir() && strings.HasPrefix(innerInfo.Name(), "_") && !strings.HasSuffix(innerInfo.Name(), "_") {
 					return filepath.SkipDir
 				}
 
@@ -512,7 +513,6 @@ func (g *Gox) renderStaticFiles() error {
 		if err != nil {
 			return err
 		}
-		fmt.Println("LOG 1:", pathAndTagPage)
 		output += pathAndTagPage
 
 		// page-body.html
@@ -531,7 +531,6 @@ func (g *Gox) renderStaticFiles() error {
 		if err != nil {
 			return err
 		}
-		fmt.Println("LOG 2:", pathAndTagPage)
 		output += pathAndTagBody
 
 	}
@@ -666,16 +665,33 @@ func isHTTPRequest(expr ast.Expr) bool {
 }
 
 func removeDirWithUnderscorePostfix(path string) string {
+	fmt.Println("removeDirWithUnderscorePostfix")
 	segments := strings.Split(path, "/")
+	fmt.Println(segments)
 	var output []string
 	if len(segments) == 0 {
 		return path
 	}
 	for _, segment := range segments {
+		if strings.HasPrefix(segment, "_") && strings.HasSuffix(segment, "_") {
+			s1 := segment[1 : len(segment)-1]
+			fmt.Println("TESTERERERERER", s1, segment)
+			output = append(output, fmt.Sprintf("{%s}", s1))
+		}
 		if !strings.HasSuffix(segment, "_") {
 			output = append(output, segment)
 		}
 	}
-
+	/**
+	* TODO - slugs
+	* So we want to take the file path -> _example_ and add it to the filepath as "/{example}"
+	* Not sure the effects of this yet in current structure
+	* NOTE
+	* Have to use name of folder cuz you can access this from request handler -> slug := mux.Vars(r)["example"]
+	* ISSUE
+	* So it seems the `templ generate` command ignores any dirs with "_" prefix. So templs in slug dirs will be ignored?
+	* Can specify dirs -> templ generate -f /home/caleb/go/personal/src/app/_test/test.templ
+	**/
+	fmt.Println(output)
 	return filepath.Join(output...)
 }
