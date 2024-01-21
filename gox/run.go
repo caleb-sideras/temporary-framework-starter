@@ -231,8 +231,13 @@ func (g *Gox) createRouteResReqHandler(route Handler, eTags map[string]string) p
 func (g *Gox) createRouteRenderHandler(route string, eTags map[string]string) pageHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Println("- - - - - - - - - - - -")
-		eTagPath := filepath.Join(r.URL.Path, ROUTE_OUT_FILE)
+		/**
+		* NOTE
+		* Changed eTagPath from r.URL.Path -> route. Allows slugs.
+		**/
+		eTagPath := filepath.Join(route, ROUTE_OUT_FILE)
 		pagePath := filepath.Join(g.OutputDir, eTagPath)
+		log.Println(route, pagePath, eTagPath)
 
 		if eTag := r.Header.Get("If-None-Match"); eTag == eTags[eTagPath] {
 			log.Println("403: status not modified")
