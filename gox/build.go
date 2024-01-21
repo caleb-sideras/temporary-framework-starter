@@ -677,8 +677,7 @@ func removeDirWithUnderscorePostfix(path string) string {
 			s1 := segment[1 : len(segment)-1]
 			fmt.Println("TESTERERERERER", s1, segment)
 			output = append(output, fmt.Sprintf("{%s}", s1))
-		}
-		if !strings.HasSuffix(segment, "_") {
+		} else if !strings.HasSuffix(segment, "_") {
 			output = append(output, segment)
 		}
 	}
