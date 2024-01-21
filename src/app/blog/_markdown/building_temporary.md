@@ -13,7 +13,7 @@ There are many examples I can provide that fit the criteria above, such as:
 
 4. GraphQL... API churn
 
-**But specifically, I am referring to the efforts we've gone to, in the name of reactivity, to duplicate state on both the server and the client**
+**But specifically, I am referring to the efforts we've gone to, in the name of reactivity, to duplicate state and their respective logic on both the server and the client**
 
 As a young developer who started working with React more recently, I have heard stories of the comedic struggle from my more experienced colleagues as they have had to migrate between React patterns over the years. The grumblings about having to convert all their class components to functional components with hooks, confusion over lifecycle methods and much more. Hooks feel quite natural to me now as they are all i've ever know, but I can sympathize with how challenging it must have been to refactor your mind as well as a complex codebase.
 
