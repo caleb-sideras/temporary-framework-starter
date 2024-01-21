@@ -167,7 +167,7 @@ func getSortedFunctions(dirFiles map[string]map[string][]goxDir, startDir string
 			goFiles = files[GO_EXT]
 		}
 
-		ndir := removeDirWithUnderscorePostfix(dir)
+		ndir := dirPostfixSuffixRemoval(dir)
 		leafPath := strings.Replace(ndir, startDir, "", 1)
 		if leafPath == "" {
 			leafPath = "/"
@@ -664,10 +664,8 @@ func isHTTPRequest(expr ast.Expr) bool {
 	return x.Name == "http" && selector.Sel.Name == "Request"
 }
 
-func removeDirWithUnderscorePostfix(path string) string {
-	fmt.Println("removeDirWithUnderscorePostfix")
+func dirPostfixSuffixRemoval(path string) string {
 	segments := strings.Split(path, "/")
-	fmt.Println(segments)
 	var output []string
 	if len(segments) == 0 {
 		return path
@@ -675,7 +673,6 @@ func removeDirWithUnderscorePostfix(path string) string {
 	for _, segment := range segments {
 		if strings.HasPrefix(segment, "_") && strings.HasSuffix(segment, "_") {
 			s1 := segment[1 : len(segment)-1]
-			fmt.Println("TESTERERERERER", s1, segment)
 			output = append(output, fmt.Sprintf("{%s}", s1))
 		} else if !strings.HasSuffix(segment, "_") {
 			output = append(output, segment)
@@ -691,6 +688,5 @@ func removeDirWithUnderscorePostfix(path string) string {
 	* So it seems the `templ generate` command ignores any dirs with "_" prefix. So templs in slug dirs will be ignored?
 	* Can specify dirs -> templ generate -f /home/caleb/go/personal/src/app/_test/test.templ
 	**/
-	fmt.Println(output)
 	return filepath.Join(output...)
 }
