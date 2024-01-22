@@ -38,7 +38,7 @@ func (g *Gox) Run(r *mux.Router, port string, servePath string) {
 
 func (g *Gox) handleRoutes(r *mux.Router, eTags map[string]string) {
 	fmt.Println("Function Type: Page - Render")
-	g.handlePageRoutes(r, eTags)
+	g.handlePageRender(r, eTags)
 	fmt.Println("Function Type: Page - Handle")
 	g.handlePageHandles(r, eTags)
 	fmt.Println("Function Type: Route - Handle")
@@ -48,7 +48,7 @@ func (g *Gox) handleRoutes(r *mux.Router, eTags map[string]string) {
 }
 
 // PageRenderList
-func (g *Gox) handlePageRoutes(r *mux.Router, eTags map[string]string) {
+func (g *Gox) handlePageRender(r *mux.Router, eTags map[string]string) {
 	for _, route := range PageRenderList {
 		currRoute := route.Path
 		fmt.Printf("   - %s\n", currRoute)
@@ -96,13 +96,17 @@ func (g *Gox) handleRouteRender(r *mux.Router, eTags map[string]string) {
 // PageRender
 func (g *Gox) createPageHandler(route string, eTags map[string]string) pageHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
+		/**
+		* NOTE
+		* Changed eTagPath from r.URL.Path -> route. Allows slugs.
+		**/
 		log.Println("- - - - - - - - - - - -")
 		eTagPath := ""
 		pagePath := ""
 
 		handlePage := func() {
 			log.Println("Partial")
-			eTagPath = filepath.Join(r.URL.Path, PAGE_BODY_OUT_FILE)
+			eTagPath = filepath.Join(route, PAGE_BODY_OUT_FILE)
 			pagePath = filepath.Join(g.OutputDir, eTagPath)
 		}
 
@@ -113,7 +117,7 @@ func (g *Gox) createPageHandler(route string, eTags map[string]string) pageHandl
 
 		handleIndex := func() {
 			log.Println("Full-Page")
-			eTagPath = filepath.Join(r.URL.Path, PAGE_OUT_FILE)
+			eTagPath = filepath.Join(route, PAGE_OUT_FILE)
 			pagePath = filepath.Join(g.OutputDir, eTagPath)
 		}
 

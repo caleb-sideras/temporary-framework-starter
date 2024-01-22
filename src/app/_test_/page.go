@@ -1,14 +1,15 @@
 package test
 
 import (
-	"net/http"
+	// "net/http"
 
 	"github.com/a-h/templ"
 	"github.com/caleb-sideras/gox2/src/components/server"
 	"github.com/caleb-sideras/gox2/src/utils"
 )
 
-func Page(w http.ResponseWriter, r *http.Request) templ.Component {
+// w http.ResponseWriter, r *http.Request
+func Page_() templ.Component {
 
 	tLinkList := []utils.TLinkContent{
 		{

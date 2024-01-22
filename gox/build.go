@@ -44,7 +44,6 @@ func (g *Gox) Build(startDir string, packageDir string) {
 
 	fmt.Println("-------------------------EXTRACTING YOUR CODE-------------------------")
 	imports, indexGroup, pageRenderFunctions, pageHandleFunctions, routeRenderFunctions, routeHandleFunctions := getSortedFunctions(dirFiles, startDir, packageDir)
-	fmt.Println(pageHandleFunctions)
 
 	fmt.Println("-----------------------RENDERING SORTED FUNCTIONS----------------------")
 	code, err := renderSortedFunctions(imports, indexGroup, pageRenderFunctions, pageHandleFunctions, routeRenderFunctions, routeHandleFunctions)
