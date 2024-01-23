@@ -1,9 +1,11 @@
 # TODO
 
-- finish blog
-- add links
+
+- absolute messed up 2 bugs
+  - static rendering of a component that uses a suspense doesn't run keep the request handler from build -> start
+  - slugs pages dynamic routing serves two html documents??
+
 - fix highlighting of focused color
-- add own docs -> video button ???
 - remove redudant files
 - add transitions? not sure
 
@@ -23,6 +25,8 @@ FINISHED
 - Mobile Navigation hard
 - mobile rail highlighting
 - mobile dropdownlist color 
+- finish blog
+- add links
 
 NOTES
 

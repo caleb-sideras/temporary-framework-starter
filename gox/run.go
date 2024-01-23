@@ -157,6 +157,7 @@ func (g *Gox) createPageDefaultHandler(route Handler, eTags map[string]string) p
 		handleIndex := func() {
 			log.Println("Full-Page")
 			err := IndexList[route.Path]().Render(templ.WithChildren(r.Context(), route.Handler.(func() templ.Component)()), &buffer)
+			// log.Println(route.Path, buffer.String())
 			g.handleRenderError(err, w)
 		}
 
@@ -168,6 +169,7 @@ func (g *Gox) createPageDefaultHandler(route Handler, eTags map[string]string) p
 		w.Header().Set("Vary", "HX-Request")
 		w.Header().Set("Cache-Control", "no-cache")
 		w.Header().Set("ETag", eTag)
+		log.Println(route.Path, buffer.String())
 		w.Write(buffer.Bytes())
 	}
 }
