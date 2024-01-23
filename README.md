@@ -1,8 +1,5 @@
 # TODO
 
-
-- absolute messed up 2 bugs
-  - static rendering of a component that uses a suspense doesn't run keep the request handler from build -> start
 - camel case folders -> hyphen separated urls
 
 - fix highlighting of focused color
@@ -31,6 +28,8 @@ FINISHED
 
 NOTES
 
+- static rendering of a component that uses a suspense doesn't run keep the request handler from build -> start
+  - This is impossible to solve based on my current abilities. So just make this explicit in the docs
 - Provide w and r objects to the index -> if so, all static pages will be rendered on build-time and inserted on request time
 
 
