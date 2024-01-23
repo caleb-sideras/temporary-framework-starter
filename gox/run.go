@@ -157,20 +157,13 @@ func (g *Gox) createPageDefaultHandler(route Handler, eTags map[string]string) p
 		handleIndex := func() {
 			log.Println("Full-Page")
 			err := IndexList[route.Path]().Render(templ.WithChildren(r.Context(), route.Handler.(func() templ.Component)()), &buffer)
-			// log.Println(route.Path, buffer.String())
 			g.handleRenderError(err, w)
 		}
 
 		formatRequest(w, r, handlePage, handleBoostPage, handleIndex, handleIndex)
 
 		eTag := utils.GenerateETag(buffer.String())
-		g.handleETag(w, r, eTag, buffer.Bytes(), eTags)
-
-		w.Header().Set("Vary", "HX-Request")
-		w.Header().Set("Cache-Control", "no-cache")
-		w.Header().Set("ETag", eTag)
-		log.Println(route.Path, buffer.String())
-		w.Write(buffer.Bytes())
+		g.handleWriter(w, r, eTag, buffer.Bytes(), eTags)
 	}
 }
 
@@ -359,7 +352,7 @@ func (g *Gox) handleRenderError(err error, w http.ResponseWriter) {
 	}
 }
 
-func (g *Gox) handleETag(w http.ResponseWriter, r *http.Request, eTag string, content []byte, eTags map[string]string) {
+func (g *Gox) handleWriter(w http.ResponseWriter, r *http.Request, eTag string, content []byte, eTags map[string]string) {
 	if rEtag := r.Header.Get("If-None-Match"); rEtag == eTag {
 		log.Println("304: status not modified")
 		w.WriteHeader(http.StatusNotModified)

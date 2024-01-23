@@ -9,7 +9,7 @@ import (
 	"github.com/a-h/templ"
 )
 
-func Page_() templ.Component {
+func Page() templ.Component {
 
 	return SuspenseExample()
 }

@@ -3,7 +3,7 @@
 
 - absolute messed up 2 bugs
   - static rendering of a component that uses a suspense doesn't run keep the request handler from build -> start
-  - slugs pages dynamic routing serves two html documents??
+- camel case folders -> hyphen separated urls
 
 - fix highlighting of focused color
 - remove redudant files
@@ -15,6 +15,7 @@ AFTER LAUNCH
 
 FINISHED
 
+- slugs pages dynamic routing serves two html documents??
 - change image (cdn?) - NO NEED TO OVERCOMPLICATE...
 - add disclaimer for ui/framework - DONE
 - add fixed width for drawer - DONE
