@@ -1,6 +1,7 @@
 package gox
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
@@ -12,6 +13,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"unicode"
 )
 
 type goxDir struct {
@@ -167,6 +169,8 @@ func getSortedFunctions(dirFiles map[string]map[string][]goxDir, startDir string
 		}
 
 		ndir := dirPostfixSuffixRemoval(dir)
+		ndir = camelToHyphen(ndir)
+
 		leafPath := strings.Replace(ndir, startDir, "", 1)
 		if leafPath == "" {
 			leafPath = "/"
@@ -688,4 +692,17 @@ func dirPostfixSuffixRemoval(path string) string {
 	* Can specify dirs -> templ generate -f /home/caleb/go/personal/src/app/_test/test.templ
 	**/
 	return filepath.Join(output...)
+}
+
+func camelToHyphen(input string) string {
+	var result bytes.Buffer
+
+	for i, char := range input {
+		if i > 0 && unicode.IsUpper(char) {
+			result.WriteRune('-')
+		}
+		result.WriteRune(unicode.ToLower(char))
+	}
+
+	return result.String()
 }

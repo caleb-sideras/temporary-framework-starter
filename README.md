@@ -1,6 +1,5 @@
 # TODO
 
-- camel case folders -> hyphen separated urls
 
 - fix highlighting of focused color
 - remove redudant files
@@ -12,6 +11,7 @@ AFTER LAUNCH
 
 FINISHED
 
+- camel case folders -> hyphen separated urls
 - slugs pages dynamic routing serves two html documents??
 - change image (cdn?) - NO NEED TO OVERCOMPLICATE...
 - add disclaimer for ui/framework - DONE
