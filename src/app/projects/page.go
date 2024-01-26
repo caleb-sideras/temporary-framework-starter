@@ -23,7 +23,7 @@ func Page(w http.ResponseWriter, r *http.Request) templ.Component {
 			Title:       "GoX Framework",
 			Description: "A framework designed to make working with Go and HTMX easier. Achieves this by employing certain primitives that tightly couple them, aiding scaling.",
 			Src:         "https://gox-framework.org/static/assets/gox-mascot-hor.png",
-			Href:        "/projects/goxFramework",
+			Href:        "/projects/gox-framework",
 			Alt:         "GoX Framework Moscot",
 		},
 		{

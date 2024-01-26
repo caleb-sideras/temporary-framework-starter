@@ -62,11 +62,11 @@ func MdObjToTempl(markdown []byte) (templ.Component, error) {
 }
 
 func MdFileToTempl(path string) (templ.Component, error) {
-	cwd, err := os.Getwd()
+	_, err := os.Getwd()
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Printf("Current working directory: %s\n", cwd)
+	// log.Printf("Current working directory: %s\n", cwd)
 	markdown, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
