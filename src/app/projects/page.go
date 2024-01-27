@@ -25,6 +25,7 @@ func Page(w http.ResponseWriter, r *http.Request) templ.Component {
 			Src:         "https://gox-framework.org/static/assets/gox-mascot-hor.png",
 			Href:        "/projects/gox-framework",
 			Alt:         "GoX Framework Moscot",
+			Boost:       "true",
 		},
 		{
 			Title:       "CAAS",
@@ -32,6 +33,7 @@ func Page(w http.ResponseWriter, r *http.Request) templ.Component {
 			Src:         "https://opengraph.githubassets.com/1a43d7c7f54d054a1094b6f53a76668f5d192eafd3f041c978cce36355cf3006/caleb-sideras/CAAS",
 			Href:        "/projects/caas",
 			Alt:         "CAAS Github",
+			Boost:       "true",
 		},
 		{
 			Title:       "People Pedia",
@@ -39,6 +41,7 @@ func Page(w http.ResponseWriter, r *http.Request) templ.Component {
 			Src:         "https://opengraph.githubassets.com/be1d1b6657697642586856c35f9916242a1108d34d8cee509b61c2ca5b5e2e56/caleb-sideras/PeoplePedia-Backend",
 			Href:        "/projects/peoplepedia",
 			Alt:         "People Pedia Github",
+			Boost:       "true",
 		},
 		{
 			Title:       "Tweetailyze",
@@ -46,6 +49,7 @@ func Page(w http.ResponseWriter, r *http.Request) templ.Component {
 			Src:         "https://opengraph.githubassets.com/bc52bfa035af32496e45f674130251555d2549ca38d8b333461df836979cebbb/caleb-sideras/tweetailyze-frontend",
 			Href:        "/projects/tweetailyze",
 			Alt:         "Tweetailyze Github",
+			Boost:       "true",
 		},
 		{
 			Title:       "Temporary Framework",

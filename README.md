@@ -1,17 +1,43 @@
 # TODO
 
 
+- REGEX to t-navigation??????
 - fix highlighting of focused color
 - remove redudant files
 - add transitions? not sure
 
+
+HTMX 2.0 migration
+
+```javascript
+const shadowRoot = document.getElementsByTagName('t-link')
+htmx.process(shadowRoot[0].shadowRoot)
+```
+
+```
+htmx.min.js:1 TypeError: Cannot read properties of undefined (reading 'classList')
+    at qn (htmx.min.js:1:40637)
+    at m.onload (htmx.min.js:1:37682)
+      S @ htmx.min.js:1
+      fe @ htmx.min.js:1
+      ae @ htmx.min.js:1
+      m.onload @ htmx.min.js:1
+      load (async)
+      he @ htmx.min.js:1
+      (anonymous) @ htmx.min.js:1
+      o @ htmx.min.js:1
+htmx.min.js:1 Uncaught TypeError: Cannot read properties of undefined (reading 'classList')
+    at qn (htmx.min.js:1:40637)
+    at m.onload (htmx.min.js:1:37682)  
+```
+
 AFTER LAUNCH
-- add slugs 
 - add ssr url to navigation - NOT DOING THIS; want to serve static pages for speed, as this will be on a EC2 micro :)) $5 month
 
 FINISHED
 
 - camel case folders -> hyphen separated urls
+- add slugs 
 - slugs pages dynamic routing serves two html documents??
 - change image (cdn?) - NO NEED TO OVERCOMPLICATE...
 - add disclaimer for ui/framework - DONE

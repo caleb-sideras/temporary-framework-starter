@@ -63,6 +63,10 @@ export class TListItem extends ListItem {
       this.type = 'button';
     }
 
+    // if (this.href) {
+    //   this.type = 'link';
+    // }
+
   }
 
   protected override renderListItem(content: unknown) {
