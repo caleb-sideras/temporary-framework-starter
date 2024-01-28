@@ -15,14 +15,14 @@ export class TLink extends HTMXElement {
 	    pointer-events: none;
 	    filter: grayscale(100%);
 	  }
-		link_container:hover h2,
-		link_container:hover p {
+		.link_container:hover h2,
+		.link_container:hover p {
 			color: var(--md-sys-color-primary) !important;
     }		
-		link_container:hover img{
+		.link_container:hover img{
 			border-color:var(--md-sys-color-primary) !important;
 		}
-		link_container{
+		.link_container{
 			text-decoration: none;
 			color: #212121;
 		}

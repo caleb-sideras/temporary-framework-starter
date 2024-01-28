@@ -1,7 +1,6 @@
 # TODO
 
 
-- REGEX to t-navigation??????
 - fix highlighting of focused color
 - remove redudant files
 - add transitions? not sure
@@ -41,6 +40,7 @@ AFTER LAUNCH
 
 FINISHED
 
+- REGEX to t-navigation??????
 - camel case folders -> hyphen separated urls
 - add slugs 
 - slugs pages dynamic routing serves two html documents??
