@@ -1,7 +1,7 @@
 // as of now, htmx does not support shadow dom
 // merge https://github.com/bigskysoftware/htmx/pull/2075 !!!
 
-import { LitElement, html } from 'lit';
+import { nothing, LitElement, html } from 'lit';
 import { property } from 'lit/decorators.js';
 
 export class HTMXElement extends LitElement {
@@ -22,7 +22,7 @@ export class HTMXElement extends LitElement {
   renderAnchor(content: unknown) {
     return html`
       <a
-        href="${this.href}"
+        href="${this.href|| nothing}"
         hx-boost="${this.hxBoost}"
       >
         ${content}

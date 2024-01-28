@@ -38,7 +38,7 @@ func (g *Gox) Run(r *mux.Router, port string, servePath string) {
 
 func (g *Gox) handleRoutes(r *mux.Router, eTags map[string]string) {
 	fmt.Println("Function Type: Page - Render")
-	g.handlePageRoutes(r, eTags)
+	g.handlePageRender(r, eTags)
 	fmt.Println("Function Type: Page - Handle")
 	g.handlePageHandles(r, eTags)
 	fmt.Println("Function Type: Route - Handle")
@@ -48,7 +48,7 @@ func (g *Gox) handleRoutes(r *mux.Router, eTags map[string]string) {
 }
 
 // PageRenderList
-func (g *Gox) handlePageRoutes(r *mux.Router, eTags map[string]string) {
+func (g *Gox) handlePageRender(r *mux.Router, eTags map[string]string) {
 	for _, route := range PageRenderList {
 		currRoute := route.Path
 		fmt.Printf("   - %s\n", currRoute)
@@ -96,13 +96,17 @@ func (g *Gox) handleRouteRender(r *mux.Router, eTags map[string]string) {
 // PageRender
 func (g *Gox) createPageHandler(route string, eTags map[string]string) pageHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
+		/**
+		* NOTE
+		* Changed eTagPath from r.URL.Path -> route. Allows slugs.
+		**/
 		log.Println("- - - - - - - - - - - -")
 		eTagPath := ""
 		pagePath := ""
 
 		handlePage := func() {
 			log.Println("Partial")
-			eTagPath = filepath.Join(r.URL.Path, PAGE_BODY_OUT_FILE)
+			eTagPath = filepath.Join(route, PAGE_BODY_OUT_FILE)
 			pagePath = filepath.Join(g.OutputDir, eTagPath)
 		}
 
@@ -113,7 +117,7 @@ func (g *Gox) createPageHandler(route string, eTags map[string]string) pageHandl
 
 		handleIndex := func() {
 			log.Println("Full-Page")
-			eTagPath = filepath.Join(r.URL.Path, PAGE_OUT_FILE)
+			eTagPath = filepath.Join(route, PAGE_OUT_FILE)
 			pagePath = filepath.Join(g.OutputDir, eTagPath)
 		}
 
@@ -159,12 +163,7 @@ func (g *Gox) createPageDefaultHandler(route Handler, eTags map[string]string) p
 		formatRequest(w, r, handlePage, handleBoostPage, handleIndex, handleIndex)
 
 		eTag := utils.GenerateETag(buffer.String())
-		g.handleETag(w, r, eTag, buffer.Bytes(), eTags)
-
-		w.Header().Set("Vary", "HX-Request")
-		w.Header().Set("Cache-Control", "no-cache")
-		w.Header().Set("ETag", eTag)
-		w.Write(buffer.Bytes())
+		g.handleWriter(w, r, eTag, buffer.Bytes(), eTags)
 	}
 }
 
@@ -231,8 +230,13 @@ func (g *Gox) createRouteResReqHandler(route Handler, eTags map[string]string) p
 func (g *Gox) createRouteRenderHandler(route string, eTags map[string]string) pageHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Println("- - - - - - - - - - - -")
-		eTagPath := filepath.Join(r.URL.Path, ROUTE_OUT_FILE)
+		/**
+		* NOTE
+		* Changed eTagPath from r.URL.Path -> route. Allows slugs.
+		**/
+		eTagPath := filepath.Join(route, ROUTE_OUT_FILE)
 		pagePath := filepath.Join(g.OutputDir, eTagPath)
+		log.Println(route, pagePath, eTagPath)
 
 		if eTag := r.Header.Get("If-None-Match"); eTag == eTags[eTagPath] {
 			log.Println("403: status not modified")
@@ -348,7 +352,7 @@ func (g *Gox) handleRenderError(err error, w http.ResponseWriter) {
 	}
 }
 
-func (g *Gox) handleETag(w http.ResponseWriter, r *http.Request, eTag string, content []byte, eTags map[string]string) {
+func (g *Gox) handleWriter(w http.ResponseWriter, r *http.Request, eTag string, content []byte, eTags map[string]string) {
 	if rEtag := r.Header.Get("If-None-Match"); rEtag == eTag {
 		log.Println("304: status not modified")
 		w.WriteHeader(http.StatusNotModified)

@@ -1,18 +1,49 @@
 # TODO
 
-- finish blog
-- add links
+
 - fix highlighting of focused color
-- add own docs -> video button ???
 - remove redudant files
 - add transitions? not sure
 
+REGEX double example
+
+```regex
+regex={`^\/projects\/gox-framework(?:$|\/.*)`}
+```
+
+HTMX 2.0 migration
+
+```javascript
+const shadowRoot = document.getElementsByTagName('t-link')
+htmx.process(shadowRoot[0].shadowRoot)
+```
+
+```
+htmx.min.js:1 TypeError: Cannot read properties of undefined (reading 'classList')
+    at qn (htmx.min.js:1:40637)
+    at m.onload (htmx.min.js:1:37682)
+      S @ htmx.min.js:1
+      fe @ htmx.min.js:1
+      ae @ htmx.min.js:1
+      m.onload @ htmx.min.js:1
+      load (async)
+      he @ htmx.min.js:1
+      (anonymous) @ htmx.min.js:1
+      o @ htmx.min.js:1
+htmx.min.js:1 Uncaught TypeError: Cannot read properties of undefined (reading 'classList')
+    at qn (htmx.min.js:1:40637)
+    at m.onload (htmx.min.js:1:37682)  
+```
+
 AFTER LAUNCH
-- add slugs 
 - add ssr url to navigation - NOT DOING THIS; want to serve static pages for speed, as this will be on a EC2 micro :)) $5 month
 
 FINISHED
 
+- REGEX to t-navigation??????
+- camel case folders -> hyphen separated urls
+- add slugs 
+- slugs pages dynamic routing serves two html documents??
 - change image (cdn?) - NO NEED TO OVERCOMPLICATE...
 - add disclaimer for ui/framework - DONE
 - add fixed width for drawer - DONE
@@ -23,9 +54,13 @@ FINISHED
 - Mobile Navigation hard
 - mobile rail highlighting
 - mobile dropdownlist color 
+- finish blog
+- add links
 
 NOTES
 
+- static rendering of a component that uses a suspense doesn't run keep the request handler from build -> start
+  - This is impossible to solve based on my current abilities. So just make this explicit in the docs
 - Provide w and r objects to the index -> if so, all static pages will be rendered on build-time and inserted on request time
 
 

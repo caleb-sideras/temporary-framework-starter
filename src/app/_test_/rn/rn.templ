@@ -1,0 +1,13 @@
+package rn
+
+import "github.com/caleb-sideras/gox2/temporary"
+
+templ SuspenseExample() {
+	@temporary.Suspense(temporary.Spinner()) {
+		@RandomNumber()
+	}
+}
+
+templ RandomNumberTempl(number string) {
+	<h1>{ number } </h1>
+}

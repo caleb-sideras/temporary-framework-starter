@@ -52,6 +52,7 @@ export class TListItem extends ListItem {
   @property({ type: Boolean, reflect: true }) active = false;
   @property({ type: Boolean, reflect: true }) border = false;
   @property({ type: Boolean, reflect: true, attribute: 'hide-event' }) hideEvent = false;
+  @property({ type: String }) regex = "";
 
   protected override willUpdate(changed: PropertyValues<ListItem>) {
     super.willUpdate(changed);
@@ -62,6 +63,10 @@ export class TListItem extends ListItem {
     } else {
       this.type = 'button';
     }
+
+    // if (this.href) {
+    //   this.type = 'link';
+    // }
 
   }
 

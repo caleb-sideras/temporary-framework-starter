@@ -9,7 +9,8 @@ templ IndexTempl() {
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<script type="module" src="/static/js/index.js"></script>
 			<link href="/static/css/output.css" rel="stylesheet"/>
-			<script src="https://unpkg.com/htmx.org@1.9.6" integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous"></script>
+			<!-- <script src="https://unpkg.com/htmx.org@1.9.6" integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous"></script> -->
+			<script src="https://unpkg.com/htmx.org@2.0.0-alpha1/dist/htmx.min.js"></script>
 			<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
 			<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet"/>
 			<link
@@ -30,24 +31,24 @@ templ IndexTempl() {
 						</temporary-list-item>
 						<temporary-list-item interactive type="link" href="https://www.linkedin.com/in/caleb-james-sideras-9555b0196/">
 							linkedin
-							<md-icon slot="end" class="material-symbols-filled-light">north_east</md-icon>
+							<md-icon slot="end" class="material-symbols-filled-eeight">north_east</md-icon>
 						</temporary-list-item>
 					</div>
 					<t-mobile-navigation-rail slot="rail">
-						<temporary-list-item interactive type="button" href="/" hx-get="/" hx-target="main" hx-push-url="true">
+						<temporary-list-item interactive type="button" href="/" regex="^/?$" hx-get="/" hx-target="main" hx-push-url="true">
 							Home
 							<md-icon slot="start" class="material-symbols-filled">crop_square</md-icon>
 						</temporary-list-item>
-						<temporary-list-item interactive type="button" href="/projects">
+						<temporary-list-item interactive type="button" href="/projects" regex={`^/?\/projects(\/?|\/.*)?$`}>
 							Projects
 							<md-icon slot="start" class="material-symbols-filled">code_blocks</md-icon>
 							<md-icon slot="end" class="material-symbols-filled">arrow_forward</md-icon>
 						</temporary-list-item>
-						<temporary-list-item interactive type="button" href="/experience" hx-get="/experience" hx-target="main" hx-push-url="true">
+						<temporary-list-item interactive type="button" href="/experience" regex={`^/?\/experience(\/?|\/.*)?$`} hx-get="/experience" hx-target="main" hx-push-url="true">
 							Experience
 							<md-icon slot="start" class="material-symbols-filled">developer_guide</md-icon>
 						</temporary-list-item>
-						<temporary-list-item interactive type="button" href="/blog" hx-get="/blog" hx-target="main" hx-push-url="true">
+						<temporary-list-item interactive type="button" href="/blog" hx-get="/blog" regex={`^/?\/blog(\/?|\/.*)?$`} hx-target="main" hx-push-url="true">
 							Blog
 							<md-icon slot="start" class="material-symbols-filled">article</md-icon>
 						</temporary-list-item>
@@ -59,7 +60,7 @@ templ IndexTempl() {
 						<temporary-list-item interactive border type="button" href="/projects/musicgpt" hx-get="/projects/musicgpt" hx-target="main" hx-push-url="true">
 							MusicGPT
 						</temporary-list-item>
-						<temporary-list-item interactive border type="button" href="/projects/goxFramework" hx-get="/projects/goxFramework" hx-target="main" hx-push-url="true">
+						<temporary-list-item interactive border type="button" href="/projects/gox-framework" hx-get="/projects/gox-framework" hx-target="main" hx-push-url="true">
 							GoX
 						</temporary-list-item>
 						<t-dropdown>
@@ -103,19 +104,19 @@ templ IndexTempl() {
 						</temporary-list-item>
 					</div>
 					<t-navigation-rail slot="rail">
-						<temporary-list-item interactive type="button" href="/" hx-get="/" hx-target="main" hx-push-url="true">
+						<temporary-list-item interactive type="button" href="/" regex="^/?$" hx-get="/" hx-target="main" hx-push-url="true">
 							Home
 							<md-icon slot="start" class="material-symbols-filled">crop_square</md-icon>
 						</temporary-list-item>
-						<temporary-list-item interactive type="button" href="/projects" hx-get="/projects" hx-target="main" hx-push-url="true">
+						<temporary-list-item interactive type="button" href="/projects" regex={`^/?\/projects(\/?|\/.*)?$`} hx-get="/projects" hx-target="main" hx-push-url="true">
 							Projects
 							<md-icon slot="start" class="material-symbols-filled">code_blocks</md-icon>
 						</temporary-list-item>
-						<temporary-list-item interactive type="button" href="/experience" hx-get="/experience" hx-target="main" hx-push-url="true">
+						<temporary-list-item interactive type="button" href="/experience" regex={`^/?\/experience(\/?|\/.*)?$`} hx-get="/experience" hx-target="main" hx-push-url="true">
 							Experience
 							<md-icon slot="start" class="material-symbols-filled">developer_guide</md-icon>
 						</temporary-list-item>
-						<temporary-list-item interactive type="button" href="/blog" hx-get="/blog" hx-target="main" hx-push-url="true">
+						<temporary-list-item interactive type="button" href="/blog" regex={`^/?\/blog(\/?|\/.*)?$`} hx-get="/blog" hx-target="main" hx-push-url="true">
 							Blog
 							<md-icon slot="start" class="material-symbols-filled">article</md-icon>
 						</temporary-list-item>
@@ -127,7 +128,7 @@ templ IndexTempl() {
 						<temporary-list-item interactive border type="button" href="/projects/musicgpt" hx-get="/projects/musicgpt" hx-target="main" hx-push-url="true">
 							MusicGPT
 						</temporary-list-item>
-						<temporary-list-item interactive border type="button" href="/projects/goxFramework" hx-get="/projects/goxFramework" hx-target="main" hx-push-url="true">
+						<temporary-list-item interactive border type="button" href="/projects/gox-framework" hx-get="/projects/gox-framework" hx-target="main" hx-push-url="true">
 							GoX
 						</temporary-list-item>
 						<t-dropdown>

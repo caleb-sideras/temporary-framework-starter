@@ -62,32 +62,44 @@ export class TListController<Item extends TListItem> extends ListController<Item
   /**
     * Finds matching href and activates the respective item
     */
-  public updateList(url: string) {
-    const matchingItem = this.getListItem(url);
-    if (matchingItem) this.onRequestActivation(this.createActivationEvent(matchingItem));
-  }
+  // public updateList(url: string) {
+  //   const matchingItem = this.getListItem(url);
+  //   if (matchingItem) this.onRequestActivation(this.createActivationEvent(matchingItem));
+  // }
 
   /**
     * Finds matching href 
     */
-  public getListItem(url: string, soft: boolean = false): TListItem | undefined {
+  public getListItem(url: string): TListItem | undefined {
     if (!url) return;
 
     const items = this.items;
     if (items.length <= 0) return;
 
-    let matchingItem: TListItem | undefined;
-    if (soft) {
-      matchingItem = this.findSoftMatchingItem(url, items);
-    } else {
-      matchingItem = this.findMatchingItem(url, items);
-    }
-    if (!matchingItem) return;
+    const matchingItem = this.findMatch(url, items);
+    console.log("TListController: Matching Item from", url, "-> ", matchingItem);
 
-    console.log("TListController: Matching Item -> ", matchingItem);
-
-    return matchingItem
+    return matchingItem;
   }
+
+  // public getListItem(url: string, soft: boolean = false): TListItem | undefined {
+  //   if (!url) return;
+
+  //   const items = this.items;
+  //   if (items.length <= 0) return;
+
+  //   let matchingItem: TListItem | undefined;
+  //   if (soft) {
+  //     matchingItem = this.findSoftMatchingItem(url, items);
+  //   } else {
+  //     matchingItem = this.findMatchingItem(url, items);
+  //   }
+  //   if (!matchingItem) return;
+
+  //   console.log("TListController: Matching Item -> ", matchingItem);
+
+  //   return matchingItem
+  // }
 
   /**
     * Highlights the element (sets active and tabindex) without focusing. Avoid emitting an event
@@ -116,9 +128,29 @@ export class TListController<Item extends TListItem> extends ListController<Item
   /**
     * Helpers
     */
-  protected findMatchingItem(href: string, listItems: TListItem[]): TListItem | undefined {
+  protected findMatch(url: string, items: TListItem[]): TListItem | undefined {
+    const regexMatch = this.findMatchingRegex(url, items);
+    if (regexMatch) {
+      return regexMatch;
+    }
+    return this.findMatchingExact(url, items);
+  }
+
+  protected findMatchingExact(href: string, listItems: TListItem[]): TListItem | undefined {
     for (const item of listItems) {
       if (this.removeFirstLastSlash(item.href) === this.removeFirstLastSlash(href)) return item;
+    }
+    return;
+  }
+
+  protected findMatchingRegex(href: string, listItems: TListItem[]): TListItem | undefined {
+    for (const item of listItems) {
+      if (item.regex === "") continue;
+
+      const regex = new RegExp(item.regex);
+      const isMatch = regex.test(href);
+
+      if (isMatch) return item;
     }
     return;
   }

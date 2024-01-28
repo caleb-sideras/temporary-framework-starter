@@ -47,7 +47,6 @@ export class TNavigationContainer extends TVerticalList {
     const matchingItem = this.listController.getListItem(this.getBrowerPathname());
     this.listController.onDeactivateItems();
     if (matchingItem) this.listController.requestHighlight(matchingItem);
-
   }
 
   private needsRevalidation(listItem: TListItem): boolean {
