@@ -8,7 +8,9 @@ templ Grid(videos []utils.TLinkContent) {
 	<div class="grid-cols-2 grid">
 		for _, item :=range videos {
 			<t-link
- 				href={ item.Href }
+ 				hx-get={ item.Href }
+ 				hx-target="main"
+ 				hx-push-url="true"
  				title={ item.Title }
  				description={ item.Description }
  				src={ item.Src }

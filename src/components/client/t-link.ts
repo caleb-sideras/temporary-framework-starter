@@ -15,14 +15,14 @@ export class TLink extends HTMXElement {
 	    pointer-events: none;
 	    filter: grayscale(100%);
 	  }
-		a:hover h2,
-		a:hover p {
+		link_container:hover h2,
+		link_container:hover p {
 			color: var(--md-sys-color-primary) !important;
     }		
-		a:hover img{
+		link_container:hover img{
 			border-color:var(--md-sys-color-primary) !important;
 		}
-		a{
+		link_container{
 			text-decoration: none;
 			color: #212121;
 		}
@@ -55,45 +55,45 @@ export class TLink extends HTMXElement {
 
 	@property({ type: Boolean, reflect: true }) disabled = false;
 
-	// render() {
-	// 	let tag: StaticValue;
-	// 	if (!this.href || this.href === "") {
-	// 		tag = literal`div`;
-	// 	} else {
-	// 		tag = literal`a`;
-	// 	}
+	render() {
+		let tag: StaticValue;
+		if (!this.href || this.href === "") {
+			tag = literal`div`;
+		} else {
+			tag = literal`a`;
+		}
 
-	// 	return staticHtml`
-	// 		<${tag} href=${this.href || nothing} class="link_container">
-	// 			<h2>
-	// 				${this.title}
-	// 			</h2>
-	// 			<p>
-	// 				${this.description}
-	// 			</p>
-	// 			<img
-	// 				loading="lazy"
-	// 				src="${this.imgSrc}"
-	// 				alt="${this.imgAlt}"
-	// 			/>     
-	// 		</${tag}>
- //    `
-	// }
+		return staticHtml`
+			<${tag} href=${this.href || nothing} class="link_container">
+				<h2>
+					${this.title}
+				</h2>
+				<p>
+					${this.description}
+				</p>
+				<img
+					loading="lazy"
+					src="${this.imgSrc}"
+					alt="${this.imgAlt}"
+				/>     
+			</${tag}>
+    `
+	}
 
 	// When HTMX supports shadow DOM we change back to this
-	render() {
-		return this.renderAnchor(html`
-			<h2>
-				${this.title}
-			</h2>
-			<p>
-				${this.description}
-			</p>
-			<img
-				loading="lazy"
-				src="${this.imgSrc}"
-				alt="${this.imgAlt}"
-			/>     
-	   `)
-	}
+	// render() {
+	// 	return this.renderAnchor(html`
+	// 		<h2>
+	// 			${this.title}
+	// 		</h2>
+	// 		<p>
+	// 			${this.description}
+	// 		</p>
+	// 		<img
+	// 			loading="lazy"
+	// 			src="${this.imgSrc}"
+	// 			alt="${this.imgAlt}"
+	// 		/>     
+	//    `)
+	// }
 }
