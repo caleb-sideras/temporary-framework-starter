@@ -6,6 +6,11 @@
 - remove redudant files
 - add transitions? not sure
 
+REGEX double example
+
+```regex
+regex={`^\/projects\/gox-framework(?:$|\/.*)`}
+```
 
 HTMX 2.0 migration
 

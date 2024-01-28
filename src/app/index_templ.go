@@ -86,7 +86,7 @@ func IndexTempl() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <md-icon slot=\"end\" class=\"material-symbols-filled-light\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <md-icon slot=\"end\" class=\"material-symbols-filled-eeight\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -113,7 +113,15 @@ func IndexTempl() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item> <temporary-list-item interactive type=\"button\" href=\"/projects\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item> <temporary-list-item interactive type=\"button\" href=\"/projects\" regex=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(`^/?\/projects(\/?|\/.*)?$`))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -170,7 +178,7 @@ func IndexTempl() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(`^/?\/experience(\/?|\/.*)?$`))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(`^/?\/blog(\/?|\/.*)?$`))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -210,15 +218,7 @@ func IndexTempl() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"button\" regex=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(`^\/projects\/gox-framework(?:$|\/.*)`))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" href=\"/projects/gox-framework\" hx-get=\"/projects/gox-framework\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"button\" href=\"/projects/gox-framework\" hx-get=\"/projects/gox-framework\" hx-target=\"main\" hx-push-url=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -344,7 +344,7 @@ func IndexTempl() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item></div><t-navigation-rail slot=\"rail\"><temporary-list-item interactive type=\"button\" href=\"/\" hx-get=\"/\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item></div><t-navigation-rail slot=\"rail\"><temporary-list-item interactive type=\"button\" href=\"/\" regex=\"^/?$\" hx-get=\"/\" hx-target=\"main\" hx-push-url=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -362,7 +362,15 @@ func IndexTempl() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item> <temporary-list-item interactive type=\"button\" href=\"/projects\" hx-get=\"/projects\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item> <temporary-list-item interactive type=\"button\" href=\"/projects\" regex=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(`^/?\/projects(\/?|\/.*)?$`))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-get=\"/projects\" hx-target=\"main\" hx-push-url=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -380,7 +388,15 @@ func IndexTempl() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item> <temporary-list-item interactive type=\"button\" href=\"/experience\" hx-get=\"/experience\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item> <temporary-list-item interactive type=\"button\" href=\"/experience\" regex=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(`^/?\/experience(\/?|\/.*)?$`))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-get=\"/experience\" hx-target=\"main\" hx-push-url=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -398,7 +414,15 @@ func IndexTempl() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item> <temporary-list-item interactive type=\"button\" href=\"/blog\" hx-get=\"/blog\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item> <temporary-list-item interactive type=\"button\" href=\"/blog\" regex=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(`^/?\/blog(\/?|\/.*)?$`))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-get=\"/blog\" hx-target=\"main\" hx-push-url=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

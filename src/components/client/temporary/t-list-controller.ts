@@ -77,8 +77,7 @@ export class TListController<Item extends TListItem> extends ListController<Item
     if (items.length <= 0) return;
 
     const matchingItem = this.findMatch(url, items);
-    console.log("const matchingItem = this.findMatch(url, items);");
-    console.log("TListController: Matching Item -> ", matchingItem);
+    console.log("TListController: Matching Item from", url, "-> ", matchingItem);
 
     return matchingItem;
   }
@@ -131,13 +130,9 @@ export class TListController<Item extends TListItem> extends ListController<Item
     */
   protected findMatch(url: string, items: TListItem[]): TListItem | undefined {
     const regexMatch = this.findMatchingRegex(url, items);
-    console.log("WTF EGENX")
     if (regexMatch) {
-      console.log("MF REGEX MATCH");
       return regexMatch;
     }
-
-    console.log("NO REGEX MATCH");
     return this.findMatchingExact(url, items);
   }
 
@@ -150,10 +145,12 @@ export class TListController<Item extends TListItem> extends ListController<Item
 
   protected findMatchingRegex(href: string, listItems: TListItem[]): TListItem | undefined {
     for (const item of listItems) {
-      const pattern = item.regex.slice(1, -1);
-      const regex = new RegExp(pattern);
+      if (item.regex === "") continue;
+
+      const regex = new RegExp(item.regex);
       const isMatch = regex.test(href);
-      if (isMatch) return item
+
+      if (isMatch) return item;
     }
     return;
   }
