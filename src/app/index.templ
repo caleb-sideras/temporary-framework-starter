@@ -35,7 +35,7 @@ templ IndexTempl() {
 						</temporary-list-item>
 					</div>
 					<t-mobile-navigation-rail slot="rail">
-						<temporary-list-item interactive type="button" href="/" hx-get="/" hx-target="main" hx-push-url="true">
+						<temporary-list-item interactive type="button" href="/" regex="^/?$" hx-get="/" hx-target="main" hx-push-url="true">
 							Home
 							<md-icon slot="start" class="material-symbols-filled">crop_square</md-icon>
 						</temporary-list-item>
@@ -44,11 +44,11 @@ templ IndexTempl() {
 							<md-icon slot="start" class="material-symbols-filled">code_blocks</md-icon>
 							<md-icon slot="end" class="material-symbols-filled">arrow_forward</md-icon>
 						</temporary-list-item>
-						<temporary-list-item interactive type="button" href="/experience" hx-get="/experience" hx-target="main" hx-push-url="true">
+						<temporary-list-item interactive type="button" href="/experience" regex={`^/?\/experience(\/?|\/.*)?$`} hx-get="/experience" hx-target="main" hx-push-url="true">
 							Experience
 							<md-icon slot="start" class="material-symbols-filled">developer_guide</md-icon>
 						</temporary-list-item>
-						<temporary-list-item interactive type="button" href="/blog" hx-get="/blog" hx-target="main" hx-push-url="true">
+						<temporary-list-item interactive type="button" href="/blog" hx-get="/blog" regex={`^/?\/experience(\/?|\/.*)?$`} hx-target="main" hx-push-url="true">
 							Blog
 							<md-icon slot="start" class="material-symbols-filled">article</md-icon>
 						</temporary-list-item>
@@ -60,7 +60,7 @@ templ IndexTempl() {
 						<temporary-list-item interactive border type="button" href="/projects/musicgpt" hx-get="/projects/musicgpt" hx-target="main" hx-push-url="true">
 							MusicGPT
 						</temporary-list-item>
-						<temporary-list-item interactive border type="button" href="/projects/gox-framework" hx-get="/projects/gox-framework" hx-target="main" hx-push-url="true">
+						<temporary-list-item interactive border type="button" regex={`^\/projects\/gox-framework(?:$|\/.*)`} href="/projects/gox-framework" hx-get="/projects/gox-framework" hx-target="main" hx-push-url="true">
 							GoX
 						</temporary-list-item>
 						<t-dropdown>

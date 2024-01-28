@@ -52,6 +52,7 @@ export class TListItem extends ListItem {
   @property({ type: Boolean, reflect: true }) active = false;
   @property({ type: Boolean, reflect: true }) border = false;
   @property({ type: Boolean, reflect: true, attribute: 'hide-event' }) hideEvent = false;
+  @property({ type: String }) regex = "";
 
   protected override willUpdate(changed: PropertyValues<ListItem>) {
     super.willUpdate(changed);

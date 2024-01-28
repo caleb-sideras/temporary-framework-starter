@@ -11,6 +11,7 @@ export interface TListItem extends SharedListItem {
   type: 'text' | 'button' | 'link';
   active: boolean;
   href: string;
+  regex: string;
 }
 
 export class TList extends LitElement {
