@@ -11,7 +11,7 @@ export class TExperience extends LitElement {
     color: var(--md-sys-color-on-primary-80);
   }
   span {
-    color: black;
+    color: var(--md-sys-color-on-primary-80);
     font-weight: normal;
     font-style: italic;
   }
