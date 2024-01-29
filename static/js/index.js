@@ -5510,7 +5510,7 @@ class TNavigation extends s3 {
   htmxReValidate(event) {
     const target = event.target;
     if (target.hasAttribute("hx-push-url") && target.getAttribute("hx-push-url") === "true") {
-      this.url = target.getAttribute("href");
+      this.url = target.getAttribute("hx-get");
       this.initRail();
       this.initDrawers();
     }

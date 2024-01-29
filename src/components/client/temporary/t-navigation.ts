@@ -41,7 +41,6 @@ export class TNavigation extends LitElement {
 
   @property({ type: String }) url = '';
 
-
   connectedCallback(): void {
     super.connectedCallback();
 
@@ -67,7 +66,12 @@ export class TNavigation extends LitElement {
     const target = event.target;
 
     if (target.hasAttribute("hx-push-url") && target.getAttribute("hx-push-url") === 'true') {
-      this.url = target.getAttribute("href") as string;
+      /**
+        * NOTE
+        * Temp fix while shadowDOM is broken
+      **/
+      // this.url = target.getAttribute("href") as string;
+      this.url = target.getAttribute("hx-get") as string;
       this.initRail();
       this.initDrawers();
     };
