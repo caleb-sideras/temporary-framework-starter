@@ -48,7 +48,6 @@ export class TDropdown extends LitElement {
 
   handleTitleIteraction() {
     this.dList.active = this.dTitle.open;
-    console.log(this.dTitle.open, this.dList.active);
   }
 
   /** 

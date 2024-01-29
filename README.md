@@ -1,6 +1,8 @@
 # TODO
 
-
+- fix issue of templ generate not working on INITIAl build becuase of .mod dependencies
+- generated.go file throwing errors if functions change
+- delete/create default files on BUILD - > html/css/js delete -> generated.go default
 - fix highlighting of focused color
 - remove redudant files
 - add transitions? not sure

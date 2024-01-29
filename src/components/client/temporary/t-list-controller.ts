@@ -1,4 +1,4 @@
-import { ListController, ListControllerConfig, NavigableKeys } from '@material/web/list/internal/list-controller.js';
+import { ListController, ListControllerConfig } from '@material/web/list/internal/list-controller.js';
 import { TListItem, TList } from './t-list';
 
 /** 
@@ -15,7 +15,6 @@ export interface TListControllerConfig<Item extends TListItem> extends ListContr
     */
   isList: (list: HTMLElement) => list is TList;
 }
-
 
 
 /** 
@@ -60,14 +59,6 @@ export class TListController<Item extends TListItem> extends ListController<Item
   }
 
   /**
-    * Finds matching href and activates the respective item
-    */
-  // public updateList(url: string) {
-  //   const matchingItem = this.getListItem(url);
-  //   if (matchingItem) this.onRequestActivation(this.createActivationEvent(matchingItem));
-  // }
-
-  /**
     * Finds matching href 
     */
   public getListItem(url: string): TListItem | undefined {
@@ -77,29 +68,10 @@ export class TListController<Item extends TListItem> extends ListController<Item
     if (items.length <= 0) return;
 
     const matchingItem = this.findMatch(url, items);
-    console.log("TListController: Matching Item from", url, "-> ", matchingItem);
+    // console.log("TListController: Matching Item from", url, "-> ", matchingItem);
 
     return matchingItem;
   }
-
-  // public getListItem(url: string, soft: boolean = false): TListItem | undefined {
-  //   if (!url) return;
-
-  //   const items = this.items;
-  //   if (items.length <= 0) return;
-
-  //   let matchingItem: TListItem | undefined;
-  //   if (soft) {
-  //     matchingItem = this.findSoftMatchingItem(url, items);
-  //   } else {
-  //     matchingItem = this.findMatchingItem(url, items);
-  //   }
-  //   if (!matchingItem) return;
-
-  //   console.log("TListController: Matching Item -> ", matchingItem);
-
-  //   return matchingItem
-  // }
 
   /**
     * Highlights the element (sets active and tabindex) without focusing. Avoid emitting an event
@@ -151,21 +123,6 @@ export class TListController<Item extends TListItem> extends ListController<Item
       const isMatch = regex.test(href);
 
       if (isMatch) return item;
-    }
-    return;
-  }
-
-  /**
-  * href -> 'projects/musicpgt' matches item.href -> 'projects/' 
-  */
-  protected findSoftMatchingItem(href: string, listItems: TListItem[]): TListItem | undefined {
-    for (const item of listItems) {
-      const cleanItemHref = this.removeFirstLastSlash(item.href);
-      const cleanHref = this.removeFirstLastSlash(href);
-      console.log("cleanItemHref", cleanItemHref);
-      console.log("cleanHref", cleanHref);
-      console.log("cleanFinal", cleanHref.slice(0, cleanItemHref.length))
-      if (cleanHref.slice(0, cleanItemHref.length) === cleanItemHref) return item;
     }
     return;
   }
