@@ -6,6 +6,7 @@ export class THeader extends LitElement {
 
   static styles = css`
     a {
+			color: var(--md-sys-color-on-primary) !important;
       display:flex;
       align-items:center;
 			color: #000000;
@@ -14,7 +15,7 @@ export class THeader extends LitElement {
     }
 
 		a:hover {
-			color: var(--md-sys-color-primary) !important;
+			color: var(--md-sys-color-on-secondary) !important;
 		}
 
     h1 {

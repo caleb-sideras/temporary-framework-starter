@@ -17,7 +17,7 @@ export class TNavigationDrawer extends TNavigationContainer {
   static override styles = [
     css`
       :host{
-        --md-list-container-color: var(--t-navigation-drawer-container-color, var(--md-sys-color-on-primary, #ffffff)) !important;
+        --md-list-container-color: var(--t-navigation-drawer-container-color, var(--md-sys-color-primary, #ffffff)) !important;
       }
     `,
     ...TNavigationContainer.styles

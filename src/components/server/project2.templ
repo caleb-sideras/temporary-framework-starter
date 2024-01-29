@@ -11,16 +11,16 @@ type ProjectTabType struct {
 templ ProjectTab(project ProjectTabType) {
 	<div style="flex-direction: column; display: flex;">
 		<t-header href={ project.ProjectURL } heading={ project.Title }></t-header>
-		<md-list>
-			<t-list-item interactive type="button" hx-get={ project.ReadMeURL } hx-target="#example-body">
+		<temporary-list>
+			<temporary-list-item interactive type="button" hx-get={ project.ReadMeURL } hx-target="#example-body" active>
 				ReadME.md
 				<md-icon slot="start" class="material-symbols-filled">markdown</md-icon>
-			</t-list-item>
-			<t-list-item interactive type="button" hx-get={ project.VideoURL } hx-target="#example-body">
+			</temporary-list-item>
+			<temporary-list-item interactive type="button" hx-get={ project.VideoURL } hx-target="#example-body">
 				Videos
 				<md-icon slot="start" class="material-symbols-filled">movie</md-icon>
-			</t-list-item>
-		</md-list>
+			</temporary-list-item>
+		</temporary-list>
 		<div id="example-body" style="display:flex; justify-content: center;">
 			@project.InitialBody
 		</div>

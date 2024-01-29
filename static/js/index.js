@@ -4581,26 +4581,26 @@ class TLink extends HTMXElement {
 	  }
 		.link_container:hover h2,
 		.link_container:hover p {
-			color: var(--md-sys-color-primary) !important;
+			color: var(--md-sys-color-on-secondary) !important;
     }		
 		.link_container:hover img{
-			border-color:var(--md-sys-color-primary) !important;
+			border-color:var(--md-sys-color-on-secondary) !important;
 		}
 		.link_container{
 			text-decoration: none;
-			color: #212121;
 		}
 		h2 {
 			margin-bottom: 32px;
-			font-variation-settings: 'wght' 100, 'wdth' 100, 'opsz' 8; 
-			font-size: 2.5rem;
+			font-variation-settings: 'wght' 100, 'wdth' 100, 'opsz' 8; 			font-size: 2.5rem;
 			font-weight: normal;	
+			color: var(--md-sys-color-on-primary) !important;
 		}
 		p {
 			font-size: 0.95rem;
 			font-weight: 300;
 			margin-bottom: 40px;
 			margin-top: 0px;
+			color: var(--md-sys-color-on-primary-80) !important;
 		}
 		img {
 			width: 100%;
@@ -4661,6 +4661,7 @@ class THeader extends s3 {
   }
   static styles = i`
     a {
+			color: var(--md-sys-color-on-primary) !important;
       display:flex;
       align-items:center;
 			color: #000000;
@@ -4669,7 +4670,7 @@ class THeader extends s3 {
     }
 
 		a:hover {
-			color: var(--md-sys-color-primary) !important;
+			color: var(--md-sys-color-on-secondary) !important;
 		}
 
     h1 {
@@ -4713,10 +4714,14 @@ class TExperience extends s3 {
     this.company = "";
     this.position = "";
     this.date = "";
+    this.description = "";
   }
   static styles = i`
-  h2 {  
-    color: var(--md-sys-color-primary);
+  h2{  
+    color: var(--md-sys-color-on-primary);
+  }
+  p{  
+    color: var(--md-sys-color-on-primary-80);
   }
   span {
     color: black;
@@ -4729,6 +4734,7 @@ class TExperience extends s3 {
       <h2>${this.company} <span>${this.position}</span></h2>
       <p>${this.date}</p>
       <slot name="list"></slot>
+      <p>${this.description}</p>
     `;
   }
 }
@@ -4741,6 +4747,9 @@ __legacyDecorateClassTS([
 __legacyDecorateClassTS([
   n3({ type: String })
 ], TExperience.prototype, "date", undefined);
+__legacyDecorateClassTS([
+  n3({ type: String })
+], TExperience.prototype, "description", undefined);
 TExperience = __legacyDecorateClassTS([
   t("t-experience")
 ], TExperience);
@@ -5044,14 +5053,14 @@ class TListItem extends ListItemEl {
       }
 
       :host([active]) {
-        --md-list-item-label-text-color: var(--t-list-item-active-color, var(--md-sys-color-primary, #743342));
-        --md-list-item-trailing-icon-color: var(--t-list-item-active-color, var(--md-sys-color-primary, #743342));
+        --md-list-item-label-text-color: var(--t-list-item-active-color, var(--md-sys-color-on-secondary, #743342));
+        --md-list-item-trailing-icon-color: var(--t-list-item-active-color, var(--md-sys-color-on-secondary, #743342));
       }
 
       :host([active][border]) {
-        border: var(--t-dropdown-list-item-border, solid);        
-        border-width: var(--t-dropdown-list-item-border-width, 1px);
-        border-color: var(--t-dropdown-list-item-active-color, var(--md-sys-color-primary, #743342));
+        border: var(--t-list-item-border, solid);        
+        border-width: var(--t-list-item-border-width, 1px);
+        border-color: var(--t-list-item-active-color, var(--md-sys-color-on-secondary, #743342));
       }
     `
   ];
@@ -5641,7 +5650,7 @@ class TNavigationDrawer extends TNavigationContainer {
   static styles = [
     i`
       :host{
-        --md-list-container-color: var(--t-navigation-drawer-container-color, var(--md-sys-color-on-primary, #ffffff)) !important;
+        --md-list-container-color: var(--t-navigation-drawer-container-color, var(--md-sys-color-primary, #ffffff)) !important;
       }
     `,
     ...TNavigationContainer.styles

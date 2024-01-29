@@ -70,8 +70,14 @@
 
   --md-sys-color-primary: #09090b;
   --md-sys-color-on-primary: #fafafa;
+  --md-sys-color-on-primary-80: #a1a1aa;
 
-  --md-sys-color-primary-80: #9cd67d;
+  --md-sys-color-secondary: #27272a;
+  --md-sys-color-on-secondary: #743342;
+
+  --md-list-item-label-text-color: var(--md-sys-color-on-primary-80);
+  --md-list-container-color: var(--md-sys-color-secondary);
+
   --md-sys-color-primary-30: #205107;
   --md-sys-color-primary-20: #0c3900;
   --md-sys-color-neutral-10: #1a1c18;
@@ -79,10 +85,7 @@
   --md-sys-color-primary-container: #205107;
   --md-sys-color-on-primary-container: #b8f397;
 
-  --md-sys-color-secondary: #27272a;
-  --md-sys-color-on-secondary: #64646a;
 
-  --md-list-item-label-text-color: var(--md-sys-color-on-surface-variant);
 
   --md-sys-color-secondary-container: #3e4a36;
   --md-sys-color-on-secondary-container: #d9e7cb;
@@ -143,14 +146,16 @@
   --md-sys-color-primary-30: #205107;
   --md-sys-color-primary-20: #0c3900;
 
-  --md-sys-color-primary: #743342;
-  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary: #ffffff;
+  --md-sys-color-on-primary: #000000;
+
+  --md-sys-color-secondary: #f4f4f5;
+  --md-sys-color-on-secondary: #743342;
+  --md-sys-color-on-primary-80: #616161;
 
   --md-sys-color-primary-container: #f5f5f5;
   --md-sys-color-on-primary-container: #000000;
 
-  --md-sys-color-secondary: #f4f4f5;
-  --md-sys-color-on-secondary: #b3b3b7;
 
   --md-sys-color-secondary-container: #ffffff;
   --md-sys-color-on-secondary-container: #09090b;
@@ -241,9 +246,6 @@
 
   --t-navigation-rail-list-item-active-color: #743342;
 
-  /** Navigation Drawer **/
-  --t-navigation-drawer-container-color: #ffffff;
-
   /** Navigation Drawer List Item **/
   --t-navigation-drawer-list-item-text-size: 0.9rem;
 
@@ -256,6 +258,8 @@
   * --- GLOBAL CLASSES ---
 **/
 body {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
   margin: 0px;
   display: flex;
   flex-direction: row;
@@ -368,7 +372,7 @@ main {
 
 .home_ipa {
   font-family: Google;
-  color: #616161;
+  color: var(--md-sys-color-on-primary-80);
   font-size: 1rem;
 }
 
@@ -380,13 +384,13 @@ main {
 
 .home_bio {
   font-size: 1.2rem;
-  color: #424242;
+  color: var(--md-sys-color-on-primary);
   margin-top: 50px;
 }
 
 .home_disclaimer {
   font-family: Google;
-  color: #616161;
+  color: var(--md-sys-color-on-primary-80);
   font-size: 0.8rem;
   margin-top: 24px;
 }
@@ -515,9 +519,11 @@ h1 {
 }
 
 #markdown pre {
+  /**
   border: var(--md-sys-color-primary);
   border-style: solid;
   border-width: 1px;
+  **/
   background-color: var(--md-sys-color-primary-container);
   color: var(--md-sys-color-on-primary-container);
   padding: 16px;
@@ -548,10 +554,10 @@ h1 {
   align-items: center;
   justify-content: center;
   --tw-bg-opacity: 1;
-  background-color: var(--md-sys-color-primary);
+  background-color: var(--md-sys-color-on-secondary);
   font-size: 14px;
   --tw-text-opacity: 1;
-  color: var(--md-sys-color-on-primary);
+  color: var(--md-sys-color-primary);
 }
 
 #markdown ul {

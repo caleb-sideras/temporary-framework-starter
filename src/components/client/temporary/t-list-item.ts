@@ -37,14 +37,14 @@ export class TListItem extends ListItem {
       }
 
       :host([active]) {
-        --md-list-item-label-text-color: var(--t-list-item-active-color, var(--md-sys-color-primary, #743342));
-        --md-list-item-trailing-icon-color: var(--t-list-item-active-color, var(--md-sys-color-primary, #743342));
+        --md-list-item-label-text-color: var(--t-list-item-active-color, var(--md-sys-color-on-secondary, #743342));
+        --md-list-item-trailing-icon-color: var(--t-list-item-active-color, var(--md-sys-color-on-secondary, #743342));
       }
 
       :host([active][border]) {
-        border: var(--t-dropdown-list-item-border, solid);        
-        border-width: var(--t-dropdown-list-item-border-width, 1px);
-        border-color: var(--t-dropdown-list-item-active-color, var(--md-sys-color-primary, #743342));
+        border: var(--t-list-item-border, solid);        
+        border-width: var(--t-list-item-border-width, 1px);
+        border-color: var(--t-list-item-active-color, var(--md-sys-color-on-secondary, #743342));
       }
     `
   ];
