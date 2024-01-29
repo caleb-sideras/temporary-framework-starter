@@ -4779,7 +4779,6 @@ class TDropdown extends s3 {
   }
   handleTitleIteraction() {
     this.dList.active = this.dTitle.open;
-    console.log(this.dTitle.open, this.dList.active);
   }
   handleExternalActivation(event) {
     const dItem = event.target;
