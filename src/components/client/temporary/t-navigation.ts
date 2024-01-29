@@ -128,7 +128,6 @@ export class TNavigation extends LitElement {
   }
 
   protected isMobileNaviationRail(rail: TNavigationRail): boolean {
-    console.log("this.rail", rail)
     return rail.localName === this.railAttribute;
   }
 
@@ -159,7 +158,7 @@ export class TNavigation extends LitElement {
     * Drawers Handlers
     */
   initRail() {
-    const listItem = this.rail.listController.getListItem(this.getRootNodeUrl(this.url));
+    const listItem = this.rail.listController.getListItem(this.url);
     if (listItem) this.rail.listController.requestHighlight(listItem);
   }
 
@@ -199,12 +198,12 @@ export class TNavigation extends LitElement {
     return cleanPath;
   }
 
-  getRootNodeUrl(url: string): string {
-    const urls = this.splitLeafUrl(url);
-    if (!urls || urls.length <= 0) return '';
+  // getRootNodeUrl(url: string): string {
+  //   const urls = this.splitLeafUrl(url);
+  //   if (!urls || urls.length <= 0) return '';
 
-    return urls[0];
-  }
+  //   return urls[0];
+  // }
 
   splitLeafUrl(url: string): string[] {
     const trimmedUrl = url.replace(/^\/|\/$/g, '');
