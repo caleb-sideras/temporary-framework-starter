@@ -18,7 +18,25 @@ templ IndexTempl() {
  				href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
 			/>
 		</head>
-		<body class="dark">
+		<body>
+			<script>
+				const colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+				function handleColorSchemeChange(e) {
+				  if (e.matches) {
+				    document.body.classList.add('dark'); 
+				  } else {
+				    document.body.classList.remove('dark');
+				  }
+				}
+
+				colorSchemeQuery.addListener(handleColorSchemeChange);
+
+				// Initial setting
+				if (colorSchemeQuery.matches) {
+				  document.body.classList.add('dark');
+				}
+			</script>
 			<header>
 				<t-mobile-top-app-bar>
 					<md-icon slot="navigationIcon" class="material-symbols-filled">menu</md-icon>
@@ -39,16 +57,16 @@ templ IndexTempl() {
 							Home
 							<md-icon slot="start" class="material-symbols-filled">crop_square</md-icon>
 						</temporary-list-item>
-						<temporary-list-item interactive type="button" href="/projects" regex={`^/?\/projects(\/?|\/.*)?$`}>
+						<temporary-list-item interactive type="button" href="/projects" regex={ `^/?\/projects(\/?|\/.*)?$` }>
 							Projects
 							<md-icon slot="start" class="material-symbols-filled">code_blocks</md-icon>
 							<md-icon slot="end" class="material-symbols-filled">arrow_forward</md-icon>
 						</temporary-list-item>
-						<temporary-list-item interactive type="button" href="/experience" regex={`^/?\/experience(\/?|\/.*)?$`} hx-get="/experience" hx-target="main" hx-push-url="true">
+						<temporary-list-item interactive type="button" href="/experience" regex={ `^/?\/experience(\/?|\/.*)?$` } hx-get="/experience" hx-target="main" hx-push-url="true">
 							Experience
 							<md-icon slot="start" class="material-symbols-filled">developer_guide</md-icon>
 						</temporary-list-item>
-						<temporary-list-item interactive type="button" href="/blog" hx-get="/blog" regex={`^/?\/blog(\/?|\/.*)?$`} hx-target="main" hx-push-url="true">
+						<temporary-list-item interactive type="button" href="/blog" hx-get="/blog" regex={ `^/?\/blog(\/?|\/.*)?$` } hx-target="main" hx-push-url="true">
 							Blog
 							<md-icon slot="start" class="material-symbols-filled">article</md-icon>
 						</temporary-list-item>
@@ -108,15 +126,15 @@ templ IndexTempl() {
 							Home
 							<md-icon slot="start" class="material-symbols-filled">crop_square</md-icon>
 						</temporary-list-item>
-						<temporary-list-item interactive type="button" href="/projects" regex={`^/?\/projects(\/?|\/.*)?$`} hx-get="/projects" hx-target="main" hx-push-url="true">
+						<temporary-list-item interactive type="button" href="/projects" regex={ `^/?\/projects(\/?|\/.*)?$` } hx-get="/projects" hx-target="main" hx-push-url="true">
 							Projects
 							<md-icon slot="start" class="material-symbols-filled">code_blocks</md-icon>
 						</temporary-list-item>
-						<temporary-list-item interactive type="button" href="/experience" regex={`^/?\/experience(\/?|\/.*)?$`} hx-get="/experience" hx-target="main" hx-push-url="true">
+						<temporary-list-item interactive type="button" href="/experience" regex={ `^/?\/experience(\/?|\/.*)?$` } hx-get="/experience" hx-target="main" hx-push-url="true">
 							Experience
 							<md-icon slot="start" class="material-symbols-filled">developer_guide</md-icon>
 						</temporary-list-item>
-						<temporary-list-item interactive type="button" href="/blog" regex={`^/?\/blog(\/?|\/.*)?$`} hx-get="/blog" hx-target="main" hx-push-url="true">
+						<temporary-list-item interactive type="button" href="/blog" regex={ `^/?\/blog(\/?|\/.*)?$` } hx-get="/blog" hx-target="main" hx-push-url="true">
 							Blog
 							<md-icon slot="start" class="material-symbols-filled">article</md-icon>
 						</temporary-list-item>

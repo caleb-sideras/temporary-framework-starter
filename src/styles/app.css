@@ -510,8 +510,8 @@ h1 {
 #markdown code {
   text-shadow: none !important;
   text-wrap: balance;
-  background-color: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
+  background-color: var(--md-sys-color-secondary);
+  color: var(--md-sys-color-on-primary-80);
   padding-left: 0.25rem;
   padding-right: 0.25rem;
   word-wrap: break-word;
@@ -524,8 +524,8 @@ h1 {
   border-style: solid;
   border-width: 1px;
   **/
-  background-color: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
+  background-color: var(--md-sys-color-secondary);
+  color: var(--md-sys-color-on-primary-80);
   padding: 16px;
 }
 
