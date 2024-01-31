@@ -416,7 +416,6 @@ h1 {
   font-size: 5.25rem;
   line-height: 5.75rem;
   font-weight: 500;
-  text-align: center;
   margin: 0px;
 }
 
@@ -491,6 +490,11 @@ h1 {
   font-weight: 300;
   margin-bottom: 40px;
   margin-top: 0px;
+  color: var(--md-sys-color-on-primary-80);
+}
+
+#markdown li {
+  font-size: 1rem;
 }
 
 #markdown li a {
