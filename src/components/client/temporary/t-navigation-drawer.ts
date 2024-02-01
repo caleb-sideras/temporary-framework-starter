@@ -17,6 +17,7 @@ export class TNavigationDrawer extends TNavigationContainer {
   static override styles = [
     css`
       :host{
+        overflow-y: auto;
         --md-list-container-color: var(--t-navigation-drawer-container-color, var(--md-sys-color-primary, #ffffff)) !important;
       }
     `,

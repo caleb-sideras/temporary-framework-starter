@@ -637,7 +637,7 @@ func IndexTempl() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/pages/static-rendering\" hx-get=\"/docs/pages/static-rendering\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/pages/static-pages\" hx-get=\"/docs/pages/static-pages\" hx-target=\"main\" hx-push-url=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -673,7 +673,7 @@ func IndexTempl() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></t-dropdown-title> <t-dropdown-list slot=\"content\"><t-dropdown-list-item interactive border type=\"text\" href=\"/projects/caas/segmentation\" hx-get=\"/projects/caas/segmentation\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></t-dropdown-title> <t-dropdown-list slot=\"content\"><t-dropdown-list-item interactive border type=\"text\" href=\"/docs/index\" hx-get=\"/docs/index\" hx-target=\"main\" hx-push-url=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -682,39 +682,12 @@ func IndexTempl() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/projects/caas/segmentation\" hx-get=\"/projects/caas/segmentation\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/index/templ\" hx-get=\"/docs/index/templ\" hx-target=\"main\" hx-push-url=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var68 := `Data Fetching`
+		templ_7745c5c3_Var68 := `Templ`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var68)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/projects/caas/cluster\" hx-get=\"/projects/caas/cluster\" hx-target=\"main\" hx-push-url=\"true\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Var69 := `Templ`
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var69)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/projects/caas/processor\" hx-get=\"/projects/caas/processor\" hx-target=\"main\" hx-push-url=\"true\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Var70 := `Static Rendering`
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var70)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/projects/caas/processor\" hx-get=\"/projects/caas/processor\" hx-target=\"main\" hx-push-url=\"true\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Var71 := `Suspense`
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var71)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
