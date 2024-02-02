@@ -37,6 +37,10 @@ export class THeader extends LitElement {
   @property({ type: String, attribute: 'href' }) href = '';
   @property({ type: String, attribute: 'heading' }) heading = ''
 
+  /** 
+  * TODO
+  * Add a check to see if href is passed in. if not just render a div
+  **/
   render() {
     return html`
 		<a href=${this.href}>

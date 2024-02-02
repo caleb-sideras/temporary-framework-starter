@@ -38,188 +38,8 @@ templ IndexTempl() {
 				}
 			</script>
 			<header>
-				<t-mobile-top-app-bar>
-					<md-icon slot="navigationIcon" class="material-symbols-filled">menu</md-icon>
-				</t-mobile-top-app-bar>
-				<t-mobile-navigation>
-					<div slot="footer">
-						<temporary-list-item interactive type="link" href="https://github.com/caleb-sideras/">
-							github
-							<md-icon slot="end" class="material-symbols-filled-light">north_east</md-icon>
-						</temporary-list-item>
-						<temporary-list-item interactive type="link" href="https://www.linkedin.com/in/caleb-james-sideras-9555b0196/">
-							linkedin
-							<md-icon slot="end" class="material-symbols-filled-eeight">north_east</md-icon>
-						</temporary-list-item>
-					</div>
-					<t-mobile-navigation-rail slot="rail">
-						<temporary-list-item interactive type="button" href="/" regex="^/?$" hx-get="/" hx-target="main" hx-push-url="true">
-							Home
-							<md-icon slot="start" class="material-symbols-filled">crop_square</md-icon>
-						</temporary-list-item>
-						<temporary-list-item interactive type="button" href="/examples" regex={ `^/?\/examples(\/?|\/.*)?$` }>
-							Examples
-							<md-icon slot="start" class="material-symbols-filled">code_blocks</md-icon>
-							<md-icon slot="end" class="material-symbols-filled">arrow_forward</md-icon>
-						</temporary-list-item>
-						<temporary-list-item interactive type="button" href="/docs" regex={ `^/?\/docs(\/?|\/.*)?$` }>
-							Docs
-							<md-icon slot="start" class="material-symbols-filled">developer_guide</md-icon>
-						</temporary-list-item>
-						<temporary-list-item interactive type="button" href="/blog" hx-get="/blog" regex={ `^/?\/blog(\/?|\/.*)?$` } hx-target="main" hx-push-url="true">
-							Blog
-							<md-icon slot="start" class="material-symbols-filled">article</md-icon>
-						</temporary-list-item>
-					</t-mobile-navigation-rail>
-					<t-mobile-navigation-drawer slot="drawer">
-						<temporary-list-item interactive border type="button" href="/examples" hx-get="/examples" hx-target="main" hx-push-url="true">
-							Examples Overview
-						</temporary-list-item>
-						<temporary-list-item interactive border type="button" href="/projects/musicgpt" hx-get="/projects/musicgpt" hx-target="main" hx-push-url="true">
-							Todo
-						</temporary-list-item>
-						<temporary-list-item interactive border type="button" href="/projects/gox-framework" hx-get="/projects/gox-framework" hx-target="main" hx-push-url="true">
-							Data Fetching
-						</temporary-list-item>
-						<t-dropdown>
-							<t-dropdown-title border hide-event slot="title">
-								<div slot="headline">CAAS</div>
-								<md-icon slot="active">arrow_drop_up</md-icon>
-								<md-icon slot="inactive">arrow_drop_down</md-icon>
-							</t-dropdown-title>
-							<t-dropdown-list slot="content">
-								<t-dropdown-list-item interactive border type="text" href="/projects/caas" hx-get="/projects/caas" hx-target="main" hx-push-url="true">
-									Overview
-								</t-dropdown-list-item>
-								<t-dropdown-list-item interactive border type="text" href="/projects/caas/segmentation" hx-get="/projects/caas/segmentation" hx-target="main" hx-push-url="true">
-									Segmentation
-								</t-dropdown-list-item>
-								<t-dropdown-list-item interactive border type="text" href="/projects/caas/cluster" hx-get="/projects/caas/cluster" hx-target="main" hx-push-url="true">
-									Cluster
-								</t-dropdown-list-item>
-								<t-dropdown-list-item interactive border type="text" href="/projects/caas/processor" hx-get="/projects/caas/processor" hx-target="main" hx-push-url="true">
-									Processor
-								</t-dropdown-list-item>
-							</t-dropdown-list>
-						</t-dropdown>
-						<temporary-list-item interactive border type="button" href="/projects/tweetailyze" hx-get="/projects/tweetailyze" hx-target="main" hx-push-url="true">
-							TweetAIlyze
-						</temporary-list-item>
-						<temporary-list-item interactive border type="button" href="/projects/peoplepedia" hx-get="/projects/peoplepedia" hx-target="main" hx-push-url="true">
-							PeoplePedia
-						</temporary-list-item>
-					</t-mobile-navigation-drawer>
-				</t-mobile-navigation>
-
-				<t-navigation>
-
-					<div slot="footer">
-						<temporary-list-item interactive type="link" href="https://github.com/caleb-sideras/">
-							github
-							<md-icon slot="end" class="material-symbols-filled-light">north_east</md-icon>
-						</temporary-list-item>
-						<temporary-list-item interactive type="link" href="https://www.linkedin.com/in/caleb-james-sideras-9555b0196/">
-							linkedin
-							<md-icon slot="end" class="material-symbols-filled-light">north_east</md-icon>
-						</temporary-list-item>
-					</div>
-
-					<t-navigation-rail slot="rail">
-						<temporary-list-item interactive type="button" href="/" regex="^/?$" hx-get="/" hx-target="main" hx-push-url="true">
-							Home
-							<md-icon slot="start" class="material-symbols-filled">crop_square</md-icon>
-						</temporary-list-item>
-						<temporary-list-item interactive type="button" href="/examples" regex={ `^/?\/examples(\/?|\/.*)?$` } hx-get="/examples" hx-target="main" hx-push-url="true">
-							Examples
-							<md-icon slot="start" class="material-symbols-filled">code_blocks</md-icon>
-						</temporary-list-item>
-						<temporary-list-item interactive type="button" href="/docs" regex={ `^/?\/docs(\/?|\/.*)?$` } hx-get="/docs" hx-target="main" hx-push-url="true">
-							Docs
-							<md-icon slot="start" class="material-symbols-filled">developer_guide</md-icon>
-						</temporary-list-item>
-						<temporary-list-item interactive type="button" href="/blog" regex={ `^/?\/blog(\/?|\/.*)?$` } hx-get="/blog" hx-target="main" hx-push-url="true">
-							Blog
-							<md-icon slot="start" class="material-symbols-filled">article</md-icon>
-						</temporary-list-item>
-					</t-navigation-rail>
-					<t-navigation-drawer slot="drawer">
-						<temporary-list-item interactive border type="button" href="/docs" hx-get="/docs" hx-target="main" hx-push-url="true">
-							Introduction
-						</temporary-list-item>
-						<temporary-list-item interactive border type="button" href="/docs/installation" hx-get="/docs/installation" hx-target="main" hx-push-url="true">
-							Installation
-						</temporary-list-item>
-						<temporary-list-item interactive border type="button" href="/docs/project-structure" hx-get="/docs/project-structure" hx-target="main" hx-push-url="true">
-							Project Structure
-						</temporary-list-item>
-						<t-dropdown>
-							<t-dropdown-title border hide-event slot="title">
-								<div slot="headline">Routing</div>
-								<md-icon slot="active">arrow_drop_up</md-icon>
-								<md-icon slot="inactive">arrow_drop_down</md-icon>
-							</t-dropdown-title>
-							<t-dropdown-list slot="content">
-								<t-dropdown-list-item interactive border type="text" href="/docs/routing" hx-get="/docs/routing" hx-target="main" hx-push-url="true">
-									Fundamentals
-								</t-dropdown-list-item>
-								<t-dropdown-list-item interactive border type="text" href="/docs/routing/defining-routes" hx-get="/docs/routing/defining-routes" hx-target="main" hx-push-url="true">
-									Defining Routes
-								</t-dropdown-list-item>
-								<t-dropdown-list-item interactive border type="text" href="/docs/routing/pages-and-index" hx-get="/docs/routing/pages-and-index" hx-target="main" hx-push-url="true">
-									Pages and Index
-								</t-dropdown-list-item>
-								<t-dropdown-list-item interactive border type="text" href="/docs/routing/hx-boost" hx-get="/docs/routing/hx-boost" hx-target="main" hx-push-url="true">
-									hx-boost
-								</t-dropdown-list-item>
-								<t-dropdown-list-item interactive border type="text" href="/docs/routing/static-pages-and-routes" hx-get="/docs/routing/static-pages-and-routes" hx-target="main" hx-push-url="true">
-									Static Pages
-								</t-dropdown-list-item>
-								<t-dropdown-list-item interactive border type="text" href="/docs/routing/caching" hx-get="/docs/routing/caching" hx-target="main" hx-push-url="true">
-									Caching
-								</t-dropdown-list-item>
-								<t-dropdown-list-item interactive border type="text" href="/docs/routing/dynamic-routes" hx-get="/docs/routing/dynamic-routes" hx-target="main" hx-push-url="true">
-									Dynamic Routes
-								</t-dropdown-list-item>
-								<t-dropdown-list-item interactive border type="text" href="/docs/routing/suspense" hx-get="/docs/routing/suspense" hx-target="main" hx-push-url="true">
-									Suspense
-								</t-dropdown-list-item>
-							</t-dropdown-list>
-						</t-dropdown>
-						<t-dropdown>
-							<t-dropdown-title border hide-event slot="title">
-								<div slot="headline">Pages</div>
-								<md-icon slot="active">arrow_drop_up</md-icon>
-								<md-icon slot="inactive">arrow_drop_down</md-icon>
-							</t-dropdown-title>
-							<t-dropdown-list slot="content">
-								<t-dropdown-list-item interactive border type="text" href="/docs/pages" hx-get="/docs/pages" hx-target="main" hx-push-url="true">
-									Definition
-								</t-dropdown-list-item>
-								<t-dropdown-list-item interactive border type="text" href="/docs/pages/templ" hx-get="/docs/pages/templ" hx-target="main" hx-push-url="true">
-									Templ
-								</t-dropdown-list-item>
-								<t-dropdown-list-item interactive border type="text" href="/docs/pages/static-pages" hx-get="/docs/pages/static-pages" hx-target="main" hx-push-url="true">
-									Static Rendering
-								</t-dropdown-list-item>
-							</t-dropdown-list>
-						</t-dropdown>
-						<t-dropdown>
-							<t-dropdown-title border hide-event slot="title">
-								<div slot="headline">Index</div>
-								<md-icon slot="active">arrow_drop_up</md-icon>
-								<md-icon slot="inactive">arrow_drop_down</md-icon>
-							</t-dropdown-title>
-							<t-dropdown-list slot="content">
-								<t-dropdown-list-item interactive border type="text" href="/docs/index" hx-get="/docs/index" hx-target="main" hx-push-url="true">
-									Definition
-								</t-dropdown-list-item>
-								<t-dropdown-list-item interactive border type="text" href="/docs/index/templ" hx-get="/docs/index/templ" hx-target="main" hx-push-url="true">
-									Templ
-								</t-dropdown-list-item>
-							</t-dropdown-list>
-						</t-dropdown>
-					</t-navigation-drawer>
-				</t-navigation>
+				@MobileNavigation()
+				@Navigation()
 			</header>
 			<div class="main_container">
 				<main>
@@ -228,4 +48,201 @@ templ IndexTempl() {
 			</div>
 		</body>
 	</html>
+}
+
+templ Navigation() {
+	<t-navigation>
+		<div slot="footer">
+			<temporary-list-item interactive type="link" href="https://github.com/caleb-sideras/">
+				github
+				<md-icon slot="end" class="material-symbols-filled-light">north_east</md-icon>
+			</temporary-list-item>
+			<temporary-list-item interactive type="link" href="https://www.linkedin.com/in/caleb-james-sideras-9555b0196/">
+				linkedin
+				<md-icon slot="end" class="material-symbols-filled-light">north_east</md-icon>
+			</temporary-list-item>
+		</div>
+		<t-navigation-rail slot="rail">
+			<temporary-list-item interactive type="button" href="/" regex="^/?$" hx-get="/" hx-target="main" hx-push-url="true">
+				Home
+				<md-icon slot="start" class="material-symbols-filled">crop_square</md-icon>
+			</temporary-list-item>
+			<temporary-list-item interactive type="button" href="/examples/todo" regex={ `^/?\/examples(\/?|\/.*)?$` } hx-get="/examples/todo" hx-target="main" hx-push-url="true">
+				Examples
+				<md-icon slot="start" class="material-symbols-filled">code_blocks</md-icon>
+			</temporary-list-item>
+			<temporary-list-item interactive type="button" href="/docs" regex={ `^/?\/docs(\/?|\/.*)?$` } hx-get="/docs" hx-target="main" hx-push-url="true">
+				Docs
+				<md-icon slot="start" class="material-symbols-filled">developer_guide</md-icon>
+			</temporary-list-item>
+			<temporary-list-item interactive type="button" href="/blog" regex={ `^/?\/blog(\/?|\/.*)?$` } hx-get="/blog" hx-target="main" hx-push-url="true">
+				Blog
+				<md-icon slot="start" class="material-symbols-filled">article</md-icon>
+			</temporary-list-item>
+		</t-navigation-rail>
+		<t-navigation-drawer slot="drawer">
+			<temporary-list-item interactive border type="button" href="/docs" hx-get="/docs" hx-target="main" hx-push-url="true">
+				Introduction
+			</temporary-list-item>
+			<temporary-list-item interactive border type="button" href="/docs/installation" hx-get="/docs/installation" hx-target="main" hx-push-url="true">
+				Installation
+			</temporary-list-item>
+			<temporary-list-item interactive border type="button" href="/docs/project-structure" hx-get="/docs/project-structure" hx-target="main" hx-push-url="true">
+				Project Structure
+			</temporary-list-item>
+			<t-dropdown>
+				<t-dropdown-title border hide-event slot="title">
+					<div slot="headline">Routing</div>
+					<md-icon slot="active">arrow_drop_up</md-icon>
+					<md-icon slot="inactive">arrow_drop_down</md-icon>
+				</t-dropdown-title>
+				<t-dropdown-list slot="content">
+					<t-dropdown-list-item interactive border type="text" href="/docs/routing" hx-get="/docs/routing" hx-target="main" hx-push-url="true">
+						Fundamentals
+					</t-dropdown-list-item>
+					<t-dropdown-list-item interactive border type="text" href="/docs/routing/defining-routes" hx-get="/docs/routing/defining-routes" hx-target="main" hx-push-url="true">
+						Defining Routes
+					</t-dropdown-list-item>
+					<t-dropdown-list-item interactive border type="text" href="/docs/routing/pages-and-index" hx-get="/docs/routing/pages-and-index" hx-target="main" hx-push-url="true">
+						Pages and Index
+					</t-dropdown-list-item>
+					<t-dropdown-list-item interactive border type="text" href="/docs/routing/hx-boost" hx-get="/docs/routing/hx-boost" hx-target="main" hx-push-url="true">
+						hx-boost
+					</t-dropdown-list-item>
+					<t-dropdown-list-item interactive border type="text" href="/docs/routing/static-pages-and-routes" hx-get="/docs/routing/static-pages-and-routes" hx-target="main" hx-push-url="true">
+						Static Pages
+					</t-dropdown-list-item>
+					<t-dropdown-list-item interactive border type="text" href="/docs/routing/caching" hx-get="/docs/routing/caching" hx-target="main" hx-push-url="true">
+						Caching
+					</t-dropdown-list-item>
+					<t-dropdown-list-item interactive border type="text" href="/docs/routing/dynamic-routes" hx-get="/docs/routing/dynamic-routes" hx-target="main" hx-push-url="true">
+						Dynamic Routes
+					</t-dropdown-list-item>
+					<t-dropdown-list-item interactive border type="text" href="/docs/routing/suspense" hx-get="/docs/routing/suspense" hx-target="main" hx-push-url="true">
+						Suspense
+					</t-dropdown-list-item>
+				</t-dropdown-list>
+			</t-dropdown>
+			<t-dropdown>
+				<t-dropdown-title border hide-event slot="title">
+					<div slot="headline">Pages</div>
+					<md-icon slot="active">arrow_drop_up</md-icon>
+					<md-icon slot="inactive">arrow_drop_down</md-icon>
+				</t-dropdown-title>
+				<t-dropdown-list slot="content">
+					<t-dropdown-list-item interactive border type="text" href="/docs/pages" hx-get="/docs/pages" hx-target="main" hx-push-url="true">
+						Definition
+					</t-dropdown-list-item>
+					<t-dropdown-list-item interactive border type="text" href="/docs/pages/templ" hx-get="/docs/pages/templ" hx-target="main" hx-push-url="true">
+						Templ
+					</t-dropdown-list-item>
+					<t-dropdown-list-item interactive border type="text" href="/docs/pages/static-pages" hx-get="/docs/pages/static-pages" hx-target="main" hx-push-url="true">
+						Static Rendering
+					</t-dropdown-list-item>
+				</t-dropdown-list>
+			</t-dropdown>
+			<t-dropdown>
+				<t-dropdown-title border hide-event slot="title">
+					<div slot="headline">Index</div>
+					<md-icon slot="active">arrow_drop_up</md-icon>
+					<md-icon slot="inactive">arrow_drop_down</md-icon>
+				</t-dropdown-title>
+				<t-dropdown-list slot="content">
+					<t-dropdown-list-item interactive border type="text" href="/docs/index" hx-get="/docs/index" hx-target="main" hx-push-url="true">
+						Definition
+					</t-dropdown-list-item>
+					<t-dropdown-list-item interactive border type="text" href="/docs/index/templ" hx-get="/docs/index/templ" hx-target="main" hx-push-url="true">
+						Templ
+					</t-dropdown-list-item>
+				</t-dropdown-list>
+			</t-dropdown>
+		</t-navigation-drawer>
+		<t-navigation-drawer slot="drawer">
+			<temporary-list-item interactive border type="button" href="/examples/todo" hx-get="/examples/todo" hx-target="main" hx-push-url="true">
+				Todo
+			</temporary-list-item>
+			<temporary-list-item interactive border type="button" href="/examples/suspense" hx-get="/examples/suspense" hx-target="main" hx-push-url="true">
+				Suspense
+			</temporary-list-item>
+		</t-navigation-drawer>
+	</t-navigation>
+}
+
+templ MobileNavigation() {
+	@MobileAppBar()
+	<t-mobile-navigation>
+		<div slot="footer">
+			<temporary-list-item interactive type="link" href="https://github.com/caleb-sideras/">
+				github
+				<md-icon slot="end" class="material-symbols-filled-light">north_east</md-icon>
+			</temporary-list-item>
+			<temporary-list-item interactive type="link" href="https://www.linkedin.com/in/caleb-james-sideras-9555b0196/">
+				linkedin
+				<md-icon slot="end" class="material-symbols-filled-eeight">north_east</md-icon>
+			</temporary-list-item>
+		</div>
+		<t-mobile-navigation-rail slot="rail">
+			<temporary-list-item interactive type="button" href="/" regex="^/?$" hx-get="/" hx-target="main" hx-push-url="true">
+				Home
+				<md-icon slot="start" class="material-symbols-filled">crop_square</md-icon>
+			</temporary-list-item>
+			<temporary-list-item interactive type="button" href="/examples" regex={ `^/?\/examples(\/?|\/.*)?$` }>
+				Examples
+				<md-icon slot="start" class="material-symbols-filled">code_blocks</md-icon>
+				<md-icon slot="end" class="material-symbols-filled">arrow_forward</md-icon>
+			</temporary-list-item>
+			<temporary-list-item interactive type="button" href="/docs" regex={ `^/?\/docs(\/?|\/.*)?$` }>
+				Docs
+				<md-icon slot="start" class="material-symbols-filled">developer_guide</md-icon>
+			</temporary-list-item>
+			<temporary-list-item interactive type="button" href="/blog" hx-get="/blog" regex={ `^/?\/blog(\/?|\/.*)?$` } hx-target="main" hx-push-url="true">
+				Blog
+				<md-icon slot="start" class="material-symbols-filled">article</md-icon>
+			</temporary-list-item>
+		</t-mobile-navigation-rail>
+		<t-mobile-navigation-drawer slot="drawer">
+			<temporary-list-item interactive border type="button" href="/examples" hx-get="/examples" hx-target="main" hx-push-url="true">
+				Examples Overview
+			</temporary-list-item>
+			<temporary-list-item interactive border type="button" href="/projects/musicgpt" hx-get="/projects/musicgpt" hx-target="main" hx-push-url="true">
+				Todo
+			</temporary-list-item>
+			<temporary-list-item interactive border type="button" href="/projects/gox-framework" hx-get="/projects/gox-framework" hx-target="main" hx-push-url="true">
+				Data Fetching
+			</temporary-list-item>
+			<t-dropdown>
+				<t-dropdown-title border hide-event slot="title">
+					<div slot="headline">CAAS</div>
+					<md-icon slot="active">arrow_drop_up</md-icon>
+					<md-icon slot="inactive">arrow_drop_down</md-icon>
+				</t-dropdown-title>
+				<t-dropdown-list slot="content">
+					<t-dropdown-list-item interactive border type="text" href="/projects/caas" hx-get="/projects/caas" hx-target="main" hx-push-url="true">
+						Overview
+					</t-dropdown-list-item>
+					<t-dropdown-list-item interactive border type="text" href="/projects/caas/segmentation" hx-get="/projects/caas/segmentation" hx-target="main" hx-push-url="true">
+						Segmentation
+					</t-dropdown-list-item>
+					<t-dropdown-list-item interactive border type="text" href="/projects/caas/cluster" hx-get="/projects/caas/cluster" hx-target="main" hx-push-url="true">
+						Cluster
+					</t-dropdown-list-item>
+					<t-dropdown-list-item interactive border type="text" href="/projects/caas/processor" hx-get="/projects/caas/processor" hx-target="main" hx-push-url="true">
+						Processor
+					</t-dropdown-list-item>
+				</t-dropdown-list>
+			</t-dropdown>
+			<temporary-list-item interactive border type="button" href="/projects/tweetailyze" hx-get="/projects/tweetailyze" hx-target="main" hx-push-url="true">
+				TweetAIlyze
+			</temporary-list-item>
+			<temporary-list-item interactive border type="button" href="/projects/peoplepedia" hx-get="/projects/peoplepedia" hx-target="main" hx-push-url="true">
+				PeoplePedia
+			</temporary-list-item>
+		</t-mobile-navigation-drawer>
+	</t-mobile-navigation>
+}
+
+templ MobileAppBar() {
+	<t-mobile-top-app-bar>
+		<md-icon slot="navigationIcon" class="material-symbols-filled">menu</md-icon>
+	</t-mobile-top-app-bar>
 }
