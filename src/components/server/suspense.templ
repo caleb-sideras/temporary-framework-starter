@@ -1,0 +1,30 @@
+package server
+
+import (
+	"math/rand"
+	"time"
+	t "github.com/caleb-sideras/gox2/temporary"
+	"fmt"
+)
+
+templ Suspense() {
+	@t.Suspense(spinner()) {
+		@randomNumber()
+	}
+}
+
+templ randomNumberTempl(number string) {
+	<h1>{ number }</h1>
+}
+
+func randomNumber() templ.Component {
+
+	randomNumber := rand.Intn(101)
+	time.Sleep(3 * time.Second)
+
+	return randomNumberTempl(fmt.Sprintf("%d", randomNumber))
+}
+
+templ spinner() {
+	<md-circular-progress indeterminate role="presentation" value="0.75"></md-circular-progress>
+}

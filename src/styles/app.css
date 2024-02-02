@@ -185,6 +185,7 @@
 
   --md-circular-progress-size: 32px;
   --md-circular-progress-active-indicator-width: 20;
+  --md-circular-progress-active-indicator-color: var(--md-sys-color-on-secondary);
   /**
   --md-navigation-bar-container-color: var(--md-sys-color-surface-2);
   **/

@@ -1,14 +1,7 @@
 package temporary
 
-
 templ StreamComponent(url string) {
-	<div hx-get={ url } hx-trigger="load" hx-swap="outerHTML" hx-indicator="#spinner">
-	<div id="spinner">		
+	<div hx-get={ url } hx-trigger="load" hx-swap="outerHTML">
 		{ children... }
-		</div>
 	</div>
-}
-
-templ Spinner(){
-	<md-circular-progress value="0.75"></md-circular-progress>
 }
