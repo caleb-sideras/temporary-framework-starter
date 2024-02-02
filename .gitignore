@@ -42,6 +42,7 @@ desktop.ini    # Windows
 *.tmp
 *.bak
 *.cache
+*_templ.go
 
 # Build files
 static/css/o*

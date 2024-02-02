@@ -13,12 +13,12 @@ templ ProjectTab(project ProjectTabType) {
 		<t-header href={ project.ProjectURL } heading={ project.Title }></t-header>
 		<temporary-list>
 			<temporary-list-item interactive type="button" hx-get={ project.ReadMeURL } hx-target="#example-body" active>
-				ReadME.md
-				<md-icon slot="start" class="material-symbols-filled">markdown</md-icon>
+				Example
+				<md-icon slot="start" class="material-symbols-filled">info</md-icon>
 			</temporary-list-item>
 			<temporary-list-item interactive type="button" hx-get={ project.VideoURL } hx-target="#example-body">
-				Videos
-				<md-icon slot="start" class="material-symbols-filled">movie</md-icon>
+				Code
+				<md-icon slot="start" class="material-symbols-filled">code</md-icon>
 			</temporary-list-item>
 		</temporary-list>
 		<div id="example-body" style="display:flex; justify-content: center;">

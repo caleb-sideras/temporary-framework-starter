@@ -222,6 +222,12 @@
   --md-primary-tab-active-indicator-shape: 0px 0px 0px 0px;
   --md-primary-tab-active-indicator-height: 1px;
 
+  --md-outlined-text-field-container-shape-start-start: 0px;
+  --md-outlined-text-field-container-shape-start-end: 0px;
+  --md-outlined-text-field-container-shape-end-end: 0px;
+  --md-outlined-text-field-container-shape-end-start: 0px;
+
+  --md-filled-button-container-shape: 0px;
   /** Custom Components **/
 
   /** T List Item **/
@@ -267,6 +273,7 @@ body {
 
 main {
   max-width: 1240px;
+  width: 100%;
 }
 
 .main_container {
@@ -572,6 +579,64 @@ h1 {
 #markdown ul li {
   position: relative;
   margin-bottom: 16px;
+}
+
+/**
+  * --- Todo Example ---
+**/
+
+.example-body {
+  max-width: 384px;
+  width: 100%;
+  height: 384px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  padding-top: 32px;
+}
+
+.task-form {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.submit-button {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  border: solid;
+  border-width: 1px;
+  border-color: var(--md-sys-color-on-secondary);
+}
+
+.task-list {
+  overflow: auto;
+  flex: 1;
+  background-color: var(--md-sys-color-secondary);
+  color: var(--md-sys-color-on-secondary);
+}
+
+@media (min-width: 640px) {
+  .example-body {
+    width: auto;
+  }
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+}
+
+.list-item-text {
+  margin: auto 0;
 }
 
 /**

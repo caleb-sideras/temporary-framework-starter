@@ -1,10 +1,11 @@
 # DOCS
 
-- Intro ->  Philoshopy behind Temporary
-- Routing Fundamentals -> ```_dir_ , _dir, dir_```, page.go, index.go,
-- Pages -> page.go & templ
-- Index -> index.go & templ
-- GoX Router
+- Examples
+    - TODO
+    - Suspense
+    - static render
+    - pages (body/full)
+    - dynamic route
 - Roadmap
 
 
