@@ -9,7 +9,7 @@ func Page() templ.Component {
 
 	return server.ProjectTab(server.ProjectTabType{
 		Title:       "Static Render",
-		ProjectURL:  "",
+		ProjectURL:  "/docs/routing/static-pages-and-routes",
 		ReadMeURL:   "/examples/static-render/example",
 		VideoURL:    "/examples/static-render/code",
 		InitialBody: Example(),
