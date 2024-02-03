@@ -1,11 +1,7 @@
 # DOCS
 
 - Examples
-    - TODO
-    - Suspense
-    - static render
     - pages (body/full)
-    - dynamic route
 - Roadmap
 
 

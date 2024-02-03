@@ -164,6 +164,12 @@ templ Navigation() {
 			<temporary-list-item interactive border type="button" href="/examples/suspense" hx-get="/examples/suspense" hx-target="main" hx-push-url="true">
 				Suspense
 			</temporary-list-item>
+			<temporary-list-item interactive border type="button" regex={ `^/examples/.*/dynamic-routes$` } href="/examples/_replace-me_/dynamic-routes" hx-get="/examples/_replace-me_/dynamic-routes" hx-target="main" hx-push-url="true">
+				Dynamic Routing
+			</temporary-list-item>
+			<temporary-list-item interactive border type="button" href="/examples/static-render" hx-get="/examples/static-render" hx-target="main" hx-push-url="true">
+				Static Render
+			</temporary-list-item>
 		</t-navigation-drawer>
 	</t-navigation>
 }
