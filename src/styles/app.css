@@ -368,6 +368,7 @@ main {
   flex-basis: 50%;
 }
 
+/**
 .home_heading {
   margin-bottom: 32px;
   font-variation-settings: 'wght' 100, 'wdth' 100, 'opsz' 8;
@@ -376,6 +377,13 @@ main {
   font-family: Roboto Mono, monospace;
   text-align: start;
   font-weight: 500;
+}
+**/
+.home_heading {
+  font-size: clamp(16px, 15vw, 240px);
+  text-align: center;
+  hyphens: auto;
+  word-wrap: break-word;
 }
 
 .home_ipa {
