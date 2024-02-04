@@ -466,6 +466,15 @@ h1 {
   * --- MARKDOWN ---
 **/
 
+@media screen and (max-width: 768px) {
+
+  #markdown h1 {
+    font-size: 3.25rem !important;
+    line-height: 3.75rem !important;
+  }
+
+}
+
 #markdown h1 {
   margin-bottom: 32px;
   font-variation-settings: 'wght' 100, 'wdth' 100, 'opsz' 8;

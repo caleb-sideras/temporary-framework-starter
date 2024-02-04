@@ -37,7 +37,7 @@ However, not all routes require real-time data processing. Some serve consistent
 Below is an example of a route with an extensive build process, such as converting markdown to a Templ component. This route is used for the page you are currently viewing.
 
 ```go
-package docs_routing_staticpagesandroutes
+package home
 
 import (
 	"github.com/a-h/templ"
@@ -46,7 +46,7 @@ import (
 
 func Page_() templ.Component {
 
-	newTempl, err := utils.MdFileToTempl("src/app/docs/_markdown/static_pages_and_routes.md")
+	newTempl, err := utils.MdFileToTempl("path/example.md")
 
 	if err != nil {
 		panic(err)

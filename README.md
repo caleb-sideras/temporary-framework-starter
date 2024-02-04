@@ -1,5 +1,7 @@
 # DOCS
 
+- Home page
+- fix mobile view for docs
 - Examples
     - pages (body/full)
 - Roadmap
