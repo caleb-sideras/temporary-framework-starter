@@ -50,11 +50,11 @@ func IndexTempl() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script><link href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap\" rel=\"stylesheet\"><link href=\"https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css\" rel=\"stylesheet\"><link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200\"></head><body class=\"dark\"><script>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script><link href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap\" rel=\"stylesheet\"><link href=\"https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css\" rel=\"stylesheet\"><link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200\"></head><body class=\"dark\"><!--")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var5 := `
+		templ_7745c5c3_Var5 := ` <script>
 				const colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
 				function handleColorSchemeChange(e) {
@@ -71,12 +71,13 @@ func IndexTempl() templ.Component {
 				if (colorSchemeQuery.matches) {
 				  document.body.classList.add('dark');
 				}
+			</script>
 			`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var5)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script><header>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("--><header>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -156,7 +157,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item></div><t-navigation-rail slot=\"rail\"><temporary-list-item interactive type=\"button\" href=\"/\" regex=\"^/?$\" hx-get=\"/\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item></div><t-navigation-rail slot=\"rail\"><temporary-list-item interactive type=\"link\" href=\"/\" regex=\"^/?$\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -174,7 +175,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item> <temporary-list-item interactive type=\"button\" href=\"/examples/todo\" regex=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item> <temporary-list-item interactive type=\"link\" href=\"/examples/todo\" hx-boost=\"true\" regex=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -182,7 +183,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-get=\"/examples/todo\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -200,7 +201,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item> <temporary-list-item interactive type=\"button\" href=\"/docs\" regex=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item> <temporary-list-item interactive type=\"link\" href=\"/docs\" regex=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -208,7 +209,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-get=\"/docs\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -226,7 +227,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item> <temporary-list-item interactive type=\"button\" href=\"/blog\" regex=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item> <temporary-list-item interactive type=\"link\" href=\"/blog\" regex=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -234,7 +235,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-get=\"/blog\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -252,7 +253,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item></t-navigation-rail> <t-navigation-drawer slot=\"drawer\"><temporary-list-item interactive border type=\"button\" href=\"/docs\" hx-get=\"/docs\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item></t-navigation-rail> <t-navigation-drawer slot=\"drawer\"><temporary-list-item interactive border type=\"link\" href=\"/docs\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -261,7 +262,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"button\" href=\"/docs/installation\" hx-get=\"/docs/installation\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"link\" href=\"/docs/installation\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -270,7 +271,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"button\" href=\"/docs/project-structure\" hx-get=\"/docs/project-structure\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"link\" href=\"/docs/project-structure\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -306,7 +307,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></t-dropdown-title> <t-dropdown-list slot=\"content\"><t-dropdown-list-item interactive border type=\"text\" href=\"/docs/routing\" hx-get=\"/docs/routing\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></t-dropdown-title> <t-dropdown-list slot=\"content\"><t-dropdown-list-item interactive border type=\"link\" href=\"/docs/routing\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -315,7 +316,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/routing/defining-routes\" hx-get=\"/docs/routing/defining-routes\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"link\" href=\"/docs/routing/defining-routes\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -324,7 +325,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/routing/pages-and-index\" hx-get=\"/docs/routing/pages-and-index\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"link\" href=\"/docs/routing/pages-and-index\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -333,7 +334,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/routing/hx-boost\" hx-get=\"/docs/routing/hx-boost\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"link\" href=\"/docs/routing/hx-boost\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -342,7 +343,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/routing/static-pages-and-routes\" hx-get=\"/docs/routing/static-pages-and-routes\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"link\" href=\"/docs/routing/static-pages-and-routes\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -351,7 +352,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/routing/caching\" hx-get=\"/docs/routing/caching\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"link\" href=\"/docs/routing/caching\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -360,7 +361,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/routing/dynamic-routes\" hx-get=\"/docs/routing/dynamic-routes\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"link\" href=\"/docs/routing/dynamic-routes\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -369,7 +370,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/routing/suspense\" hx-get=\"/docs/routing/suspense\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"link\" href=\"/docs/routing/suspense\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -405,7 +406,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></t-dropdown-title> <t-dropdown-list slot=\"content\"><t-dropdown-list-item interactive border type=\"text\" href=\"/docs/pages\" hx-get=\"/docs/pages\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></t-dropdown-title> <t-dropdown-list slot=\"content\"><t-dropdown-list-item interactive border type=\"link\" href=\"/docs/pages\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -414,7 +415,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/pages/templ\" hx-get=\"/docs/pages/templ\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"link\" href=\"/docs/pages/templ\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -423,7 +424,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/pages/static-pages\" hx-get=\"/docs/pages/static-pages\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"link\" href=\"/docs/pages/static-pages\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -459,7 +460,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></t-dropdown-title> <t-dropdown-list slot=\"content\"><t-dropdown-list-item interactive border type=\"text\" href=\"/docs/index\" hx-get=\"/docs/index\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></t-dropdown-title> <t-dropdown-list slot=\"content\"><t-dropdown-list-item interactive border type=\"link\" href=\"/docs/index\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -468,7 +469,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/index/templ\" hx-get=\"/docs/index/templ\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"link\" href=\"/docs/index/templ\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -477,7 +478,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item></t-dropdown-list></t-dropdown></t-navigation-drawer> <t-navigation-drawer slot=\"drawer\"><temporary-list-item interactive border type=\"button\" href=\"/examples/todo\" hx-get=\"/examples/todo\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item></t-dropdown-list></t-dropdown></t-navigation-drawer> <t-navigation-drawer slot=\"drawer\"><temporary-list-item interactive border type=\"link\" href=\"/examples/todo\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -486,7 +487,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"button\" href=\"/examples/suspense\" hx-get=\"/examples/suspense\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"link\" href=\"/examples/suspense\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -495,7 +496,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"button\" regex=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"link\" regex=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -503,7 +504,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" href=\"/examples/_replace-me_/dynamic-routes\" hx-get=\"/examples/_replace-me_/dynamic-routes\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" href=\"/examples/_replace-me_/dynamic-routes\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -512,7 +513,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"button\" href=\"/examples/static-render\" hx-get=\"/examples/static-render\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"link\" href=\"/examples/static-render\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -549,7 +550,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<t-mobile-navigation><t-mobile-navigation-rail slot=\"rail\"><temporary-list-item interactive type=\"button\" href=\"/\" regex=\"^/?$\" hx-get=\"/\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<t-mobile-navigation><t-mobile-navigation-rail slot=\"rail\"><temporary-list-item interactive type=\"link\" href=\"/\" regex=\"^/?$\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -637,7 +638,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item> <temporary-list-item interactive type=\"button\" href=\"/blog\" hx-get=\"/blog\" regex=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item> <temporary-list-item interactive type=\"link\" href=\"/blog\" regex=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -645,7 +646,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -663,7 +664,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item></t-mobile-navigation-rail> <t-mobile-navigation-drawer slot=\"drawer\"><temporary-list-item interactive border type=\"button\" href=\"/docs\" hx-get=\"/docs\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item></t-mobile-navigation-rail> <t-mobile-navigation-drawer slot=\"drawer\"><temporary-list-item interactive border type=\"link\" href=\"/docs\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -672,7 +673,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"button\" href=\"/docs/installation\" hx-get=\"/docs/installation\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"link\" href=\"/docs/installation\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -681,7 +682,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"button\" href=\"/docs/project-structure\" hx-get=\"/docs/project-structure\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"link\" href=\"/docs/project-structure\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -717,7 +718,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></t-dropdown-title> <t-dropdown-list slot=\"content\"><t-dropdown-list-item interactive border type=\"text\" href=\"/docs/routing\" hx-get=\"/docs/routing\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></t-dropdown-title> <t-dropdown-list slot=\"content\"><t-dropdown-list-item interactive border type=\"link\" href=\"/docs/routing\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -726,7 +727,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/routing/defining-routes\" hx-get=\"/docs/routing/defining-routes\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"link\" href=\"/docs/routing/defining-routes\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -735,7 +736,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/routing/pages-and-index\" hx-get=\"/docs/routing/pages-and-index\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"link\" href=\"/docs/routing/pages-and-index\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -744,7 +745,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/routing/hx-boost\" hx-get=\"/docs/routing/hx-boost\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"link\" href=\"/docs/routing/hx-boost\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -753,7 +754,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/routing/static-pages-and-routes\" hx-get=\"/docs/routing/static-pages-and-routes\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"link\" href=\"/docs/routing/static-pages-and-routes\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -762,7 +763,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/routing/caching\" hx-get=\"/docs/routing/caching\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"link\" href=\"/docs/routing/caching\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -771,7 +772,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/routing/dynamic-routes\" hx-get=\"/docs/routing/dynamic-routes\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"link\" href=\"/docs/routing/dynamic-routes\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -780,7 +781,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/routing/suspense\" hx-get=\"/docs/routing/suspense\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"link\" href=\"/docs/routing/suspense\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -816,7 +817,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></t-dropdown-title> <t-dropdown-list slot=\"content\"><t-dropdown-list-item interactive border type=\"text\" href=\"/docs/pages\" hx-get=\"/docs/pages\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></t-dropdown-title> <t-dropdown-list slot=\"content\"><t-dropdown-list-item interactive border type=\"link\" href=\"/docs/pages\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -825,7 +826,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/pages/templ\" hx-get=\"/docs/pages/templ\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"link\" href=\"/docs/pages/templ\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -834,7 +835,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/pages/static-pages\" hx-get=\"/docs/pages/static-pages\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"link\" href=\"/docs/pages/static-pages\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -870,7 +871,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></t-dropdown-title> <t-dropdown-list slot=\"content\"><t-dropdown-list-item interactive border type=\"text\" href=\"/docs/index\" hx-get=\"/docs/index\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></t-dropdown-title> <t-dropdown-list slot=\"content\"><t-dropdown-list-item interactive border type=\"link\" href=\"/docs/index\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -879,7 +880,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"text\" href=\"/docs/index/templ\" hx-get=\"/docs/index/templ\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item> <t-dropdown-list-item interactive border type=\"link\" href=\"/docs/index/templ\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -888,7 +889,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item></t-dropdown-list></t-dropdown></t-mobile-navigation-drawer> <t-mobile-navigation-drawer slot=\"drawer\"><temporary-list-item interactive border type=\"button\" href=\"/examples/todo\" hx-get=\"/examples/todo\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</t-dropdown-list-item></t-dropdown-list></t-dropdown></t-mobile-navigation-drawer> <t-mobile-navigation-drawer slot=\"drawer\"><temporary-list-item interactive border type=\"link\" href=\"/examples/todo\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -897,7 +898,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"button\" href=\"/examples/suspense\" hx-get=\"/examples/suspense\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"link\" href=\"/examples/suspense\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -906,7 +907,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"button\" regex=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"link\" regex=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -914,7 +915,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" href=\"/examples/_replace-me_/dynamic-routes\" hx-get=\"/examples/_replace-me_/dynamic-routes\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" href=\"/examples/_replace-me_/dynamic-routes\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -923,7 +924,7 @@ func MobileNavigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"button\" href=\"/examples/static-render\" hx-get=\"/examples/static-render\" hx-target=\"main\" hx-push-url=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</temporary-list-item> <temporary-list-item interactive border type=\"link\" href=\"/examples/static-render\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

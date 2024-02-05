@@ -10,6 +10,7 @@
 - fix highlighting of focused color
 - add transitions? not sure
 - LOGS
+- Fix htmx issue with setting main opposed to default body for HX-Boost
 
 - REFACTOR 
     - get shadowDOM working

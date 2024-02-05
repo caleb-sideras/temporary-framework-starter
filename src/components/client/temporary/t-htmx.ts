@@ -1,6 +1,3 @@
-// as of now, htmx does not support shadow dom
-// merge https://github.com/bigskysoftware/htmx/pull/2075 !!!
-
 import { nothing, LitElement, html } from 'lit';
 import { property } from 'lit/decorators.js';
 
@@ -20,12 +17,9 @@ export class HTMXElement extends LitElement {
   @property({ type: String, attribute: 'hx-history-elt' }) hxHistoryElt = '';
 
   firstUpdated() {
-    // This is where you tell HTMX to process the shadow root
+    // Change to importing HTMX with this element? As this relies on the global DOM scope
     // @ts-ignore
     htmx.process(this.shadowRoot);
-
-    // @ts-ignore
-    console.log("HTMX", htmx);
   }
 
 
@@ -33,7 +27,7 @@ export class HTMXElement extends LitElement {
     return html`
       <a
         href="${this.href || nothing}"
-        hx-boost="${this.hxBoost}"
+        hx-boost="${this.hxBoost|| nothing}"
       >
         ${content}
       </a>

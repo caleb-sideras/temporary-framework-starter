@@ -19,7 +19,7 @@ templ IndexTempl() {
 			/>
 		</head>
 		<body class="dark">
-			<script>
+			<!-- <script>
 				const colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
 				function handleColorSchemeChange(e) {
@@ -37,6 +37,7 @@ templ IndexTempl() {
 				  document.body.classList.add('dark');
 				}
 			</script>
+			-->
 			<header>
 				@MobileNavigation()
 				@Navigation()
@@ -63,31 +64,31 @@ templ Navigation() {
 			</temporary-list-item>
 		</div>
 		<t-navigation-rail slot="rail">
-			<temporary-list-item interactive type="button" href="/" regex="^/?$" hx-get="/" hx-target="main" hx-push-url="true">
+			<temporary-list-item interactive type="link" href="/" regex="^/?$" hx-boost="true">
 				Home
 				<md-icon slot="start" class="material-symbols-filled">crop_square</md-icon>
 			</temporary-list-item>
-			<temporary-list-item interactive type="button" href="/examples/todo" regex={ `^/?\/examples(\/?|\/.*)?$` } hx-get="/examples/todo" hx-target="main" hx-push-url="true">
+			<temporary-list-item interactive type="link" href="/examples/todo" hx-boost="true" regex={ `^/?\/examples(\/?|\/.*)?$` }>
 				Examples
 				<md-icon slot="start" class="material-symbols-filled">code_blocks</md-icon>
 			</temporary-list-item>
-			<temporary-list-item interactive type="button" href="/docs" regex={ `^/?\/docs(\/?|\/.*)?$` } hx-get="/docs" hx-target="main" hx-push-url="true">
+			<temporary-list-item interactive type="link" href="/docs" regex={ `^/?\/docs(\/?|\/.*)?$` } hx-boost="true">
 				Docs
 				<md-icon slot="start" class="material-symbols-filled">developer_guide</md-icon>
 			</temporary-list-item>
-			<temporary-list-item interactive type="button" href="/blog" regex={ `^/?\/blog(\/?|\/.*)?$` } hx-get="/blog" hx-target="main" hx-push-url="true">
+			<temporary-list-item interactive type="link" href="/blog" regex={ `^/?\/blog(\/?|\/.*)?$` } hx-boost="true">
 				Blog
 				<md-icon slot="start" class="material-symbols-filled">article</md-icon>
 			</temporary-list-item>
 		</t-navigation-rail>
 		<t-navigation-drawer slot="drawer">
-			<temporary-list-item interactive border type="button" href="/docs" hx-get="/docs" hx-target="main" hx-push-url="true">
+			<temporary-list-item interactive border type="link" href="/docs" hx-boost="true">
 				Introduction
 			</temporary-list-item>
-			<temporary-list-item interactive border type="button" href="/docs/installation" hx-get="/docs/installation" hx-target="main" hx-push-url="true">
+			<temporary-list-item interactive border type="link" href="/docs/installation" hx-boost="true">
 				Installation
 			</temporary-list-item>
-			<temporary-list-item interactive border type="button" href="/docs/project-structure" hx-get="/docs/project-structure" hx-target="main" hx-push-url="true">
+			<temporary-list-item interactive border type="link" href="/docs/project-structure" hx-boost="true">
 				Project Structure
 			</temporary-list-item>
 			<t-dropdown>
@@ -97,28 +98,28 @@ templ Navigation() {
 					<md-icon slot="inactive">arrow_drop_down</md-icon>
 				</t-dropdown-title>
 				<t-dropdown-list slot="content">
-					<t-dropdown-list-item interactive border type="text" href="/docs/routing" hx-get="/docs/routing" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/routing" hx-boost="true">
 						Fundamentals
 					</t-dropdown-list-item>
-					<t-dropdown-list-item interactive border type="text" href="/docs/routing/defining-routes" hx-get="/docs/routing/defining-routes" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/routing/defining-routes" hx-boost="true">
 						Defining Routes
 					</t-dropdown-list-item>
-					<t-dropdown-list-item interactive border type="text" href="/docs/routing/pages-and-index" hx-get="/docs/routing/pages-and-index" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/routing/pages-and-index" hx-boost="true">
 						Pages and Index
 					</t-dropdown-list-item>
-					<t-dropdown-list-item interactive border type="text" href="/docs/routing/hx-boost" hx-get="/docs/routing/hx-boost" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/routing/hx-boost" hx-boost="true">
 						hx-boost
 					</t-dropdown-list-item>
-					<t-dropdown-list-item interactive border type="text" href="/docs/routing/static-pages-and-routes" hx-get="/docs/routing/static-pages-and-routes" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/routing/static-pages-and-routes" hx-boost="true">
 						Static Pages
 					</t-dropdown-list-item>
-					<t-dropdown-list-item interactive border type="text" href="/docs/routing/caching" hx-get="/docs/routing/caching" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/routing/caching" hx-boost="true">
 						Caching
 					</t-dropdown-list-item>
-					<t-dropdown-list-item interactive border type="text" href="/docs/routing/dynamic-routes" hx-get="/docs/routing/dynamic-routes" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/routing/dynamic-routes" hx-boost="true">
 						Dynamic Routes
 					</t-dropdown-list-item>
-					<t-dropdown-list-item interactive border type="text" href="/docs/routing/suspense" hx-get="/docs/routing/suspense" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/routing/suspense" hx-boost="true">
 						Suspense
 					</t-dropdown-list-item>
 				</t-dropdown-list>
@@ -130,13 +131,13 @@ templ Navigation() {
 					<md-icon slot="inactive">arrow_drop_down</md-icon>
 				</t-dropdown-title>
 				<t-dropdown-list slot="content">
-					<t-dropdown-list-item interactive border type="text" href="/docs/pages" hx-get="/docs/pages" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/pages" hx-boost="true">
 						Definition
 					</t-dropdown-list-item>
-					<t-dropdown-list-item interactive border type="text" href="/docs/pages/templ" hx-get="/docs/pages/templ" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/pages/templ" hx-boost="true">
 						Templ
 					</t-dropdown-list-item>
-					<t-dropdown-list-item interactive border type="text" href="/docs/pages/static-pages" hx-get="/docs/pages/static-pages" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/pages/static-pages" hx-boost="true">
 						Static Rendering
 					</t-dropdown-list-item>
 				</t-dropdown-list>
@@ -148,26 +149,26 @@ templ Navigation() {
 					<md-icon slot="inactive">arrow_drop_down</md-icon>
 				</t-dropdown-title>
 				<t-dropdown-list slot="content">
-					<t-dropdown-list-item interactive border type="text" href="/docs/index" hx-get="/docs/index" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/index" hx-boost="true">
 						Definition
 					</t-dropdown-list-item>
-					<t-dropdown-list-item interactive border type="text" href="/docs/index/templ" hx-get="/docs/index/templ" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/index/templ" hx-boost="true">
 						Templ
 					</t-dropdown-list-item>
 				</t-dropdown-list>
 			</t-dropdown>
 		</t-navigation-drawer>
 		<t-navigation-drawer slot="drawer">
-			<temporary-list-item interactive border type="button" href="/examples/todo" hx-get="/examples/todo" hx-target="main" hx-push-url="true">
+			<temporary-list-item interactive border type="link" href="/examples/todo" hx-boost="true">
 				Todo
 			</temporary-list-item>
-			<temporary-list-item interactive border type="button" href="/examples/suspense" hx-get="/examples/suspense" hx-target="main" hx-push-url="true">
+			<temporary-list-item interactive border type="link" href="/examples/suspense" hx-boost="true">
 				Suspense
 			</temporary-list-item>
-			<temporary-list-item interactive border type="button" regex={ `^/examples/.*/dynamic-routes$` } href="/examples/_replace-me_/dynamic-routes" hx-get="/examples/_replace-me_/dynamic-routes" hx-target="main" hx-push-url="true">
+			<temporary-list-item interactive border type="link" regex={ `^/examples/.*/dynamic-routes$` } href="/examples/_replace-me_/dynamic-routes" hx-boost="true">
 				Dynamic Routing
 			</temporary-list-item>
-			<temporary-list-item interactive border type="button" href="/examples/static-render" hx-get="/examples/static-render" hx-target="main" hx-push-url="true">
+			<temporary-list-item interactive border type="link" href="/examples/static-render" hx-boost="true">
 				Static Render
 			</temporary-list-item>
 		</t-navigation-drawer>
@@ -179,7 +180,7 @@ templ MobileNavigation() {
 	<t-mobile-navigation>
 
 		<t-mobile-navigation-rail slot="rail">
-			<temporary-list-item interactive type="button" href="/" regex="^/?$" hx-get="/" hx-target="main" hx-push-url="true">
+			<temporary-list-item interactive type="link" href="/" regex="^/?$" hx-boost="true">
 				Home
 				<md-icon slot="start" class="material-symbols-filled">crop_square</md-icon>
 			</temporary-list-item>
@@ -193,20 +194,20 @@ templ MobileNavigation() {
 				<md-icon slot="start" class="material-symbols-filled">developer_guide</md-icon>
 				<md-icon slot="end" class="material-symbols-filled">arrow_forward</md-icon>
 			</temporary-list-item>
-			<temporary-list-item interactive type="button" href="/blog" hx-get="/blog" regex={ `^/?\/blog(\/?|\/.*)?$` } hx-target="main" hx-push-url="true">
+			<temporary-list-item interactive type="link" href="/blog" regex={ `^/?\/blog(\/?|\/.*)?$` } hx-boost="true">
 				Releases
 				<md-icon slot="start" class="material-symbols-filled">article</md-icon>
 			</temporary-list-item>
 		</t-mobile-navigation-rail>
 
 		<t-mobile-navigation-drawer slot="drawer">
-			<temporary-list-item interactive border type="button" href="/docs" hx-get="/docs" hx-target="main" hx-push-url="true">
+			<temporary-list-item interactive border type="link" href="/docs" hx-boost="true">
 				Introduction
 			</temporary-list-item>
-			<temporary-list-item interactive border type="button" href="/docs/installation" hx-get="/docs/installation" hx-target="main" hx-push-url="true">
+			<temporary-list-item interactive border type="link" href="/docs/installation" hx-boost="true">
 				Installation
 			</temporary-list-item>
-			<temporary-list-item interactive border type="button" href="/docs/project-structure" hx-get="/docs/project-structure" hx-target="main" hx-push-url="true">
+			<temporary-list-item interactive border type="link" href="/docs/project-structure" hx-boost="true">
 				Project Structure
 			</temporary-list-item>
 			<t-dropdown>
@@ -216,28 +217,28 @@ templ MobileNavigation() {
 					<md-icon slot="inactive">arrow_drop_down</md-icon>
 				</t-dropdown-title>
 				<t-dropdown-list slot="content">
-					<t-dropdown-list-item interactive border type="text" href="/docs/routing" hx-get="/docs/routing" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/routing" hx-boost="true">
 						Fundamentals
 					</t-dropdown-list-item>
-					<t-dropdown-list-item interactive border type="text" href="/docs/routing/defining-routes" hx-get="/docs/routing/defining-routes" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/routing/defining-routes" hx-boost="true">
 						Defining Routes
 					</t-dropdown-list-item>
-					<t-dropdown-list-item interactive border type="text" href="/docs/routing/pages-and-index" hx-get="/docs/routing/pages-and-index" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/routing/pages-and-index" hx-boost="true">
 						Pages and Index
 					</t-dropdown-list-item>
-					<t-dropdown-list-item interactive border type="text" href="/docs/routing/hx-boost" hx-get="/docs/routing/hx-boost" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/routing/hx-boost" hx-boost="true">
 						hx-boost
 					</t-dropdown-list-item>
-					<t-dropdown-list-item interactive border type="text" href="/docs/routing/static-pages-and-routes" hx-get="/docs/routing/static-pages-and-routes" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/routing/static-pages-and-routes" hx-boost="true">
 						Static Pages
 					</t-dropdown-list-item>
-					<t-dropdown-list-item interactive border type="text" href="/docs/routing/caching" hx-get="/docs/routing/caching" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/routing/caching" hx-boost="true">
 						Caching
 					</t-dropdown-list-item>
-					<t-dropdown-list-item interactive border type="text" href="/docs/routing/dynamic-routes" hx-get="/docs/routing/dynamic-routes" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/routing/dynamic-routes" hx-boost="true">
 						Dynamic Routes
 					</t-dropdown-list-item>
-					<t-dropdown-list-item interactive border type="text" href="/docs/routing/suspense" hx-get="/docs/routing/suspense" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/routing/suspense" hx-boost="true">
 						Suspense
 					</t-dropdown-list-item>
 				</t-dropdown-list>
@@ -249,13 +250,13 @@ templ MobileNavigation() {
 					<md-icon slot="inactive">arrow_drop_down</md-icon>
 				</t-dropdown-title>
 				<t-dropdown-list slot="content">
-					<t-dropdown-list-item interactive border type="text" href="/docs/pages" hx-get="/docs/pages" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/pages" hx-boost="true">
 						Definition
 					</t-dropdown-list-item>
-					<t-dropdown-list-item interactive border type="text" href="/docs/pages/templ" hx-get="/docs/pages/templ" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/pages/templ" hx-boost="true">
 						Templ
 					</t-dropdown-list-item>
-					<t-dropdown-list-item interactive border type="text" href="/docs/pages/static-pages" hx-get="/docs/pages/static-pages" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/pages/static-pages" hx-boost="true">
 						Static Rendering
 					</t-dropdown-list-item>
 				</t-dropdown-list>
@@ -267,10 +268,10 @@ templ MobileNavigation() {
 					<md-icon slot="inactive">arrow_drop_down</md-icon>
 				</t-dropdown-title>
 				<t-dropdown-list slot="content">
-					<t-dropdown-list-item interactive border type="text" href="/docs/index" hx-get="/docs/index" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/index" hx-boost="true">
 						Definition
 					</t-dropdown-list-item>
-					<t-dropdown-list-item interactive border type="text" href="/docs/index/templ" hx-get="/docs/index/templ" hx-target="main" hx-push-url="true">
+					<t-dropdown-list-item interactive border type="link" href="/docs/index/templ" hx-boost="true">
 						Templ
 					</t-dropdown-list-item>
 				</t-dropdown-list>
@@ -278,16 +279,16 @@ templ MobileNavigation() {
 		</t-mobile-navigation-drawer>
 
 		<t-mobile-navigation-drawer slot="drawer">
-			<temporary-list-item interactive border type="button" href="/examples/todo" hx-get="/examples/todo" hx-target="main" hx-push-url="true">
+			<temporary-list-item interactive border type="link" href="/examples/todo" hx-boost="true">
 				Todo
 			</temporary-list-item>
-			<temporary-list-item interactive border type="button" href="/examples/suspense" hx-get="/examples/suspense" hx-target="main" hx-push-url="true">
+			<temporary-list-item interactive border type="link" href="/examples/suspense" hx-boost="true">
 				Suspense
 			</temporary-list-item>
-			<temporary-list-item interactive border type="button" regex={ `^/examples/.*/dynamic-routes$` } href="/examples/_replace-me_/dynamic-routes" hx-get="/examples/_replace-me_/dynamic-routes" hx-target="main" hx-push-url="true">
+			<temporary-list-item interactive border type="link" regex={ `^/examples/.*/dynamic-routes$` } href="/examples/_replace-me_/dynamic-routes" hx-boost="true">
 				Dynamic Routing
 			</temporary-list-item>
-			<temporary-list-item interactive border type="button" href="/examples/static-render" hx-get="/examples/static-render" hx-target="main" hx-push-url="true">
+			<temporary-list-item interactive border type="link" href="/examples/static-render" hx-boost="true">
 				Static Render
 			</temporary-list-item>
 		</t-mobile-navigation-drawer>

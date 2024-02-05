@@ -1,7 +1,7 @@
 import { PropertyValues, css, nothing } from 'lit';
 import { literal, html as staticHtml, StaticValue } from 'lit/static-html.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { customElement, eventOptions, property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { ARIAMixinStrict } from '@material/web/internal/aria/aria.js';
 import { ListItemEl as ListItem } from '@material/web/list/internal/listitem/list-item';
 import { styles } from '@material/web/list/internal/listitem/list-item-styles.css.js';
@@ -53,20 +53,21 @@ export class TListItem extends ListItem {
   @property({ type: Boolean, reflect: true }) border = false;
   @property({ type: Boolean, reflect: true, attribute: 'hide-event' }) hideEvent = false;
   @property({ type: String }) regex = "";
+  @property({ type: String, attribute: 'hx-boost' }) hxBoost = '';
+
+  firstUpdated() {
+    // Change to importing HTMX with this element? As this relies on the global DOM scope
+    // @ts-ignore
+    htmx.process(this.shadowRoot);
+  }
 
   protected override willUpdate(changed: PropertyValues<ListItem>) {
+    // TO overide default setting of type to link if contains property href
+    const initialType = this.type;
+    
     super.willUpdate(changed);
 
-    // fix until htmx supports shadowDOM. LMAO
-    if (this.href && this.href[0] === 'h') {
-      this.type = 'link';
-    } else {
-      this.type = 'button';
-    }
-
-    // if (this.href) {
-    //   this.type = 'link';
-    // }
+    this.type = initialType;
 
   }
 
@@ -102,6 +103,7 @@ export class TListItem extends ListItem {
         aria-haspopup=${(this as ARIAMixinStrict).ariaHasPopup || nothing}
         class="list-item ${classMap(this.getRenderClasses())}"
         href=${this.href || nothing}
+        hx-boost="${this.hxBoost|| nothing}"
         target=${target}
         @click=${this.onClick}
       >${content}</${tag}>

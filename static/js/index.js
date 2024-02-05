@@ -4497,13 +4497,12 @@ class HTMXElement extends s3 {
   }
   firstUpdated() {
     htmx.process(this.shadowRoot);
-    console.log("HTMX", htmx);
   }
   renderAnchor(content) {
     return x`
       <a
         href="${this.href || T}"
-        hx-boost="${this.hxBoost}"
+        hx-boost="${this.hxBoost || T}"
       >
         ${content}
       </a>
@@ -4669,11 +4668,14 @@ class TLink2 extends HTMXElement {
 	    pointer-events: none;
 	    filter: grayscale(100%);
 	  }
-		a:hover{
+		.link_container:hover{
 			background: var(--md-sys-color-secondary-hover) !important;
 			cursor: pointer; 
     }		
-		a {
+		a{
+	    text-decoration: none;
+		}
+		.link_container {
 	    text-decoration: none;
 	    text-align: left;
 	    padding: 16px;
@@ -4702,12 +4704,14 @@ class TLink2 extends HTMXElement {
 	`;
   render() {
     return this.renderAnchor(x`
-			<h2>
-				${this.title}
-			</h2>
-			<p>
-				${this.description}
-			</p>
+			<div class="link_container">
+				<h2>
+					${this.title}
+				</h2>
+				<p>
+					${this.description}
+				</p>
+			</div>
 	   `);
   }
 }
@@ -5056,6 +5060,7 @@ class TListItem extends ListItemEl {
     this.border = false;
     this.hideEvent = false;
     this.regex = "";
+    this.hxBoost = "";
   }
   static styles = [
     styles31,
@@ -5089,13 +5094,13 @@ class TListItem extends ListItemEl {
       }
     `
   ];
+  firstUpdated() {
+    htmx.process(this.shadowRoot);
+  }
   willUpdate(changed) {
+    const initialType = this.type;
     super.willUpdate(changed);
-    if (this.href && this.href[0] === "h") {
-      this.type = "link";
-    } else {
-      this.type = "button";
-    }
+    this.type = initialType;
   }
   renderListItem(content) {
     const isAnchor = this.type === "link";
@@ -5126,6 +5131,7 @@ class TListItem extends ListItemEl {
         aria-haspopup=${this.ariaHasPopup || T}
         class="list-item ${e8(this.getRenderClasses())}"
         href=${this.href || T}
+        hx-boost="${this.hxBoost || T}"
         target=${target}
         @click=${this.onClick}
       >${content}</${tag}>
@@ -5148,6 +5154,9 @@ __legacyDecorateClassTS([
 __legacyDecorateClassTS([
   n3({ type: String })
 ], TListItem.prototype, "regex", undefined);
+__legacyDecorateClassTS([
+  n3({ type: String, attribute: "hx-boost" })
+], TListItem.prototype, "hxBoost", undefined);
 TListItem = __legacyDecorateClassTS([
   t("temporary-list-item")
 ], TListItem);

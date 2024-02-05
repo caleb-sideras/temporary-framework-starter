@@ -1,8 +1,6 @@
-
-import { css, nothing, html } from "lit"
+import { css, html } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { HTMXElement } from "./t-htmx";
-import { literal, StaticValue, html as staticHtml } from 'lit/static-html.js';
 
 @customElement('t-link-2')
 export class TLink2 extends HTMXElement {
@@ -12,11 +10,14 @@ export class TLink2 extends HTMXElement {
 	    pointer-events: none;
 	    filter: grayscale(100%);
 	  }
-		a:hover{
+		.link_container:hover{
 			background: var(--md-sys-color-secondary-hover) !important;
 			cursor: pointer; 
     }		
-		a {
+		a{
+	    text-decoration: none;
+		}
+		.link_container {
 	    text-decoration: none;
 	    text-align: left;
 	    padding: 16px;
@@ -77,12 +78,14 @@ export class TLink2 extends HTMXElement {
 		// 	} else {
 		// 		tag = literal`a`;
 		return this.renderAnchor(html`
-			<h2>
-				${this.title}
-			</h2>
-			<p>
-				${this.description}
-			</p>
+			<div class="link_container">
+				<h2>
+					${this.title}
+				</h2>
+				<p>
+					${this.description}
+				</p>
+			</div>
 	   `)
 	}
 }
