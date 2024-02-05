@@ -1,14 +1,14 @@
 {
-  "name": "temporary",
+  "name": "temporary-website",
   "version": "1.0.0",
-  "description": "Personal Website",
+  "description": "temporary website",
   "main": "index.ts",
   "scripts": {
-    "tailwind-dev": "bun run tailwindcss -i ./src/styles/app.css -o ./static/css/output.css --watch",
-    "tailwind-build": "bun run tailwindcss -i ./src/styles/app.css -o ./static/css/output.css",
-    "dev": "bun run tailwind-dev",
-    "build": "bun bun.build.js & bun run tailwind-build & templ generate & go run src/main.go build",
-    "start": "go run src/main.go run"
+    "css-build": "bun run tailwindcss -i ./src/styles/app.css -o ./static/css/output.css",
+    "go-build": "go run src/main.go build",
+    "go-run": "go run src/main.go run",
+    "build": "templ generate & bun bun.build.js & bun run css-build & bun run go-build",
+    "start": "bun run go-run"
   },
   "keywords": [],
   "author": "",

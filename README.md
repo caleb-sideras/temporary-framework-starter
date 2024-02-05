@@ -11,6 +11,7 @@
 - add transitions? not sure
 - LOGS
 - Fix htmx issue with setting main opposed to default body for HX-Boost
+- Fix static render
 
 - REFACTOR 
     - get shadowDOM working
