@@ -1,9 +1,8 @@
 # DOCS
 
-- Home page
-- fix mobile view for docs
-- Examples
-    - pages (body/full)
+- Installation
+- REFACTOR (remove redundant files, get shadowDOM working, move all duplicated logic to separate repo, get cli tools working)
+- Fix mobile nav rail not highlighting
 - Roadmap
 
 
