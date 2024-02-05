@@ -23,6 +23,7 @@ import '@material/web/tabs/tabs.js';
 import 'lit'
 
 import './src/components/client/t-link'
+import './src/components/client/t-link-2'
 import './src/components/client/t-header'
 import './src/components/client/experience'
 

@@ -73,6 +73,7 @@
   --md-sys-color-on-primary-80: #a1a1aa;
 
   --md-sys-color-secondary: #27272a;
+  --md-sys-color-secondary-hover: #363639;
   --md-sys-color-on-secondary: #743342;
 
   --md-list-item-label-text-color: var(--md-sys-color-on-primary-80);
@@ -150,7 +151,9 @@
   --md-sys-color-on-primary: #000000;
 
   --md-sys-color-secondary: #f4f4f5;
+  --md-sys-color-secondary-hover: #e3e3e4;
   --md-sys-color-on-secondary: #743342;
+
   --md-sys-color-on-primary-80: #616161;
 
   --md-sys-color-primary-container: #f5f5f5;
@@ -347,10 +350,29 @@ main {
 **/
 
 .home_container {
-  max-width: 1240px;
   display: flex;
   flex-direction: column;
-  padding-top: 120px;
+  align-items: center;
+  text-align: center;
+}
+
+.home_subtitle {
+  font-size: 36px;
+  font-weight: bold;
+  padding-top: 64px;
+  padding-bottom: 64px;
+  color: var(--md-sys-color-on-primary-80);
+}
+
+.home_grid {
+  display: grid;
+  gap: 32px;
+}
+
+@media screen and (min-width: 1024px) {
+  .home_grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .home_flexbox {
