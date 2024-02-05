@@ -140,13 +140,14 @@ func (t *Temp) createPageHandler(route string, eTags map[string]string) pageHand
 // PageHandle - DefaultHandler
 func (t *Temp) createPageDefaultHandler(route Handler, eTags map[string]string) pageHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Println("- - - - - - - - - - - -")
+		logs := fmt.Sprintf("%s %s %s", r.RemoteAddr, r.Method, r.URL.Path)
+
 		var buffer bytes.Buffer
 
 		handlePage := func() {
-			log.Println("Partial")
+			logs = fmt.Sprintf("%s %s", logs, "Partial")
 			err := route.Handler.(func() templ.Component)().Render(r.Context(), &buffer)
-			t.handleRenderError(err, w)
+			t.handleRenderError(err, w, logs)
 		}
 
 		// handleBoostPage := func() {
@@ -155,29 +156,29 @@ func (t *Temp) createPageDefaultHandler(route Handler, eTags map[string]string) 
 		// }
 
 		handleIndex := func() {
-			log.Println("Full-Page")
+			logs = fmt.Sprintf("%s %s", logs, "Full-Page")
 			err := IndexList[route.Path]().Render(templ.WithChildren(r.Context(), route.Handler.(func() templ.Component)()), &buffer)
-			t.handleRenderError(err, w)
+			t.handleRenderError(err, w, logs)
 		}
 
 		formatRequest(w, r, handlePage, handleIndex, handleIndex, handleIndex)
 		// formatRequest(w, r, handlePage, handleBoostPage, handleIndex, handleIndex)
 
 		eTag := utils.GenerateETag(buffer.String())
-		t.handleWriter(w, r, eTag, buffer.Bytes(), eTags)
+		t.handleWriter(w, r, eTag, buffer.Bytes(), eTags, logs)
 	}
 }
 
 // PageHandle - ResResqHandler
 func (t *Temp) createPageResReqHandler(route Handler, eTags map[string]string) pageHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Println("- - - - - - - - - - - -")
+		logs := fmt.Sprintf("%s %s %s", r.RemoteAddr, r.Method, r.URL.Path)
 		var buffer bytes.Buffer
 
 		handlePage := func() {
-			log.Println("Partial")
+			logs = fmt.Sprintf("%s %s", logs, "Partial")
 			err := route.Handler.(func(http.ResponseWriter, *http.Request) templ.Component)(w, r).Render(r.Context(), &buffer)
-			t.handleRenderError(err, w)
+			t.handleRenderError(err, w, logs)
 		}
 
 		// handleBoostPage := func() {
@@ -186,13 +187,15 @@ func (t *Temp) createPageResReqHandler(route Handler, eTags map[string]string) p
 		// }
 
 		handleIndex := func() {
-			log.Println("Full-Page")
+			logs = fmt.Sprintf("%s %s", logs, "Full-Page")
 			err := IndexList[route.Path]().Render(templ.WithChildren(r.Context(), route.Handler.(func(http.ResponseWriter, *http.Request) templ.Component)(w, r)), &buffer)
-			t.handleRenderError(err, w)
+			t.handleRenderError(err, w, logs)
 		}
 
 		formatRequest(w, r, handlePage, handleIndex, handleIndex, handleIndex)
 		// formatRequest(w, r, handlePage, handleBoostPage, handleIndex, handleIndex)
+
+		log.Println(fmt.Sprintf("%s %d", logs, http.StatusOK))
 
 		w.Header().Set("Vary", "HX-Request")
 		w.Header().Set("Cache-Control", "no-cache")
@@ -203,11 +206,13 @@ func (t *Temp) createPageResReqHandler(route Handler, eTags map[string]string) p
 // RouteHandleList - DefaultHandler
 func (t *Temp) createRouteDefaultHandler(route Handler, eTags map[string]string) pageHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Println("- - - - - - - - - - - -")
+		logs := fmt.Sprintf("%s %s %s", r.RemoteAddr, r.Method, r.URL.Path)
 		var buffer bytes.Buffer
 
 		err := route.Handler.(func() templ.Component)().Render(r.Context(), &buffer)
-		t.handleRenderError(err, w)
+		t.handleRenderError(err, w, logs)
+
+		log.Println(fmt.Sprintf("%s %d", logs, http.StatusOK))
 
 		setRouteHeaders(w)
 		w.Write(buffer.Bytes())
@@ -217,11 +222,14 @@ func (t *Temp) createRouteDefaultHandler(route Handler, eTags map[string]string)
 // RouteHandleList - ResReqHandler
 func (t *Temp) createRouteResReqHandler(route Handler, eTags map[string]string) pageHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Println("- - - - - - - - - - - -")
+		logs := fmt.Sprintf("%s %s %s", r.RemoteAddr, r.Method, r.URL.Path)
+
 		var buffer bytes.Buffer
 
 		err := route.Handler.(func(http.ResponseWriter, *http.Request) templ.Component)(w, r).Render(r.Context(), &buffer)
-		t.handleRenderError(err, w)
+		t.handleRenderError(err, w, logs)
+
+		log.Println(fmt.Sprintf("%s %d", logs, http.StatusOK))
 
 		setRouteHeaders(w)
 		w.Write(buffer.Bytes())
@@ -231,22 +239,18 @@ func (t *Temp) createRouteResReqHandler(route Handler, eTags map[string]string) 
 // RouteRender
 func (t *Temp) createRouteRenderHandler(route string, eTags map[string]string) pageHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Println("- - - - - - - - - - - -")
-		/**
-		* NOTE
-		* Changed eTagPath from r.URL.Path -> route. Allows slugs.
-		**/
+		logs := fmt.Sprintf("%s %s %s", r.RemoteAddr, r.Method, r.URL.Path)
+
 		eTagPath := filepath.Join(route, ROUTE_OUT_FILE)
 		pagePath := filepath.Join(t.OutputDir, eTagPath)
-		log.Println(route, pagePath, eTagPath)
 
 		if eTag := r.Header.Get("If-None-Match"); eTag == eTags[eTagPath] {
-			log.Println("403: status not modified")
+			log.Println(fmt.Sprintf("%s %s %d", logs, pagePath, http.StatusNotModified))
 			w.WriteHeader(http.StatusNotModified)
 			return
 		}
 
-		log.Println("Serving File:", pagePath)
+		log.Println(fmt.Sprintf("%s %s %d", logs, pagePath, http.StatusOK))
 
 		setRouteRenderHeaders(w, eTagPath, eTags)
 
@@ -293,8 +297,6 @@ func determineRequest(w http.ResponseWriter, r *http.Request) requestType {
 	if !utils.IsHtmxRequest(r) {
 		return NormalRequest
 	}
-
-	log.Println("HX-Request")
 
 	if !utils.IsHxBoosted(r) {
 		if r.URL.Query().Get("index") == "true" {
@@ -347,19 +349,20 @@ func setHeaders(w http.ResponseWriter, eTag string) {
 	w.Header().Set("ETag", eTag)
 }
 
-func (t *Temp) handleRenderError(err error, w http.ResponseWriter) {
+func (t *Temp) handleRenderError(err error, w http.ResponseWriter, logs string) {
 	if err != nil {
-		log.Printf("500: Issue rendering: %v\n", err)
+		log.Println(fmt.Sprintf("%s %d", logs, http.StatusInternalServerError))
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 }
 
-func (t *Temp) handleWriter(w http.ResponseWriter, r *http.Request, eTag string, content []byte, eTags map[string]string) {
+func (t *Temp) handleWriter(w http.ResponseWriter, r *http.Request, eTag string, content []byte, eTags map[string]string, logs string) {
 	if rEtag := r.Header.Get("If-None-Match"); rEtag == eTag {
-		log.Println("304: status not modified")
+		log.Println(fmt.Sprintf("%s %d", logs, http.StatusNotModified))
 		w.WriteHeader(http.StatusNotModified)
 		return
 	}
+	log.Println(fmt.Sprintf("%s %d", logs, http.StatusOK))
 	setHeaders(w, eTag)
 	w.Write(content)
 }
