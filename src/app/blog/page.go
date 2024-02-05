@@ -3,9 +3,9 @@ package blog
 import (
 	// "net/http"
 
+	"calebsideras.com/temporary/src/components/server"
+	"calebsideras.com/temporary/src/utils"
 	"github.com/a-h/templ"
-	"github.com/caleb-sideras/gox2/src/components/server"
-	"github.com/caleb-sideras/gox2/src/utils"
 )
 
 func Page_() templ.Component {

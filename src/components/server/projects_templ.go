@@ -11,7 +11,7 @@ import "io"
 import "bytes"
 
 import (
-	"github.com/caleb-sideras/gox2/src/utils"
+	"calebsideras.com/temporary/src/utils"
 )
 
 func GridTitles(title []string, videoList [][]utils.TLinkContent) templ.Component {

@@ -4478,7 +4478,7 @@ MdTabs = __decorate([
   t("md-tabs")
 ], MdTabs);
 
-// node_modules/lit-html/directive
+// node_modules/lit-html/directive-helpers.j
 class HTMXElement extends s3 {
   constructor() {
     super(...arguments);
@@ -4560,7 +4560,7 @@ __legacyDecorateClassTS([
   n3({ type: String, attribute: "hx-history-elt" })
 ], HTMXElement.prototype, "hxHistoryElt", undefined);
 
-// node_modules/lit-html/directive
+// node_modules/lit-html/directive-helpers.j
 class TLink extends HTMXElement {
   constructor() {
     super(...arguments);
@@ -4652,7 +4652,7 @@ TLink = __legacyDecorateClassTS([
   t("t-link")
 ], TLink);
 
-// node_modules/lit-html/directive-h
+// node_modules/lit-html/directive-helpers.jst
 class TLink2 extends HTMXElement {
   constructor() {
     super(...arguments);
@@ -4728,7 +4728,7 @@ TLink2 = __legacyDecorateClassTS([
   t("t-link-2")
 ], TLink2);
 
-// node_modules/lit-html/directive-h
+// node_modules/lit-html/directive-helpers.jst
 class THeader extends s3 {
   constructor() {
     super(...arguments);
@@ -4782,53 +4782,6 @@ __legacyDecorateClassTS([
 THeader = __legacyDecorateClassTS([
   t("t-header")
 ], THeader);
-
-// node_modules/lit-html/directive-hel
-class TExperience extends s3 {
-  constructor() {
-    super(...arguments);
-    this.company = "";
-    this.position = "";
-    this.date = "";
-    this.description = "";
-  }
-  static styles = i`
-  h2{  
-    color: var(--md-sys-color-on-primary);
-  }
-  p{  
-    color: var(--md-sys-color-on-primary-80);
-  }
-  span {
-    color: var(--md-sys-color-on-primary-80);
-    font-weight: normal;
-    font-style: italic;
-  }
-  `;
-  render() {
-    return x`
-      <h2>${this.company} <span>${this.position}</span></h2>
-      <p>${this.date}</p>
-      <slot name="list"></slot>
-      <p>${this.description}</p>
-    `;
-  }
-}
-__legacyDecorateClassTS([
-  n3({ type: String })
-], TExperience.prototype, "company", undefined);
-__legacyDecorateClassTS([
-  n3({ type: String })
-], TExperience.prototype, "position", undefined);
-__legacyDecorateClassTS([
-  n3({ type: String })
-], TExperience.prototype, "date", undefined);
-__legacyDecorateClassTS([
-  n3({ type: String })
-], TExperience.prototype, "description", undefined);
-TExperience = __legacyDecorateClassTS([
-  t("t-experience")
-], TExperience);
 
 // node_modules/lit-html/directive-helpers.jstro
 class TDropdown extends s3 {
@@ -5736,86 +5689,3 @@ class TNavigationDrawer extends TNavigationContainer {
 TNavigationDrawer = __legacyDecorateClassTS([
   t("t-navigation-drawer")
 ], TNavigationDrawer);
-
-// node_modules/lit-html/directive-helpers.jstro
-class TListItem2 extends MdListItem {
-  constructor() {
-    super(...arguments);
-  }
-  static styles = [
-    i`
-      md-item {     
-          --md-list-item-label-text-size: var(--t-list-item-text-size, 0.95rem);
-      }
-
-      :host([tabindex="-1"]) { 
-        --md-list-item-label-text-color	: var(--t-list-item-color, var(--md-sys-color-on-primary-container, #000000));
-        --md-list-item-trailing-icon-color: var(--t-list-item-color, var(--md-sys-color-on-primary-container, #000000));
-        border-radius: var(--t-list-item-border-radius, 32px) !important;
-
-        /** Dynamic **/
-        --md-list-item-hover-state-layer-color: var(--t-list-item-hover-state-layer-color, #000000);
-        --md-list-item-hover-state-layer-opacity: var(--t-list-item-hover-state-layer-opacity, 0.06);
-
-        --md-list-item-pressed-state-layer-color: var(--t-list-item-pressed-state-layer-color, #000000);
-        --md-list-item-pressed-state-layer-opacity: var(--t-list-item-pressed-state-layer-opacity, 0.08);   
-      }
-
-      :host([tabindex="0"]) {
-        --md-list-item-label-text-color: var(--t-list-item-active-color, var(--md-sys-color-primary, #743342));
-        --md-list-item-trailing-icon-color: var(--t-list-item-active-color, var(--md-sys-color-primary, #743342));
-      }
-    `,
-    ...MdListItem.styles
-  ];
-  renderListItem(content) {
-    this.type = "button";
-    const isAnchor = false;
-    let tag = s4`button`;
-    const isInteractive = true;
-    const target = isAnchor && !!this.target ? this.target : T;
-    return n6`
-      <${tag}
-        id="item"
-        tabindex="${this.isDisabled || !isInteractive ? -1 : 0}"
-        ?disabled=${this.isDisabled}
-        role="listitem"
-        aria-selected=${this.ariaSelected || T}
-        aria-checked=${this.ariaChecked || T}
-        aria-expanded=${this.ariaExpanded || T}
-        aria-haspopup=${this.ariaHasPopup || T}
-        class="list-item ${e8(this.getRenderClasses())}"
-        href=${this.href || T}
-        target=${target}
-        @focus=${this.onFocus}
-      >${content}</${tag}>
-    `;
-  }
-}
-TListItem2 = __legacyDecorateClassTS([
-  t("t-list-item")
-], TListItem2);
-
-// node_modules/lit-html/directive-helpers.jstroll
-class TListItem22 extends TListItem2 {
-  constructor() {
-    super(...arguments);
-  }
-  static styles = [
-    i`
-      md-item {
-        --md-list-item-label-text-size: var(--t-dropdown-list-item-text-size, 0.9rem) !important;
-      }      
-
-      :host([tabindex="0"]) {
-        border: var(--t-dropdown-list-item-border, solid);        
-        border-width: var(--t-dropdown-list-item-border-width, 1px);
-        border-color: var(--t-dropdown-list-item-active-color, var(--md-sys-color-primary, #743342));
-      }
-    `,
-    ...TListItem2.styles
-  ];
-}
-TListItem22 = __legacyDecorateClassTS([
-  t("t-list-item-2")
-], TListItem22);

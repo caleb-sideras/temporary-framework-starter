@@ -1,4 +1,4 @@
-package gox
+package temporary
 
 import (
 	"github.com/a-h/templ"

@@ -1,11 +1,11 @@
-package gox
+package temporary
 
-type Gox struct {
+type Temp struct {
 	OutputDir string
 }
 
-func NewGox(outputDir string) *Gox {
-	return &Gox{
+func NewTemp(outputDir string) *Temp {
+	return &Temp{
 		OutputDir: outputDir,
 	}
 }

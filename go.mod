@@ -1,4 +1,4 @@
-module github.com/caleb-sideras/gox2
+module calebsideras.com/temporary
 
 go 1.21.3
 

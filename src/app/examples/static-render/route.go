@@ -1,8 +1,8 @@
 package examples_staticrender
 
 import (
+	"calebsideras.com/temporary/src/utils"
 	"github.com/a-h/templ"
-	"github.com/caleb-sideras/gox2/src/utils"
 )
 
 func Example() templ.Component {

@@ -1,4 +1,4 @@
-package gox
+package temporary
 
 import (
 	"bufio"
@@ -11,8 +11,8 @@ import (
 	"reflect"
 	"strings"
 
+	"calebsideras.com/temporary/temporary/utils"
 	"github.com/a-h/templ"
-	"github.com/caleb-sideras/gox2/gox/utils"
 	"github.com/gorilla/mux"
 )
 
@@ -29,72 +29,72 @@ const (
 
 type pageHandler func(w http.ResponseWriter, r *http.Request)
 
-func (g *Gox) Run(r *mux.Router, port string, servePath string) {
+func (t *Temp) Run(r *mux.Router, port string, servePath string) {
 	http.Handle("/", r)
 	fmt.Println("----------------------------CREATING HANDLERS----------------------------")
-	g.handleRoutes(r, g.getETags())
+	t.handleRoutes(r, t.getETags())
 	log.Fatal(http.ListenAndServe(port, nil))
 }
 
-func (g *Gox) handleRoutes(r *mux.Router, eTags map[string]string) {
+func (t *Temp) handleRoutes(r *mux.Router, eTags map[string]string) {
 	fmt.Println("Function Type: Page - Render")
-	g.handlePageRender(r, eTags)
+	t.handlePageRender(r, eTags)
 	fmt.Println("Function Type: Page - Handle")
-	g.handlePageHandles(r, eTags)
+	t.handlePageHandles(r, eTags)
 	fmt.Println("Function Type: Route - Handle")
-	g.handleRouteHandles(r, eTags)
+	t.handleRouteHandles(r, eTags)
 	fmt.Println("Function Type: Route - Render")
-	g.handleRouteRender(r, eTags)
+	t.handleRouteRender(r, eTags)
 }
 
 // PageRenderList
-func (g *Gox) handlePageRender(r *mux.Router, eTags map[string]string) {
+func (t *Temp) handlePageRender(r *mux.Router, eTags map[string]string) {
 	for _, route := range PageRenderList {
 		currRoute := route.Path
 		fmt.Printf("   - %s\n", currRoute)
-		r.HandleFunc(currRoute+"{slash:/?}", g.createPageHandler(currRoute, eTags))
+		r.HandleFunc(currRoute+"{slash:/?}", t.createPageHandler(currRoute, eTags))
 	}
 }
 
 // PageHandleList
-func (g *Gox) handlePageHandles(r *mux.Router, eTags map[string]string) {
+func (t *Temp) handlePageHandles(r *mux.Router, eTags map[string]string) {
 	for _, route := range PageHandleList {
 		currRoute := route
 		fmt.Printf("   - %s\n", currRoute.Path)
 		switch currRoute.HandleType {
 		case DefaultHandler:
-			r.HandleFunc(currRoute.Path+"{slash:/?}", g.createPageDefaultHandler(currRoute, eTags))
+			r.HandleFunc(currRoute.Path+"{slash:/?}", t.createPageDefaultHandler(currRoute, eTags))
 		case ResReqHandler:
-			r.HandleFunc(currRoute.Path+"{slash:/?}", g.createPageResReqHandler(currRoute, eTags))
+			r.HandleFunc(currRoute.Path+"{slash:/?}", t.createPageResReqHandler(currRoute, eTags))
 		}
 	}
 }
 
 // RouteHandleList
-func (g *Gox) handleRouteHandles(r *mux.Router, eTags map[string]string) {
+func (t *Temp) handleRouteHandles(r *mux.Router, eTags map[string]string) {
 	for _, route := range RouteHandleList {
 		currRoute := route
 		fmt.Printf("   - %s\n", currRoute.Path)
 		switch route.HandleType {
 		case DefaultHandler:
-			r.HandleFunc(currRoute.Path+"{slash:/?}", g.createRouteDefaultHandler(currRoute, eTags))
+			r.HandleFunc(currRoute.Path+"{slash:/?}", t.createRouteDefaultHandler(currRoute, eTags))
 		case ResReqHandler:
-			r.HandleFunc(currRoute.Path+"{slash:/?}", g.createRouteResReqHandler(currRoute, eTags))
+			r.HandleFunc(currRoute.Path+"{slash:/?}", t.createRouteResReqHandler(currRoute, eTags))
 		}
 	}
 }
 
 // RouteRenderList
-func (g *Gox) handleRouteRender(r *mux.Router, eTags map[string]string) {
+func (t *Temp) handleRouteRender(r *mux.Router, eTags map[string]string) {
 	for _, route := range RouteRenderList {
 		currRoute := route
 		fmt.Printf("   - %s\n", currRoute.Path)
-		r.HandleFunc(currRoute.Path+"{slash:/?}", g.createRouteRenderHandler(currRoute.Path, eTags))
+		r.HandleFunc(currRoute.Path+"{slash:/?}", t.createRouteRenderHandler(currRoute.Path, eTags))
 	}
 }
 
 // PageRender
-func (g *Gox) createPageHandler(route string, eTags map[string]string) pageHandler {
+func (t *Temp) createPageHandler(route string, eTags map[string]string) pageHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		/**
 		* NOTE
@@ -107,7 +107,7 @@ func (g *Gox) createPageHandler(route string, eTags map[string]string) pageHandl
 		handlePage := func() {
 			log.Println("Partial")
 			eTagPath = filepath.Join(route, PAGE_BODY_OUT_FILE)
-			pagePath = filepath.Join(g.OutputDir, eTagPath)
+			pagePath = filepath.Join(t.OutputDir, eTagPath)
 		}
 
 		handleBPage := func() {
@@ -118,7 +118,7 @@ func (g *Gox) createPageHandler(route string, eTags map[string]string) pageHandl
 		handleIndex := func() {
 			log.Println("Full-Page")
 			eTagPath = filepath.Join(route, PAGE_OUT_FILE)
-			pagePath = filepath.Join(g.OutputDir, eTagPath)
+			pagePath = filepath.Join(t.OutputDir, eTagPath)
 		}
 
 		formatRequest(w, r, handlePage, handleBPage, handleIndex, handleIndex)
@@ -138,7 +138,7 @@ func (g *Gox) createPageHandler(route string, eTags map[string]string) pageHandl
 }
 
 // PageHandle - DefaultHandler
-func (g *Gox) createPageDefaultHandler(route Handler, eTags map[string]string) pageHandler {
+func (t *Temp) createPageDefaultHandler(route Handler, eTags map[string]string) pageHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Println("- - - - - - - - - - - -")
 		var buffer bytes.Buffer
@@ -146,7 +146,7 @@ func (g *Gox) createPageDefaultHandler(route Handler, eTags map[string]string) p
 		handlePage := func() {
 			log.Println("Partial")
 			err := route.Handler.(func() templ.Component)().Render(r.Context(), &buffer)
-			g.handleRenderError(err, w)
+			t.handleRenderError(err, w)
 		}
 
 		handleBoostPage := func() {
@@ -157,18 +157,18 @@ func (g *Gox) createPageDefaultHandler(route Handler, eTags map[string]string) p
 		handleIndex := func() {
 			log.Println("Full-Page")
 			err := IndexList[route.Path]().Render(templ.WithChildren(r.Context(), route.Handler.(func() templ.Component)()), &buffer)
-			g.handleRenderError(err, w)
+			t.handleRenderError(err, w)
 		}
 
 		formatRequest(w, r, handlePage, handleBoostPage, handleIndex, handleIndex)
 
 		eTag := utils.GenerateETag(buffer.String())
-		g.handleWriter(w, r, eTag, buffer.Bytes(), eTags)
+		t.handleWriter(w, r, eTag, buffer.Bytes(), eTags)
 	}
 }
 
 // PageHandle - ResResqHandler
-func (g *Gox) createPageResReqHandler(route Handler, eTags map[string]string) pageHandler {
+func (t *Temp) createPageResReqHandler(route Handler, eTags map[string]string) pageHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Println("- - - - - - - - - - - -")
 		var buffer bytes.Buffer
@@ -176,7 +176,7 @@ func (g *Gox) createPageResReqHandler(route Handler, eTags map[string]string) pa
 		handlePage := func() {
 			log.Println("Partial")
 			err := route.Handler.(func(http.ResponseWriter, *http.Request) templ.Component)(w, r).Render(r.Context(), &buffer)
-			g.handleRenderError(err, w)
+			t.handleRenderError(err, w)
 		}
 
 		handleBoostPage := func() {
@@ -187,7 +187,7 @@ func (g *Gox) createPageResReqHandler(route Handler, eTags map[string]string) pa
 		handleIndex := func() {
 			log.Println("Full-Page")
 			err := IndexList[route.Path]().Render(templ.WithChildren(r.Context(), route.Handler.(func(http.ResponseWriter, *http.Request) templ.Component)(w, r)), &buffer)
-			g.handleRenderError(err, w)
+			t.handleRenderError(err, w)
 		}
 
 		formatRequest(w, r, handlePage, handleBoostPage, handleIndex, handleIndex)
@@ -199,13 +199,13 @@ func (g *Gox) createPageResReqHandler(route Handler, eTags map[string]string) pa
 }
 
 // RouteHandleList - DefaultHandler
-func (g *Gox) createRouteDefaultHandler(route Handler, eTags map[string]string) pageHandler {
+func (t *Temp) createRouteDefaultHandler(route Handler, eTags map[string]string) pageHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Println("- - - - - - - - - - - -")
 		var buffer bytes.Buffer
 
 		err := route.Handler.(func() templ.Component)().Render(r.Context(), &buffer)
-		g.handleRenderError(err, w)
+		t.handleRenderError(err, w)
 
 		setRouteHeaders(w)
 		w.Write(buffer.Bytes())
@@ -213,13 +213,13 @@ func (g *Gox) createRouteDefaultHandler(route Handler, eTags map[string]string) 
 }
 
 // RouteHandleList - ResReqHandler
-func (g *Gox) createRouteResReqHandler(route Handler, eTags map[string]string) pageHandler {
+func (t *Temp) createRouteResReqHandler(route Handler, eTags map[string]string) pageHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Println("- - - - - - - - - - - -")
 		var buffer bytes.Buffer
 
 		err := route.Handler.(func(http.ResponseWriter, *http.Request) templ.Component)(w, r).Render(r.Context(), &buffer)
-		g.handleRenderError(err, w)
+		t.handleRenderError(err, w)
 
 		setRouteHeaders(w)
 		w.Write(buffer.Bytes())
@@ -227,7 +227,7 @@ func (g *Gox) createRouteResReqHandler(route Handler, eTags map[string]string) p
 }
 
 // RouteRender
-func (g *Gox) createRouteRenderHandler(route string, eTags map[string]string) pageHandler {
+func (t *Temp) createRouteRenderHandler(route string, eTags map[string]string) pageHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Println("- - - - - - - - - - - -")
 		/**
@@ -235,7 +235,7 @@ func (g *Gox) createRouteRenderHandler(route string, eTags map[string]string) pa
 		* Changed eTagPath from r.URL.Path -> route. Allows slugs.
 		**/
 		eTagPath := filepath.Join(route, ROUTE_OUT_FILE)
-		pagePath := filepath.Join(g.OutputDir, eTagPath)
+		pagePath := filepath.Join(t.OutputDir, eTagPath)
 		log.Println(route, pagePath, eTagPath)
 
 		if eTag := r.Header.Get("If-None-Match"); eTag == eTags[eTagPath] {
@@ -252,10 +252,10 @@ func (g *Gox) createRouteRenderHandler(route string, eTags map[string]string) pa
 	}
 }
 
-func (g *Gox) getETags() map[string]string {
+func (t *Temp) getETags() map[string]string {
 	eTags := make(map[string]string)
 
-	file, err := os.Open(filepath.Join(g.OutputDir, ETAG_FILE))
+	file, err := os.Open(filepath.Join(t.OutputDir, ETAG_FILE))
 	if err != nil {
 		log.Fatalf("Could not create file: %v", err)
 	}
@@ -345,14 +345,14 @@ func setHeaders(w http.ResponseWriter, eTag string) {
 	w.Header().Set("ETag", eTag)
 }
 
-func (g *Gox) handleRenderError(err error, w http.ResponseWriter) {
+func (t *Temp) handleRenderError(err error, w http.ResponseWriter) {
 	if err != nil {
 		log.Printf("500: Issue rendering: %v\n", err)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 }
 
-func (g *Gox) handleWriter(w http.ResponseWriter, r *http.Request, eTag string, content []byte, eTags map[string]string) {
+func (t *Temp) handleWriter(w http.ResponseWriter, r *http.Request, eTag string, content []byte, eTags map[string]string) {
 	if rEtag := r.Header.Get("If-None-Match"); rEtag == eTag {
 		log.Println("304: status not modified")
 		w.WriteHeader(http.StatusNotModified)

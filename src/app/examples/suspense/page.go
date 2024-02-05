@@ -1,9 +1,10 @@
 package examples_suspense
 
 import (
-	"github.com/a-h/templ"
-	"github.com/caleb-sideras/gox2/src/components/server"
 	"net/http"
+
+	"calebsideras.com/temporary/src/components/server"
+	"github.com/a-h/templ"
 )
 
 func Page(w http.ResponseWriter, r *http.Request) templ.Component {

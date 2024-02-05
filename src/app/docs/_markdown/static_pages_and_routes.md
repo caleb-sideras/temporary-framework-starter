@@ -41,7 +41,7 @@ package home
 
 import (
 	"github.com/a-h/templ"
-	"github.com/caleb-sideras/gox2/src/utils"
+	"calebsideras.com/temporary/src/utils"
 )
 
 func Page_() templ.Component {

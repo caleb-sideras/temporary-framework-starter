@@ -1,4 +1,4 @@
-package temporary
+package utils
 
 import (
 	"bytes"
@@ -10,11 +10,6 @@ import (
 	"github.com/a-h/templ"
 	"github.com/google/uuid"
 )
-
-type Temporary struct {
-	Res http.ResponseWriter
-	Req *http.Request
-}
 
 func renderSuspense(childCmp templ.Component) templ.Component {
 

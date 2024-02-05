@@ -1,8 +1,8 @@
 package docs_index_templ
 
 import (
+	"calebsideras.com/temporary/src/utils"
 	"github.com/a-h/templ"
-	"github.com/caleb-sideras/gox2/src/utils"
 )
 
 func Page() templ.Component {

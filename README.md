@@ -1,10 +1,6 @@
 # DOCS
 
 - Installation
-- REFACTOR (remove redundant files, get shadowDOM working, move all duplicated logic to separate repo, get cli tools working)
-- Fix mobile nav rail not highlighting
-- Roadmap
-
 
 # TODO
 
@@ -12,8 +8,17 @@
 - generated.go file throwing errors if functions change -> use js first to destroy the files?
 - delete/create default files on BUILD - > html/css/js delete -> generated.go default
 - fix highlighting of focused color
-- remove redudant files
 - add transitions? not sure
+- LOGS
+
+- REFACTOR 
+    - remove redundant files
+    - get shadowDOM working
+    - get cli tools working
+    - move all duplicated logic to separate repo
+
+- Fix mobile nav rail not highlighting
+- Roadmap
 
 REGEX double example
 

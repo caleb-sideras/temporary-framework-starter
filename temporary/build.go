@@ -1,12 +1,10 @@
-package gox
+package temporary
 
 import (
 	"bytes"
 	"context"
 	"errors"
 	"fmt"
-	"github.com/a-h/templ"
-	"github.com/caleb-sideras/gox2/gox/utils"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -14,9 +12,12 @@ import (
 	"path/filepath"
 	"strings"
 	"unicode"
+
+	"calebsideras.com/temporary/temporary/utils"
+	"github.com/a-h/templ"
 )
 
-type goxDir struct {
+type tempDir struct {
 	FileType string
 	FilePath string
 }
@@ -35,7 +36,7 @@ var FILE_CHECK_LIST = map[string]bool{
 	PAGE_TS_FILE: true,
 }
 
-func (g *Gox) Build(startDir string, packageDir string) {
+func (t *Temp) Build(startDir string, packageDir string) {
 
 	fmt.Println("--------------------------WALKING DIRECTORY--------------------------")
 	dirFiles, err := walkDirectoryStructure(startDir)
@@ -55,15 +56,15 @@ func (g *Gox) Build(startDir string, packageDir string) {
 	fmt.Println(code)
 
 	fmt.Println("------------------------RENDERING STATIC FILES-------------------------")
-	err = g.renderStaticFiles()
+	err = t.renderStaticFiles()
 	if err != nil {
 		panic(err)
 	}
 }
 
-func walkDirectoryStructure(startDir string) (map[string]map[string][]goxDir, error) {
+func walkDirectoryStructure(startDir string) (map[string]map[string][]tempDir, error) {
 
-	result := make(map[string]map[string][]goxDir)
+	result := make(map[string]map[string][]tempDir)
 
 	err := filepath.Walk(startDir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -75,7 +76,7 @@ func walkDirectoryStructure(startDir string) (map[string]map[string][]goxDir, er
 		}
 
 		if info.IsDir() && path != startDir {
-			files := make(map[string][]goxDir)
+			files := make(map[string][]tempDir)
 
 			filepath.Walk(path, func(innerPath string, innerInfo os.FileInfo, innerErr error) error {
 
@@ -86,9 +87,9 @@ func walkDirectoryStructure(startDir string) (map[string]map[string][]goxDir, er
 				ext := filepath.Ext(innerPath)
 				if !innerInfo.IsDir() && filepath.Dir(innerPath) == path && FILE_CHECK_LIST[filepath.Base(innerPath)] && filepath.Base(innerPath) != INDEX_FILE {
 					if _, exists := files[ext]; !exists {
-						files[ext] = []goxDir{}
+						files[ext] = []tempDir{}
 					}
-					files[ext] = append(files[ext], goxDir{filepath.Base(innerPath), innerPath})
+					files[ext] = append(files[ext], tempDir{filepath.Base(innerPath), innerPath})
 				}
 				return nil
 			})
@@ -98,9 +99,9 @@ func walkDirectoryStructure(startDir string) (map[string]map[string][]goxDir, er
 				indexFile := filepath.Join(currDir, INDEX_FILE)
 				if _, err := os.Stat(indexFile); !os.IsNotExist(err) {
 					if _, ok := files[filepath.Ext(indexFile)]; !ok {
-						files[filepath.Ext(indexFile)] = []goxDir{}
+						files[filepath.Ext(indexFile)] = []tempDir{}
 					}
-					files[filepath.Ext(indexFile)] = append(files[filepath.Ext(indexFile)], goxDir{filepath.Base(indexFile), indexFile})
+					files[filepath.Ext(indexFile)] = append(files[filepath.Ext(indexFile)], tempDir{filepath.Base(indexFile), indexFile})
 					break
 				}
 				currDir = filepath.Dir(currDir)
@@ -117,7 +118,7 @@ func walkDirectoryStructure(startDir string) (map[string]map[string][]goxDir, er
 	return result, err
 }
 
-func printDirectoryStructure(dirFiles map[string]map[string][]goxDir) {
+func printDirectoryStructure(dirFiles map[string]map[string][]tempDir) {
 	for k, v := range dirFiles {
 		fmt.Println("Directory:", k)
 		for ext, files := range v {
@@ -138,7 +139,7 @@ type sortedFunctions struct {
 	imports              utils.StringSet
 }
 
-func getSortedFunctions(dirFiles map[string]map[string][]goxDir, startDir string, packageDir string) (utils.StringSet, []string, []string, []string, []string, []string) {
+func getSortedFunctions(dirFiles map[string]map[string][]tempDir, startDir string, packageDir string) (utils.StringSet, []string, []string, []string, []string, []string) {
 
 	var indexGroup map[string]string = make(map[string]string)
 	var routeRenderFunctions []string
@@ -163,7 +164,7 @@ func getSortedFunctions(dirFiles map[string]map[string][]goxDir, startDir string
 
 		fmt.Println("Directory:", dir)
 
-		var goFiles []goxDir
+		var goFiles []tempDir
 		if _, ok := files[GO_EXT]; ok {
 			goFiles = files[GO_EXT]
 		}
@@ -214,7 +215,7 @@ func getSortedFunctions(dirFiles map[string]map[string][]goxDir, startDir string
 }
 
 // Gets Index functions - returns soft error
-func (sf *sortedFunctions) getIndexFunction(gd goxDir, packageDir string, leafPath string) error {
+func (sf *sortedFunctions) getIndexFunction(gd tempDir, packageDir string, leafPath string) error {
 	fmt.Println("   index.go")
 
 	expFns, pkName, err := getExportedFuctions(gd.FilePath)
@@ -251,7 +252,7 @@ func (sf *sortedFunctions) getIndexFunction(gd goxDir, packageDir string, leafPa
 }
 
 // Gets various types of Page functions - returns soft error
-func (sf *sortedFunctions) getPageFunction(gd goxDir, leafPath string, needImport *bool) error {
+func (sf *sortedFunctions) getPageFunction(gd tempDir, leafPath string, needImport *bool) error {
 	fmt.Println("   page.go")
 
 	expFns, pkName, err := getExportedFuctions(gd.FilePath)
@@ -315,7 +316,7 @@ func (sf *sortedFunctions) getPageFunction(gd goxDir, leafPath string, needImpor
 }
 
 // Gets various types of Route functions - returns soft error
-func (sf *sortedFunctions) getRouteFunction(gd goxDir, leafPath string, needImport *bool) error {
+func (sf *sortedFunctions) getRouteFunction(gd tempDir, leafPath string, needImport *bool) error {
 	fmt.Println("   route.go")
 
 	expFns, pkName, err := getExportedFuctions(gd.FilePath)
@@ -454,8 +455,8 @@ func getExportedFuctions(path string) (map[string]fnType, string, error) {
 func renderSortedFunctions(imports utils.StringSet, indexGroup []string, pageRenderFunctions []string, pageHandleFunctions []string, routeRenderFunctions []string, routeHandleFunctions []string) (string, error) {
 
 	code := `
-// Code generated by gox; DO NOT EDIT.
-package gox
+// Code generated by Temporary; DO NOT EDIT.
+package temporary
 import (
 	` + imports.Join("\n\t") + `
 )
@@ -480,7 +481,7 @@ var RouteHandleList = []Handler{
 	` + strings.Join(routeHandleFunctions, "\n\t") + `
 }
 `
-	err := os.WriteFile("./gox/generated.go", []byte(code), 0644)
+	err := os.WriteFile("./temporary/generated.go", []byte(code), 0644)
 	if err != nil {
 		return "", err
 	}
@@ -488,7 +489,7 @@ var RouteHandleList = []Handler{
 }
 
 // RenderStaticFiles() renders all static files defined by the user
-func (g *Gox) renderStaticFiles() error {
+func (g *Temp) renderStaticFiles() error {
 
 	output := ""
 
