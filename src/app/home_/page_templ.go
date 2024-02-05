@@ -37,7 +37,7 @@ func HomeTempl(links []TLink2Hx, links2 []TLink2Href) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		for _, link := range links {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<t-link-2 hx-get=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<t-link-2 href=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -45,7 +45,7 @@ func HomeTempl(links []TLink2Hx, links2 []TLink2Href) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"main\" hx-push-url=\"true\" title=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" title=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -19,10 +19,20 @@ export class HTMXElement extends LitElement {
   @property({ type: String, attribute: 'hx-swap' }) hxSwap = '';
   @property({ type: String, attribute: 'hx-history-elt' }) hxHistoryElt = '';
 
+  firstUpdated() {
+    // This is where you tell HTMX to process the shadow root
+    // @ts-ignore
+    htmx.process(this.shadowRoot);
+
+    // @ts-ignore
+    console.log("HTMX", htmx);
+  }
+
+
   renderAnchor(content: unknown) {
     return html`
       <a
-        href="${this.href|| nothing}"
+        href="${this.href || nothing}"
         hx-boost="${this.hxBoost}"
       >
         ${content}

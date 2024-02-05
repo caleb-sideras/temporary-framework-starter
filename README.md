@@ -12,10 +12,10 @@
 - LOGS
 
 - REFACTOR 
-    - remove redundant files
     - get shadowDOM working
     - get cli tools working
     - move all duplicated logic to separate repo
+    - remove static dir config - just set default
 
 - Fix mobile nav rail not highlighting
 - Roadmap

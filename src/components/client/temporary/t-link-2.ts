@@ -12,11 +12,11 @@ export class TLink2 extends HTMXElement {
 	    pointer-events: none;
 	    filter: grayscale(100%);
 	  }
-		.link_container:hover{
+		a:hover{
 			background: var(--md-sys-color-secondary-hover) !important;
 			cursor: pointer; 
     }		
-		.link_container{
+		a {
 	    text-decoration: none;
 	    text-align: left;
 	    padding: 16px;
@@ -49,40 +49,40 @@ export class TLink2 extends HTMXElement {
 
 	@property({ type: Boolean, reflect: true }) disabled = false;
 
-	render() {
-		let tag: StaticValue;
-		if (!this.href || this.href === "") {
-			tag = literal`div`;
-		} else {
-			tag = literal`a`;
-		}
+	// render() {
+	// 	let tag: StaticValue;
+	// 	if (!this.href || this.href === "") {
+	// 		tag = literal`div`;
+	// 	} else {
+	// 		tag = literal`a`;
+	// 	}
 
-		return staticHtml`
-			<${tag} href=${this.href || nothing} class="link_container">
-				<h2>
-					${this.title}
-				</h2>
-				<p>
-					${this.description}
-				</p>
-			</${tag}>
-    `
-	}
+	// 	return staticHtml`
+	// 		<${tag} href=${this.href || nothing} class="link_container">
+	// 			<h2>
+	// 				${this.title}
+	// 			</h2>
+	// 			<p>
+	// 				${this.description}
+	// 			</p>
+	// 		</${tag}>
+	//    `
+	// }
 
 	// When HTMX supports shadow DOM we change back to this
-	// render() {
-	// 	return this.renderAnchor(html`
-	// 		<h2>
-	// 			${this.title}
-	// 		</h2>
-	// 		<p>
-	// 			${this.description}
-	// 		</p>
-	// 		<img
-	// 			loading="lazy"
-	// 			src="${this.imgSrc}"
-	// 			alt="${this.imgAlt}"
-	// 		/>     
-	//    `)
-	// }
+	render() {
+		// 	let tag: StaticValue;
+		// 	if (!this.href || this.href === "") {
+		// 		tag = literal`div`;
+		// 	} else {
+		// 		tag = literal`a`;
+		return this.renderAnchor(html`
+			<h2>
+				${this.title}
+			</h2>
+			<p>
+				${this.description}
+			</p>
+	   `)
+	}
 }

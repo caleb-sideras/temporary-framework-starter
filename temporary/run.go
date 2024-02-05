@@ -149,10 +149,10 @@ func (t *Temp) createPageDefaultHandler(route Handler, eTags map[string]string) 
 			t.handleRenderError(err, w)
 		}
 
-		handleBoostPage := func() {
-			handlePage()
-			setBoostHeaders(w)
-		}
+		// handleBoostPage := func() {
+		// 	handlePage()
+		// 	setBoostHeaders(w)
+		// }
 
 		handleIndex := func() {
 			log.Println("Full-Page")
@@ -160,7 +160,8 @@ func (t *Temp) createPageDefaultHandler(route Handler, eTags map[string]string) 
 			t.handleRenderError(err, w)
 		}
 
-		formatRequest(w, r, handlePage, handleBoostPage, handleIndex, handleIndex)
+		formatRequest(w, r, handlePage, handleIndex, handleIndex, handleIndex)
+		// formatRequest(w, r, handlePage, handleBoostPage, handleIndex, handleIndex)
 
 		eTag := utils.GenerateETag(buffer.String())
 		t.handleWriter(w, r, eTag, buffer.Bytes(), eTags)
@@ -179,10 +180,10 @@ func (t *Temp) createPageResReqHandler(route Handler, eTags map[string]string) p
 			t.handleRenderError(err, w)
 		}
 
-		handleBoostPage := func() {
-			handlePage()
-			setBoostHeaders(w)
-		}
+		// handleBoostPage := func() {
+		// 	handlePage()
+		// 	setBoostHeaders(w)
+		// }
 
 		handleIndex := func() {
 			log.Println("Full-Page")
@@ -190,7 +191,8 @@ func (t *Temp) createPageResReqHandler(route Handler, eTags map[string]string) p
 			t.handleRenderError(err, w)
 		}
 
-		formatRequest(w, r, handlePage, handleBoostPage, handleIndex, handleIndex)
+		formatRequest(w, r, handlePage, handleIndex, handleIndex, handleIndex)
+		// formatRequest(w, r, handlePage, handleBoostPage, handleIndex, handleIndex)
 
 		w.Header().Set("Vary", "HX-Request")
 		w.Header().Set("Cache-Control", "no-cache")

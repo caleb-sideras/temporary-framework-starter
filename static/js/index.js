@@ -4495,6 +4495,10 @@ class HTMXElement extends s3 {
     this.hxSwap = "";
     this.hxHistoryElt = "";
   }
+  firstUpdated() {
+    htmx.process(this.shadowRoot);
+    console.log("HTMX", htmx);
+  }
   renderAnchor(content) {
     return x`
       <a
@@ -4665,11 +4669,11 @@ class TLink2 extends HTMXElement {
 	    pointer-events: none;
 	    filter: grayscale(100%);
 	  }
-		.link_container:hover{
+		a:hover{
 			background: var(--md-sys-color-secondary-hover) !important;
 			cursor: pointer; 
     }		
-		.link_container{
+		a {
 	    text-decoration: none;
 	    text-align: left;
 	    padding: 16px;
@@ -4697,22 +4701,14 @@ class TLink2 extends HTMXElement {
 		}		
 	`;
   render() {
-    let tag;
-    if (!this.href || this.href === "") {
-      tag = s4`div`;
-    } else {
-      tag = s4`a`;
-    }
-    return n6`
-			<${tag} href=${this.href || T} class="link_container">
-				<h2>
-					${this.title}
-				</h2>
-				<p>
-					${this.description}
-				</p>
-			</${tag}>
-    `;
+    return this.renderAnchor(x`
+			<h2>
+				${this.title}
+			</h2>
+			<p>
+				${this.description}
+			</p>
+	   `);
   }
 }
 __legacyDecorateClassTS([
