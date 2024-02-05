@@ -96,16 +96,12 @@ func (t *Temp) handleRouteRender(r *mux.Router, eTags map[string]string) {
 // PageRender
 func (t *Temp) createPageHandler(route string, eTags map[string]string) pageHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
-		/**
-		* NOTE
-		* Changed eTagPath from r.URL.Path -> route. Allows slugs.
-		**/
-		log.Println("- - - - - - - - - - - -")
+		logs := fmt.Sprintf("%s %s %s", r.RemoteAddr, r.Method, r.URL.Path)
 		eTagPath := ""
 		pagePath := ""
 
 		handlePage := func() {
-			log.Println("Partial")
+			logs = fmt.Sprintf("%s %s", logs, "Partial")
 			eTagPath = filepath.Join(route, PAGE_BODY_OUT_FILE)
 			pagePath = filepath.Join(t.OutputDir, eTagPath)
 		}
@@ -116,21 +112,20 @@ func (t *Temp) createPageHandler(route string, eTags map[string]string) pageHand
 		}
 
 		handleIndex := func() {
-			log.Println("Full-Page")
+			logs = fmt.Sprintf("%s %s", logs, "Full-Page")
 			eTagPath = filepath.Join(route, PAGE_OUT_FILE)
 			pagePath = filepath.Join(t.OutputDir, eTagPath)
 		}
 
 		formatRequest(w, r, handlePage, handleBPage, handleIndex, handleIndex)
 
-		log.Println("Path:", pagePath)
-		log.Println("ETag:", eTags[eTagPath])
-
 		if eTag := r.Header.Get("If-None-Match"); eTag == eTags[eTagPath] {
-			log.Println("403: status not modified")
+			log.Println(fmt.Sprintf("%s %s %d", logs, pagePath, http.StatusNotModified))
 			w.WriteHeader(http.StatusNotModified)
 			return
 		}
+
+		log.Println(fmt.Sprintf("%s %s %d", logs, pagePath, http.StatusOK))
 
 		setPageHeaders(w, eTagPath, eTags)
 		http.ServeFile(w, r, pagePath)
