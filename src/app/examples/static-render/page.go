@@ -5,7 +5,7 @@ import (
 	"github.com/a-h/templ"
 )
 
-func Page() templ.Component {
+func Page_() templ.Component {
 
 	return server.ProjectTab(server.ProjectTabType{
 		Title:       "Static Render",

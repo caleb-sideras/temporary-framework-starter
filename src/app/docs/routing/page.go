@@ -5,7 +5,7 @@ import (
 	"github.com/a-h/templ"
 )
 
-func Page() templ.Component {
+func Page_() templ.Component {
 
 	newTempl, err := utils.MdFileToTempl("src/app/docs/_markdown/routing.md")
 

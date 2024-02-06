@@ -2,7 +2,6 @@
 
 - Installation
 
-- Fix static render -> 2024/02/06 13:15:47 [::1]:39346 GET /blog Partial static/html/blog/page-body.html 304
 
 # BUGS
 
@@ -18,6 +17,7 @@ FIX?
 - (NOTE: wait till htmx 2.0 docs come out) Fix htmx issue with setting main opposed to default body for HX-Boost
 - fix issue of templ generate not working on INITIAl build becuase of .mod dependencies
 - generated.go file throwing errors if functions change -> use js first to destroy the files?
+    https://chat.openai.com/share/cbfd2a95-6d04-4438-9593-8b2d7881e62b
 - delete/create default files on BUILD - > html/css/js delete -> generated.go default
 - get cli tools working
 

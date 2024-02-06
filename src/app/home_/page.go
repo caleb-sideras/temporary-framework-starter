@@ -1,8 +1,6 @@
 package home
 
 import (
-	// "net/http"
-
 	"github.com/a-h/templ"
 )
 
@@ -21,7 +19,6 @@ type TLink2Href struct {
 	Href        string
 }
 
-// w http.ResponseWriter, r *http.Request
 func Page_() templ.Component {
 
 	links := []TLink2Hx{
