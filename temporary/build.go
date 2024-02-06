@@ -508,7 +508,9 @@ func (g *Temp) renderStaticFiles() error {
 			return errors.New(fmt.Sprintf("Could not find an index for path: %s", render.Path))
 		}
 
-		err = IndexList[render.Path]().Render(templ.WithChildren(context.Background(), render.Handler()), fp)
+		pageTemplOut := render.Handler()
+
+		err = IndexList[render.Path]().Render(templ.WithChildren(context.Background(), pageTemplOut), fp)
 		if err != nil {
 			return err
 		}
@@ -526,7 +528,7 @@ func (g *Temp) renderStaticFiles() error {
 			return err
 		}
 
-		err = render.Handler().Render(context.Background(), f)
+		err = pageTemplOut.Render(context.Background(), f)
 		if err != nil {
 			return err
 		}

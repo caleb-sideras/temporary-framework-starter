@@ -105,11 +105,11 @@ func (t *Temp) createPageHandler(route string, eTags map[string]string) pageHand
 			eTagPath = filepath.Join(route, PAGE_BODY_OUT_FILE)
 			pagePath = filepath.Join(t.OutputDir, eTagPath)
 		}
-
-		handleBPage := func() {
-			handlePage()
-			setBoostHeaders(w)
-		}
+		// NOTE: temporary while hx-boost overide broken
+		// handleBPage := func() {
+		// 	handlePage()
+		// 	setBoostHeaders(w)
+		// }
 
 		handleIndex := func() {
 			logs = fmt.Sprintf("%s %s", logs, "Full-Page")
@@ -117,7 +117,7 @@ func (t *Temp) createPageHandler(route string, eTags map[string]string) pageHand
 			pagePath = filepath.Join(t.OutputDir, eTagPath)
 		}
 
-		formatRequest(w, r, handlePage, handleBPage, handleIndex, handleIndex)
+		formatRequest(w, r, handlePage, handleIndex, handleIndex, handleIndex)
 
 		if eTag := r.Header.Get("If-None-Match"); eTag == eTags[eTagPath] {
 			log.Println(fmt.Sprintf("%s %s %d", logs, pagePath, http.StatusNotModified))
@@ -128,6 +128,8 @@ func (t *Temp) createPageHandler(route string, eTags map[string]string) pageHand
 		log.Println(fmt.Sprintf("%s %s %d", logs, pagePath, http.StatusOK))
 
 		setPageHeaders(w, eTagPath, eTags)
+
+		// NOTE: seems NOT to throw an error if the file doesn't exist
 		http.ServeFile(w, r, pagePath)
 	}
 }

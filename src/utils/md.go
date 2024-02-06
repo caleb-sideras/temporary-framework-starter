@@ -3,22 +3,22 @@ package utils
 import (
 	"bytes"
 	"context"
+	"io"
+	"os"
+
 	"github.com/a-h/templ"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/renderer/html"
-	"io"
-	"log"
-	"os"
 )
 
 func bufferToTempl(buf bytes.Buffer) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
-		// if !templ_7745c5c3_IsBuffer {
-		// 	templ_7745c5c3_Buffer = templ.GetBuffer()
-		// 	defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
-		// }
+		if !templ_7745c5c3_IsBuffer {
+			templ_7745c5c3_Buffer = templ.GetBuffer()
+			defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
+		}
 		ctx = templ.InitializeContext(ctx)
 		// templ_7745c5c3_Var1 := templ.GetChildren(ctx)
 		// if templ_7745c5c3_Var1 == nil {
@@ -49,24 +49,21 @@ func MdObjToTempl(markdown []byte) (templ.Component, error) {
 			parser.WithAttribute(),
 		),
 	)
+
 	if err := md.Convert(markdown, &buf); err != nil {
 		return nil, err
 	}
 
 	newTempl := bufferToTempl(buf)
-	// tmpl, err := template.New("markdown").Parse(buf.String())
-	// if err != nil {
-	// 	return nil, err
-	// }
+
 	return newTempl, nil
 }
 
 func MdFileToTempl(path string) (templ.Component, error) {
 	_, err := os.Getwd()
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
-	// log.Printf("Current working directory: %s\n", cwd)
 	markdown, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err

@@ -4,7 +4,7 @@
   "description": "temporary website",
   "main": "index.ts",
   "scripts": {
-    "css-build": "bun run tailwindcss -i ./src/styles/app.css -o ./static/css/output.css",
+    "css-build": "bun run -i ./src/styles/app.css -o ./static/css/output.css",
     "go-build": "go run src/main.go build",
     "go-run": "go run src/main.go run",
     "build": "templ generate & bun bun.build.js & bun run css-build & bun run go-build",

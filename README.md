@@ -2,25 +2,33 @@
 
 - Installation
 
+- Fix static render -> 2024/02/06 13:15:47 [::1]:39346 GET /blog Partial static/html/blog/page-body.html 304
+
+# BUGS
+
+1. RENDERING STATIC FILES
+`renderStaticFiles()` uses the `generated.go` file avaliable once `bun run build` is run -> therefore if another static function is declared it will NOT get rendered from the updated `generated.go`
+FIX?
+- Have two build commands? `bun run build` & `bun run generate`?
+- Store in SQL lite?
+
 # TODO
 
+1. DIFFCULT
+- (NOTE: wait till htmx 2.0 docs come out) Fix htmx issue with setting main opposed to default body for HX-Boost
 - fix issue of templ generate not working on INITIAl build becuase of .mod dependencies
 - generated.go file throwing errors if functions change -> use js first to destroy the files?
 - delete/create default files on BUILD - > html/css/js delete -> generated.go default
-- fix highlighting of focused color
-- add transitions? not sure
-- LOGS
-- Fix htmx issue with setting main opposed to default body for HX-Boost
-- Fix static render
+- get cli tools working
 
-- REFACTOR 
-    - get shadowDOM working
-    - get cli tools working
-    - move all duplicated logic to separate repo
-    - remove static dir config - just set default
-
+2. NORMAL
+- move all duplicated logic to separate repo
+- remove static dir config - just set default
 - Fix mobile nav rail not highlighting
 - Roadmap
+
+- fix highlighting of focused color
+- add transitions? not sure
 
 REGEX double example
 
