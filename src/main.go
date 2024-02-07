@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	t "calebsideras.com/temporary/temporary"
+	temp "calebsideras.com/temporary/temporary"
 	"github.com/gorilla/mux"
 )
 
@@ -22,17 +22,17 @@ func main() {
 
 		switch os.Args[1] {
 		case "build":
-			g := t.NewTemp(HTML_OUT_DIR)
-			g.Build(APP_DIR, PROJECT_PACKAGE)
+			t := temp.NewTemp(HTML_OUT_DIR)
+			t.Build(APP_DIR, PROJECT_PACKAGE)
 
 		case "run":
-			g := t.NewTemp(HTML_OUT_DIR)
+			t := temp.NewTemp(HTML_OUT_DIR)
 
 			http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
 			r := mux.NewRouter()
 
-			g.Run(r, ":8000", HTML_SERVE_PATH)
+			t.Run(r, ":8000", HTML_SERVE_PATH)
 
 		default:
 			fmt.Println("Invalid argument. Use 'build' or 'run'.")

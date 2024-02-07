@@ -5,9 +5,10 @@
   "main": "index.ts",
   "scripts": {
     "css-build": "bun run -i ./src/styles/app.css -o ./static/css/output.css",
+    "go-generate": "go generate temporary/generate/main.go",
     "go-build": "go run src/main.go build",
     "go-run": "go run src/main.go run",
-    "build": "templ generate & bun bun.build.js & bun run css-build & bun run go-build",
+    "build": "bun run go-generate && templ generate && bun bun.build.js && bun run css-build && bun run go-build",
     "start": "bun run go-run"
   },
   "keywords": [],
