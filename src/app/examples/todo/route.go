@@ -8,7 +8,7 @@ import (
 	"github.com/a-h/templ"
 )
 
-func Example() templ.Component {
+func Example_() templ.Component {
 	return server.Todo()
 }
 
@@ -17,7 +17,7 @@ func AddTask(w http.ResponseWriter, r *http.Request) templ.Component {
 	return server.Task(task)
 }
 
-func Code() templ.Component {
+func Code_() templ.Component {
 
 	newTempl, err := utils.MdFileToTempl("src/app/examples/_markdown/todo.md")
 	if err != nil {

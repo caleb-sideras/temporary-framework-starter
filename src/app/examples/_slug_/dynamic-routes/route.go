@@ -17,7 +17,7 @@ func Example(w http.ResponseWriter, r *http.Request) templ.Component {
 	return server.Slug(slug)
 }
 
-func Code() templ.Component {
+func Code_() templ.Component {
 
 	newTempl, err := utils.MdFileToTempl("src/app/examples/_markdown/slug.md")
 	if err != nil {

@@ -481,8 +481,7 @@ var RouteHandleList = []Handler{
 	` + strings.Join(routeHandleFunctions, "\n\t") + `
 }
 `
-	// err := os.WriteFile("./temporary/definitions.go", []byte(code), 0644)
-	err := os.WriteFile("./temporary/definitions.txt", []byte(code), 0644)
+	err := os.WriteFile("./temporary/definitions.go", []byte(code), 0644)
 	if err != nil {
 		return "", err
 	}

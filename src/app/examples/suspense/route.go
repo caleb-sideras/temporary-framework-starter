@@ -10,7 +10,7 @@ func Example() templ.Component {
 	return server.Suspense()
 }
 
-func Code() templ.Component {
+func Code_() templ.Component {
 
 	newTempl, err := utils.MdFileToTempl("src/app/examples/_markdown/suspense.md")
 	if err != nil {

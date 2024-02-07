@@ -5,7 +5,7 @@ import (
 	"github.com/a-h/templ"
 )
 
-func Example() templ.Component {
+func Example_() templ.Component {
 	newTempl, err := utils.MdFileToTempl("src/app/examples/_markdown/static_render_example.md")
 	if err != nil {
 		panic(err)
@@ -14,7 +14,7 @@ func Example() templ.Component {
 	return newTempl
 }
 
-func Code() templ.Component {
+func Code_() templ.Component {
 
 	newTempl, err := utils.MdFileToTempl("src/app/examples/_markdown/static_render.md")
 	if err != nil {

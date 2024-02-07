@@ -12,6 +12,6 @@ func Page_() templ.Component {
 		ProjectURL:  "/docs/routing/static-pages-and-routes",
 		ReadMeURL:   "/examples/static-render/example",
 		VideoURL:    "/examples/static-render/code",
-		InitialBody: Example(),
+		InitialBody: Example_(),
 	})
 }
