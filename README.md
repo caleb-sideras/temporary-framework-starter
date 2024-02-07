@@ -7,8 +7,12 @@
 1. DIFFCULT
 - (NOTE: wait till htmx 2.0 docs come out) Fix htmx issue with setting main opposed to default body for HX-Boost
 - fix issue of templ generate not working on INITIAl build becuase of .mod dependencies -> might be fixed due to sequential cli command calling in bun?
-- delete/create default files on BUILD - > html/css/js delete -> generated.go default
 - get cli tools working
+
+- delete/create default files on BUILD - > html/css/js delete 
+    - so we dont want to just delete all the files in this dir - simply because users might add shit to this?
+    - store files we saved so we can remove them?
+    - give a warning to the user about storing files here? 
 
 2. NORMAL
 - move all duplicated logic to separate repo

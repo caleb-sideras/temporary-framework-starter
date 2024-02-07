@@ -139,8 +139,7 @@ export class TMobileNavigation extends MdNavigationDrawerModal {
 
   onActivateRail() {
     this.deactivateDrawers();
-    // this.rail.revalidateFromBrower();
-    this.rail.revalidateFromUrl(this.getRootNodeUrl(this.getURL()));
+    this.rail.revalidateFromUrl(this.getURL());
     this.activateItem(this.rail);
   }
 
