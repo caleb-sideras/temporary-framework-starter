@@ -54,12 +54,6 @@ func (t *Temp) Build(startDir string, packageDir string) {
 		panic(err)
 	}
 	fmt.Println(code)
-
-	fmt.Println("------------------------RENDERING STATIC FILES-------------------------")
-	err = t.renderStaticFiles()
-	if err != nil {
-		panic(err)
-	}
 }
 
 func walkDirectoryStructure(startDir string) (map[string]map[string][]tempDir, error) {
@@ -489,8 +483,10 @@ var RouteHandleList = []Handler{
 	return code, nil
 }
 
-// RenderStaticFiles() renders all static files defined by the user
-func (g *Temp) renderStaticFiles() error {
+// Render() renders all static files defined by the user
+func (g *Temp) Render() {
+
+	fmt.Println("------------------------RENDERING STATIC FILES-------------------------")
 
 	output := ""
 
@@ -502,23 +498,23 @@ func (g *Temp) renderStaticFiles() error {
 		fmt.Println("   -", PAGE_OUT_FILE)
 		fp, err := utils.CreateFile(filepath.Join(render.Path, PAGE_OUT_FILE), g.OutputDir)
 		if err != nil {
-			return err
+			panic(err)
 		}
 
 		if _, ok := IndexList[render.Path]; !ok {
-			return errors.New(fmt.Sprintf("Could not find an index for path: %s", render.Path))
+			panic(errors.New(fmt.Sprintf("Could not find an index for path: %s", render.Path)))
 		}
 
 		pageTemplOut := render.Handler()
 
 		err = IndexList[render.Path]().Render(templ.WithChildren(context.Background(), pageTemplOut), fp)
 		if err != nil {
-			return err
+			panic(err)
 		}
 
 		pathAndTagPage, err := readFileAndGenerateETag(g.OutputDir, filepath.Join(render.Path, PAGE_OUT_FILE))
 		if err != nil {
-			return err
+			panic(err)
 		}
 		output += pathAndTagPage
 
@@ -526,17 +522,17 @@ func (g *Temp) renderStaticFiles() error {
 		fmt.Println("   -", PAGE_BODY_OUT_FILE)
 		f, err := utils.CreateFile(filepath.Join(render.Path, PAGE_BODY_OUT_FILE), g.OutputDir)
 		if err != nil {
-			return err
+			panic(err)
 		}
 
 		err = pageTemplOut.Render(context.Background(), f)
 		if err != nil {
-			return err
+			panic(err)
 		}
 
 		pathAndTagBody, err := readFileAndGenerateETag(g.OutputDir, filepath.Join(render.Path, PAGE_BODY_OUT_FILE))
 		if err != nil {
-			return err
+			panic(err)
 		}
 		output += pathAndTagBody
 
@@ -550,17 +546,17 @@ func (g *Temp) renderStaticFiles() error {
 		fmt.Println("   -", ROUTE_OUT_FILE)
 		f, err := utils.CreateFile(filepath.Join(render.Path, ROUTE_OUT_FILE), g.OutputDir)
 		if err != nil {
-			return err
+			panic(err)
 		}
 
 		err = render.Handler().Render(context.Background(), f)
 		if err != nil {
-			return err
+			panic(err)
 		}
 
 		pathAndTagBody, err := readFileAndGenerateETag(g.OutputDir, filepath.Join(render.Path, ROUTE_OUT_FILE))
 		if err != nil {
-			return err
+			panic(err)
 		}
 		output += pathAndTagBody
 
@@ -569,15 +565,14 @@ func (g *Temp) renderStaticFiles() error {
 	file, err := utils.CreateFile(ETAG_FILE, g.OutputDir)
 	defer file.Close()
 	if err != nil {
-		return err
+		panic(err)
 	}
 
 	_, err = file.Write([]byte(output))
 	if err != nil {
-		return err
+		panic(err)
 	}
 
-	return nil
 }
 
 func readFileAndGenerateETag(outDir string, filePath string) (string, error) {

@@ -7,8 +7,9 @@
     "css-build": "bun run -i ./src/styles/app.css -o ./static/css/output.css",
     "go-generate": "go generate temporary/generate/main.go",
     "go-build": "go run src/main.go build",
+    "go-render": "go run src/main.go render",
     "go-run": "go run src/main.go run",
-    "build": "bun run go-generate && templ generate && bun bun.build.js && bun run css-build && bun run go-build",
+    "build": "templ generate && bun bun.build.js && bun run css-build && bun run go-build && bun run go-generate && bun run go-render",
     "start": "bun run go-run"
   },
   "keywords": [],

@@ -25,6 +25,10 @@ func main() {
 			t := temp.NewTemp(HTML_OUT_DIR)
 			t.Build(APP_DIR, PROJECT_PACKAGE)
 
+		case "render":
+			t := temp.NewTemp(HTML_OUT_DIR)
+			t.Render()
+
 		case "run":
 			t := temp.NewTemp(HTML_OUT_DIR)
 
