@@ -1,13 +1,9 @@
 package temporary
 
-type Temp struct {
-	OutputDir string
-}
+type Temp struct{}
 
-func NewTemp(outputDir string) *Temp {
-	return &Temp{
-		OutputDir: outputDir,
-	}
+func NewTemp() *Temp {
+	return &Temp{}
 }
 
 const (
@@ -40,4 +36,6 @@ const (
 	PAGE_BODY_OUT_FILE = PAGE_BODY + HTML_EXT
 	ROUTE_OUT_FILE     = ROUTE + HTML_EXT
 	ETAG_FILE          = ETAG + TXT_EXT
+
+	HTML_OUT_DIR = "./static/html/"
 )

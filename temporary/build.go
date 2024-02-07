@@ -36,17 +36,23 @@ var FILE_CHECK_LIST = map[string]bool{
 	PAGE_TS_FILE: true,
 }
 
-func (t *Temp) Build(startDir string, packageDir string) {
+const (
+	HTML_SERVE_PATH = "/static/"
+	APP_DIR         = "src/app"
+	PROJECT_PACKAGE = "calebsideras.com/temporary/"
+)
+
+func (t *Temp) Build() {
 
 	fmt.Println("--------------------------WALKING DIRECTORY--------------------------")
-	dirFiles, err := walkDirectoryStructure(startDir)
+	dirFiles, err := walkDirectoryStructure(APP_DIR)
 	if err != nil {
 		panic(err)
 	}
 	printDirectoryStructure(dirFiles)
 
 	fmt.Println("-------------------------EXTRACTING YOUR CODE-------------------------")
-	imports, indexGroup, pageRenderFunctions, pageHandleFunctions, routeRenderFunctions, routeHandleFunctions := getSortedFunctions(dirFiles, startDir, packageDir)
+	imports, indexGroup, pageRenderFunctions, pageHandleFunctions, routeRenderFunctions, routeHandleFunctions := getSortedFunctions(dirFiles, APP_DIR, PROJECT_PACKAGE)
 
 	fmt.Println("-----------------------RENDERING SORTED FUNCTIONS----------------------")
 	code, err := renderSortedFunctions(imports, indexGroup, pageRenderFunctions, pageHandleFunctions, routeRenderFunctions, routeHandleFunctions)
@@ -496,7 +502,7 @@ func (g *Temp) Render() {
 
 		// page.html
 		fmt.Println("   -", PAGE_OUT_FILE)
-		fp, err := utils.CreateFile(filepath.Join(render.Path, PAGE_OUT_FILE), g.OutputDir)
+		fp, err := utils.CreateFile(filepath.Join(render.Path, PAGE_OUT_FILE), HTML_OUT_DIR)
 		if err != nil {
 			panic(err)
 		}
@@ -512,7 +518,7 @@ func (g *Temp) Render() {
 			panic(err)
 		}
 
-		pathAndTagPage, err := readFileAndGenerateETag(g.OutputDir, filepath.Join(render.Path, PAGE_OUT_FILE))
+		pathAndTagPage, err := readFileAndGenerateETag(HTML_OUT_DIR, filepath.Join(render.Path, PAGE_OUT_FILE))
 		if err != nil {
 			panic(err)
 		}
@@ -520,7 +526,7 @@ func (g *Temp) Render() {
 
 		// page-body.html
 		fmt.Println("   -", PAGE_BODY_OUT_FILE)
-		f, err := utils.CreateFile(filepath.Join(render.Path, PAGE_BODY_OUT_FILE), g.OutputDir)
+		f, err := utils.CreateFile(filepath.Join(render.Path, PAGE_BODY_OUT_FILE), HTML_OUT_DIR)
 		if err != nil {
 			panic(err)
 		}
@@ -530,7 +536,7 @@ func (g *Temp) Render() {
 			panic(err)
 		}
 
-		pathAndTagBody, err := readFileAndGenerateETag(g.OutputDir, filepath.Join(render.Path, PAGE_BODY_OUT_FILE))
+		pathAndTagBody, err := readFileAndGenerateETag(HTML_OUT_DIR, filepath.Join(render.Path, PAGE_BODY_OUT_FILE))
 		if err != nil {
 			panic(err)
 		}
@@ -544,7 +550,7 @@ func (g *Temp) Render() {
 
 		// route.html
 		fmt.Println("   -", ROUTE_OUT_FILE)
-		f, err := utils.CreateFile(filepath.Join(render.Path, ROUTE_OUT_FILE), g.OutputDir)
+		f, err := utils.CreateFile(filepath.Join(render.Path, ROUTE_OUT_FILE), HTML_OUT_DIR)
 		if err != nil {
 			panic(err)
 		}
@@ -554,7 +560,7 @@ func (g *Temp) Render() {
 			panic(err)
 		}
 
-		pathAndTagBody, err := readFileAndGenerateETag(g.OutputDir, filepath.Join(render.Path, ROUTE_OUT_FILE))
+		pathAndTagBody, err := readFileAndGenerateETag(HTML_OUT_DIR, filepath.Join(render.Path, ROUTE_OUT_FILE))
 		if err != nil {
 			panic(err)
 		}
@@ -562,7 +568,7 @@ func (g *Temp) Render() {
 
 	}
 
-	file, err := utils.CreateFile(ETAG_FILE, g.OutputDir)
+	file, err := utils.CreateFile(ETAG_FILE, HTML_OUT_DIR)
 	defer file.Close()
 	if err != nil {
 		panic(err)

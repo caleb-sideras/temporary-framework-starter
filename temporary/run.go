@@ -29,7 +29,7 @@ const (
 
 type pageHandler func(w http.ResponseWriter, r *http.Request)
 
-func (t *Temp) Run(r *mux.Router, port string, servePath string) {
+func (t *Temp) Run(r *mux.Router, port string) {
 	http.Handle("/", r)
 	fmt.Println("----------------------------CREATING HANDLERS----------------------------")
 	t.handleRoutes(r, t.getETags())
@@ -103,7 +103,7 @@ func (t *Temp) createPageHandler(route string, eTags map[string]string) pageHand
 		handlePage := func() {
 			logs = fmt.Sprintf("%s %s", logs, "Partial")
 			eTagPath = filepath.Join(route, PAGE_BODY_OUT_FILE)
-			pagePath = filepath.Join(t.OutputDir, eTagPath)
+			pagePath = filepath.Join(HTML_OUT_DIR, eTagPath)
 		}
 		// NOTE: temporary while hx-boost overide broken
 		// handleBPage := func() {
@@ -114,7 +114,7 @@ func (t *Temp) createPageHandler(route string, eTags map[string]string) pageHand
 		handleIndex := func() {
 			logs = fmt.Sprintf("%s %s", logs, "Full-Page")
 			eTagPath = filepath.Join(route, PAGE_OUT_FILE)
-			pagePath = filepath.Join(t.OutputDir, eTagPath)
+			pagePath = filepath.Join(HTML_OUT_DIR, eTagPath)
 		}
 
 		formatRequest(w, r, handlePage, handleIndex, handleIndex, handleIndex)
@@ -239,7 +239,7 @@ func (t *Temp) createRouteRenderHandler(route string, eTags map[string]string) p
 		logs := fmt.Sprintf("%s %s %s", r.RemoteAddr, r.Method, r.URL.Path)
 
 		eTagPath := filepath.Join(route, ROUTE_OUT_FILE)
-		pagePath := filepath.Join(t.OutputDir, eTagPath)
+		pagePath := filepath.Join(HTML_OUT_DIR, eTagPath)
 
 		if eTag := r.Header.Get("If-None-Match"); eTag == eTags[eTagPath] {
 			log.Println(fmt.Sprintf("%s %s %d", logs, pagePath, http.StatusNotModified))
@@ -258,7 +258,7 @@ func (t *Temp) createRouteRenderHandler(route string, eTags map[string]string) p
 func (t *Temp) getETags() map[string]string {
 	eTags := make(map[string]string)
 
-	file, err := os.Open(filepath.Join(t.OutputDir, ETAG_FILE))
+	file, err := os.Open(filepath.Join(HTML_OUT_DIR, ETAG_FILE))
 	if err != nil {
 		log.Fatalf("Could not create file: %v", err)
 	}
