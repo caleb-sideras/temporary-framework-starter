@@ -51,10 +51,10 @@ static/js/**/*.js
 src/out
 msc/*
 
-# But allow the root directories to be pushed
-!static/html/
-!static/js/
-!static/css/
+touch static/html/.gitkeep
+touch static/js/.gitkeep
+
+!.gitkeep
 
 bin/
 pkg/
