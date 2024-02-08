@@ -45,10 +45,9 @@ desktop.ini    # Windows
 *_templ.go
 
 # Build files
-static/css/**/*.css
-static/html/**/*.html
-static/js/**/*.js
-src/out
+static/css/*
+static/html/*
+static/js/*
 msc/*
 
 touch static/html/.gitkeep
