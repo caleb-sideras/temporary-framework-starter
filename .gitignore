@@ -45,9 +45,9 @@ desktop.ini    # Windows
 *_templ.go
 
 # Build files
-static/css/*.css
-static/html/*.html
-static/js/*.js
+static/css/**/*.css
+static/html/**/*.html
+static/js/**/*.js
 src/out
 msc/*
 
