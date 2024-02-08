@@ -1,0 +1,123 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script type="module" src="/static/js/index.js"></script><link href="/static/css/output.css" rel="stylesheet"><!-- <script src="https://unpkg.com/htmx.org@1.9.6" integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous"></script> --><script src="https://unpkg.com/htmx.org@2.0.0-alpha1/dist/htmx.min.js"></script><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"></head><body class="dark"><!-- <script>
+				const colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+				function handleColorSchemeChange(e) {
+				  if (e.matches) {
+				    document.body.classList.add('dark'); 
+				  } else {
+				    document.body.classList.remove('dark');
+				  }
+				}
+
+				colorSchemeQuery.addListener(handleColorSchemeChange);
+
+				// Initial setting
+				if (colorSchemeQuery.matches) {
+				  document.body.classList.add('dark');
+				}
+			</script>
+			--><header><t-mobile-top-app-bar><md-icon slot="navigationIcon" class="material-symbols-filled">menu</md-icon></t-mobile-top-app-bar><t-mobile-navigation><t-mobile-navigation-rail slot="rail"><temporary-list-item interactive type="link" href="/" regex="^/?$" hx-boost="true">Home <md-icon slot="start" class="material-symbols-filled">crop_square</md-icon></temporary-list-item> <temporary-list-item interactive type="button" href="/examples/todo" regex="^/?\/examples(\/?|\/.*)?$">Examples <md-icon slot="start" class="material-symbols-filled">code_blocks</md-icon> <md-icon slot="end" class="material-symbols-filled">arrow_forward</md-icon></temporary-list-item> <temporary-list-item interactive type="button" href="/docs" regex="^/?\/docs(\/?|\/.*)?$">Docs <md-icon slot="start" class="material-symbols-filled">developer_guide</md-icon> <md-icon slot="end" class="material-symbols-filled">arrow_forward</md-icon></temporary-list-item> <temporary-list-item interactive type="link" href="/blog" regex="^/?\/blog(\/?|\/.*)?$" hx-boost="true">Releases <md-icon slot="start" class="material-symbols-filled">article</md-icon></temporary-list-item></t-mobile-navigation-rail> <t-mobile-navigation-drawer slot="drawer"><temporary-list-item interactive border type="link" href="/docs" hx-boost="true">Introduction</temporary-list-item> <temporary-list-item interactive border type="link" href="/docs/installation" hx-boost="true">Installation</temporary-list-item> <temporary-list-item interactive border type="link" href="/docs/project-structure" hx-boost="true">Project Structure</temporary-list-item> <t-dropdown><t-dropdown-title border hide-event slot="title"><div slot="headline">Routing</div><md-icon slot="active">arrow_drop_up</md-icon> <md-icon slot="inactive">arrow_drop_down</md-icon></t-dropdown-title> <t-dropdown-list slot="content"><t-dropdown-list-item interactive border type="link" href="/docs/routing" hx-boost="true">Fundamentals</t-dropdown-list-item> <t-dropdown-list-item interactive border type="link" href="/docs/routing/defining-routes" hx-boost="true">Defining Routes</t-dropdown-list-item> <t-dropdown-list-item interactive border type="link" href="/docs/routing/pages-and-index" hx-boost="true">Pages and Index</t-dropdown-list-item> <t-dropdown-list-item interactive border type="link" href="/docs/routing/hx-boost" hx-boost="true">hx-boost</t-dropdown-list-item> <t-dropdown-list-item interactive border type="link" href="/docs/routing/static-pages-and-routes" hx-boost="true">Static Pages</t-dropdown-list-item> <t-dropdown-list-item interactive border type="link" href="/docs/routing/caching" hx-boost="true">Caching</t-dropdown-list-item> <t-dropdown-list-item interactive border type="link" href="/docs/routing/dynamic-routes" hx-boost="true">Dynamic Routes</t-dropdown-list-item> <t-dropdown-list-item interactive border type="link" href="/docs/routing/suspense" hx-boost="true">Suspense</t-dropdown-list-item></t-dropdown-list></t-dropdown> <t-dropdown><t-dropdown-title border hide-event slot="title"><div slot="headline">Pages</div><md-icon slot="active">arrow_drop_up</md-icon> <md-icon slot="inactive">arrow_drop_down</md-icon></t-dropdown-title> <t-dropdown-list slot="content"><t-dropdown-list-item interactive border type="link" href="/docs/pages" hx-boost="true">Definition</t-dropdown-list-item> <t-dropdown-list-item interactive border type="link" href="/docs/pages/templ" hx-boost="true">Templ</t-dropdown-list-item> <t-dropdown-list-item interactive border type="link" href="/docs/pages/static-pages" hx-boost="true">Static Rendering</t-dropdown-list-item></t-dropdown-list></t-dropdown> <t-dropdown><t-dropdown-title border hide-event slot="title"><div slot="headline">Index</div><md-icon slot="active">arrow_drop_up</md-icon> <md-icon slot="inactive">arrow_drop_down</md-icon></t-dropdown-title> <t-dropdown-list slot="content"><t-dropdown-list-item interactive border type="link" href="/docs/index" hx-boost="true">Definition</t-dropdown-list-item> <t-dropdown-list-item interactive border type="link" href="/docs/index/templ" hx-boost="true">Templ</t-dropdown-list-item></t-dropdown-list></t-dropdown></t-mobile-navigation-drawer> <t-mobile-navigation-drawer slot="drawer"><temporary-list-item interactive border type="link" href="/examples/todo" hx-boost="true">Todo</temporary-list-item> <temporary-list-item interactive border type="link" href="/examples/suspense" hx-boost="true">Suspense</temporary-list-item> <temporary-list-item interactive border type="link" regex="^/examples/.*/dynamic-routes$" href="/examples/_replace-me_/dynamic-routes" hx-boost="true">Dynamic Routing</temporary-list-item> <temporary-list-item interactive border type="link" href="/examples/static-render" hx-boost="true">Static Render</temporary-list-item></t-mobile-navigation-drawer></t-mobile-navigation><t-navigation><div slot="footer"><temporary-list-item interactive type="link" href="https://github.com/caleb-sideras/">github <md-icon slot="end" class="material-symbols-filled-light">north_east</md-icon></temporary-list-item> <temporary-list-item interactive type="link" href="https://www.linkedin.com/in/caleb-james-sideras-9555b0196/">linkedin <md-icon slot="end" class="material-symbols-filled-light">north_east</md-icon></temporary-list-item></div><t-navigation-rail slot="rail"><temporary-list-item interactive type="link" href="/" regex="^/?$" hx-boost="true">Home <md-icon slot="start" class="material-symbols-filled">crop_square</md-icon></temporary-list-item> <temporary-list-item interactive type="link" href="/examples/todo" hx-boost="true" regex="^/?\/examples(\/?|\/.*)?$">Examples <md-icon slot="start" class="material-symbols-filled">code_blocks</md-icon></temporary-list-item> <temporary-list-item interactive type="link" href="/docs" regex="^/?\/docs(\/?|\/.*)?$" hx-boost="true">Docs <md-icon slot="start" class="material-symbols-filled">developer_guide</md-icon></temporary-list-item> <temporary-list-item interactive type="link" href="/blog" regex="^/?\/blog(\/?|\/.*)?$" hx-boost="true">Blog <md-icon slot="start" class="material-symbols-filled">article</md-icon></temporary-list-item></t-navigation-rail> <t-navigation-drawer slot="drawer"><temporary-list-item interactive border type="link" href="/docs" hx-boost="true">Introduction</temporary-list-item> <temporary-list-item interactive border type="link" href="/docs/installation" hx-boost="true">Installation</temporary-list-item> <temporary-list-item interactive border type="link" href="/docs/project-structure" hx-boost="true">Project Structure</temporary-list-item> <t-dropdown><t-dropdown-title border hide-event slot="title"><div slot="headline">Routing</div><md-icon slot="active">arrow_drop_up</md-icon> <md-icon slot="inactive">arrow_drop_down</md-icon></t-dropdown-title> <t-dropdown-list slot="content"><t-dropdown-list-item interactive border type="link" href="/docs/routing" hx-boost="true">Fundamentals</t-dropdown-list-item> <t-dropdown-list-item interactive border type="link" href="/docs/routing/defining-routes" hx-boost="true">Defining Routes</t-dropdown-list-item> <t-dropdown-list-item interactive border type="link" href="/docs/routing/pages-and-index" hx-boost="true">Pages and Index</t-dropdown-list-item> <t-dropdown-list-item interactive border type="link" href="/docs/routing/hx-boost" hx-boost="true">hx-boost</t-dropdown-list-item> <t-dropdown-list-item interactive border type="link" href="/docs/routing/static-pages-and-routes" hx-boost="true">Static Pages</t-dropdown-list-item> <t-dropdown-list-item interactive border type="link" href="/docs/routing/caching" hx-boost="true">Caching</t-dropdown-list-item> <t-dropdown-list-item interactive border type="link" href="/docs/routing/dynamic-routes" hx-boost="true">Dynamic Routes</t-dropdown-list-item> <t-dropdown-list-item interactive border type="link" href="/docs/routing/suspense" hx-boost="true">Suspense</t-dropdown-list-item></t-dropdown-list></t-dropdown> <t-dropdown><t-dropdown-title border hide-event slot="title"><div slot="headline">Pages</div><md-icon slot="active">arrow_drop_up</md-icon> <md-icon slot="inactive">arrow_drop_down</md-icon></t-dropdown-title> <t-dropdown-list slot="content"><t-dropdown-list-item interactive border type="link" href="/docs/pages" hx-boost="true">Definition</t-dropdown-list-item> <t-dropdown-list-item interactive border type="link" href="/docs/pages/templ" hx-boost="true">Templ</t-dropdown-list-item> <t-dropdown-list-item interactive border type="link" href="/docs/pages/static-pages" hx-boost="true">Static Rendering</t-dropdown-list-item></t-dropdown-list></t-dropdown> <t-dropdown><t-dropdown-title border hide-event slot="title"><div slot="headline">Index</div><md-icon slot="active">arrow_drop_up</md-icon> <md-icon slot="inactive">arrow_drop_down</md-icon></t-dropdown-title> <t-dropdown-list slot="content"><t-dropdown-list-item interactive border type="link" href="/docs/index" hx-boost="true">Definition</t-dropdown-list-item> <t-dropdown-list-item interactive border type="link" href="/docs/index/templ" hx-boost="true">Templ</t-dropdown-list-item></t-dropdown-list></t-dropdown></t-navigation-drawer> <t-navigation-drawer slot="drawer"><temporary-list-item interactive border type="link" href="/examples/todo" hx-boost="true">Todo</temporary-list-item> <temporary-list-item interactive border type="link" href="/examples/suspense" hx-boost="true">Suspense</temporary-list-item> <temporary-list-item interactive border type="link" regex="^/examples/.*/dynamic-routes$" href="/examples/_replace-me_/dynamic-routes" hx-boost="true">Dynamic Routing</temporary-list-item> <temporary-list-item interactive border type="link" href="/examples/static-render" hx-boost="true">Static Render</temporary-list-item></t-navigation-drawer></t-navigation></header><div class="main_container"><main><div id='markdown'><h1 id="pages-and-indexs">Pages and Indexs</h1>
+<p>The App Router inside Temporary has file conventions to easily create pages and shared indexs. This page will guide you through how to use these special files in your Temporary application.</p>
+<h2 id="pages">Pages</h2>
+<p>A page is UI that is unique to a route. You can define pages by exporting a component from a <code>page.go</code> file. Use nested folders to define a route and a <code>page.go</code> file to make the route publicly accessible.</p>
+<p>Create your first page by adding a <code>page.go</code> file inside the app directory:</p>
+<pre><code>app                  (1)
+ ├─ index.go       
+ ├─ page.go       
+ └─ example          (2)
+    └─ page.go
+</code></pre>
+<pre><code class="language-go">// `app/page.go` is the UI for the `/` URL
+
+package home
+
+import (
+	&quot;net/http&quot;
+	&quot;github.com/a-h/templ&quot;
+)
+
+func Page(w http.ResponseWriter, r *http.Request) templ.Component {
+	return HelloHome()
+}
+
+templ HelloWorld(){
+  &lt;h1&gt;Hello, Home Page!&lt;/h1&gt;
+}
+  
+</code></pre>
+<pre><code class="language-go">// `app/example/page.go` is the UI for the `/example` URL
+
+package home
+
+import (
+	&quot;net/http&quot;
+	&quot;github.com/a-h/templ&quot;
+)
+
+func Page(w http.ResponseWriter, r *http.Request) templ.Component {
+  // Perform some data fetching/mutations
+	return HelloExample()
+}
+
+templ HelloWorld(){
+  &lt;h1&gt;Hello, Example!&lt;/h1&gt;
+}
+  
+</code></pre>
+<h3 id="good-to-know">Good to know:</h3>
+<ul>
+<li>A page is always the leaf of the route subtree.</li>
+<li><code>.go</code> file extension can be used for Pages.</li>
+<li>A <code>page.go</code> file is required to make a route segment publicly accessible.</li>
+<li>Pages are Dynamic Server Components by default.</li>
+<li>Pages can fetch data.</li>
+<li>Pages must return <code>templ.Component</code>.</li>
+</ul>
+<h2 id="indexs">Indexs</h2>
+<p>A index is UI that is shared between multiple pages. On navigation, indexs by <strong>default</strong> do not preserve state and re-render. Indexs can also be nested.</p>
+<p>You can define an index by exporting a <code>Templ</code> component from a <code>index.go</code> file. The <code>Templ</code> component should have a <code>{children...}</code> expression that is passed into it for it wrap - which will be populated with a child page during rendering.</p>
+<pre><code>app                  (1)
+ ├─ index.go       
+ ├─ page.go       
+ └─ example          (2)
+    └─ page.go
+</code></pre>
+<pre><code class="language-go">// `app/page.go` is the UI for the `/` URL
+
+package home
+
+import (
+	&quot;net/http&quot;
+	&quot;github.com/a-h/templ&quot;
+)
+
+func Index(w http.ResponseWriter, r *http.Request) templ.Component {
+	return IndexTempl()
+}
+
+templ IndexTempl(){
+	&lt;!DOCTYPE html&gt;
+	&lt;html lang=&quot;en&quot;&gt;
+      &lt;body&gt;
+        /* Include shared UI here e.g. a header or sidebar */
+        &lt;main&gt;
+          { children... }
+        &lt;/main&gt;
+      &lt;/body&gt;
+  &lt;/html&gt;
+}
+  
+</code></pre>
+<h3 id="good-to-know-1">Good to know:</h3>
+<ul>
+<li>At present Temporary doesn't support nested Indexs. So each Index is a Root Index. Indexs must contain html and body tags.</li>
+<li>Any route segment can optionally define its own Index. These Indexs will be shared across all pages in that segment.</li>
+<li>Indexs are Dynamic Server Components by default.</li>
+<li>Indexs can fetch data.</li>
+<li>Passing data between a parent index and its children is not possible.</li>
+<li><code>.go</code> file extension can be used for index.</li>
+<li>A <code>index.go</code> and <code>page.go</code> files can be defined in the same folder. The index will wrap the page.</li>
+<li><code>index.go</code> files return a <code>Templ.component</code>.</li>
+<li>The returned <code>Templ</code> component should have a <code>{children...}</code> expression that is passed into it for it wrap.</li>
+</ul>
+</div></main></div></body></html>

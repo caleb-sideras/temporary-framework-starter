@@ -1,0 +1,24 @@
+<div id='markdown'><h1 id="hx-boost">hx-boost</h1>
+<p>We recommend reading the <a href="">Pages and Indexs</a> pages before continuing.</p>
+<p>By <strong>default</strong> all navigation between pages that share the same index do not preserve state and fully re-render. But you can opt-in to preserve state on the client by only rendering the HTML required for navigation to that specific route.</p>
+<p>When navigation occurs using an anchor tag with the <strong>HTMX</strong> <code>hx-boost=&quot;true&quot;</code> attribute, Temporary hijacks this preventing full HTML DOM swaps if indexs are shared between pages. Only the necessary HTML (i.e the output from the respective <code>page.go</code>) is rendered and sent to the client. An <code>innerHTML</code> swap is performed with the <code>&lt;main&gt;</code> tag.</p>
+<p>For Example:</p>
+<pre><code>app                  (1)
+ ├─ index.go       
+ ├─ page.go       
+ └─ example          (2)
+    └─ page.go
+</code></pre>
+<p>Both <code>/</code> and <code>/example</code> share the same <code>index.go</code>, so navigation between these routes with <code>hx-boost</code> will always return the needed HTML partials and thus maintaining state in the index. This is especially useful for when you have heavy client-side logic in your index based on state solely accessible in the browser.</p>
+<h2 id="overiding">Overiding</h2>
+<p>You can overide this <code>hx-boost</code> behaviour per request. Simply append an <code>index</code> query parameter to your request and specify using a boolean value if you would like the index to be returned. Additionally, this can be used in all <code>GET</code> requests for page routing, which have this parameter set to <code>true</code> by default.</p>
+<pre><code>// Returns only the page output from example route
+
+https://example.com/example?index=false
+</code></pre>
+<h3 id="note">NOTE</h3>
+<ul>
+<li>We aim to allow you to disable this is the Temporary config.</li>
+<li>We aim to create a Metadata API to allow you to define metadata in your pages and have this dynamically changed on navigation.</li>
+</ul>
+</div>

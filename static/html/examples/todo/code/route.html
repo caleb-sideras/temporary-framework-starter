@@ -1,0 +1,45 @@
+<div id='markdown'><h2 id="folder-hierarchy">Folder Hierarchy</h2>
+<pre><code>app
+ └─ todo
+    ├─ page.go
+    ├─ route.go
+    └─ todo.templ
+</code></pre>
+<h2 id="pagego">page.go</h2>
+<pre><code class="language-go">func Page() templ.Component {
+	return Todo()
+}
+</code></pre>
+<h2 id="routego">route.go</h2>
+<pre><code class="language-go">func AddTask(w http.ResponseWriter, r *http.Request) templ.Component {
+	task := r.PostFormValue(&quot;task&quot;)
+	return Task(task)
+}
+</code></pre>
+<h2 id="todotempl">todo.templ</h2>
+<pre><code class="language-go">templ Todo() {
+	&lt;div id=&quot;example-body&quot;&gt;
+		&lt;form hx-post=&quot;/examples/todo/addtask&quot; hx-target=&quot;#task-list&quot; hx-swap=&quot;beforeend&quot; hx-indicator=&quot;#spinner&quot; &gt;
+			&lt;md-outlined-text-field label=&quot;Add a new task&quot; type=&quot;text&quot; name=&quot;task&quot; role=&quot;presentation&quot; inputmode=&quot;&quot; autocomplete=&quot;&quot;&gt;
+				&lt;md-circular-progress slot=&quot;trailing-icon&quot; indeterminate=&quot;&quot; id=&quot;spinner&quot; role=&quot;presentation&quot; aria-hidden=&quot;true&quot;&gt;&lt;/md-circular-progress&gt;
+			&lt;/md-outlined-text-field&gt;
+			&lt;md-filled-button type=&quot;submit&quot; role=&quot;presentation&quot;&gt;
+				&lt;md-icon&gt;
+					&lt;span&gt;
+						add
+					&lt;/span&gt;
+				&lt;/md-icon&gt;
+			&lt;/md-filled-button&gt;
+		&lt;/form&gt;
+		&lt;div id=&quot;task-list&quot;&gt;&lt;/div&gt;
+	&lt;/div&gt;
+}
+
+templ Task(task string) {
+	&lt;div&gt;
+		&lt;span&gt;{ task }&lt;/span&gt;
+		&lt;md-checkbox&gt;&lt;/md-checkbox&gt;
+	&lt;/div&gt;
+}
+</code></pre>
+</div>

@@ -1,0 +1,33 @@
+<div id='markdown'><h1 id="dynamic-routes">Dynamic Routes</h1>
+<p>When you don't know the exact segment names ahead of time and want to create routes from dynamic data, you can use Dynamic Segments that are filled in at request time.</p>
+<h2 id="convention">Convention</h2>
+<p>A Dynamic Segment can be created by wrapping a folder's name in underscores: <code>_folderName_</code>. For example, <code>_id_</code> or <code>_slug_</code>.</p>
+<p>Dynamic Segments are passed as the params and be accesed via the <code>*http.Request</code> object using your assigned folder name.</p>
+<h2 id="example">Example</h2>
+<p>For example, a blog could include the following route <code>app/blog/_slug_/page.go</code> where <code>_slug_</code> is the Dynamic Segment for blog posts.</p>
+<pre><code class="language-go">package slug_test
+
+import (
+	&quot;net/http&quot;
+	&quot;github.com/a-h/templ&quot;
+	&quot;github.com/gorilla/mux&quot;
+)
+
+func Page(w http.ResponseWriter, r *http.Request) templ.Component {
+  vars := mux.Vars(r)
+  slug := vars[&quot;slug&quot;]
+
+  return slugTempl(slug)
+}
+
+templ slugTempl(slug string){
+  &lt;div&gt;My Post: { slug }&lt;/div&gt;
+}
+
+</code></pre>
+<ul>
+<li><code>app/blog/_id_/page.go</code>	  → <code>/blog/a</code>	→ <code>{ id: 'a' }</code></li>
+<li><code>app/blog/_uuid_/page.go</code>	→ <code>/blog/b</code>	→ <code>{ uuid: 'b' }</code></li>
+<li><code>app/blog/_tag_/page.go</code>	→ <code>/blog/c</code>	→ <code>{ tag: 'c' }</code></li>
+</ul>
+</div>

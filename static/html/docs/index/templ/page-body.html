@@ -1,0 +1,68 @@
+<div id='markdown'><h1 id="index-templ">Index Templ</h1>
+<p>In Temporary, pages are designed to return a <code>templ.Component</code> interface from the <code>github.com/a-h/templ</code> package. This interface simply enforces the <code>Render</code> function, as demonstrated below:.</p>
+<pre><code class="language-go">// Component is the interface that all templates implement.
+type Component interface {
+	// Render the template.
+	Render(ctx context.Context, w io.Writer) error
+}
+
+// ComponentFunc converts a function that matches the Component interface's
+// Render method into a Component.
+type ComponentFunc func(ctx context.Context, w io.Writer) error
+
+// Render the template.
+func (cf ComponentFunc) Render(ctx context.Context, w io.Writer) error {
+	return cf(ctx, w)
+}
+
+</code></pre>
+<h2 id="separate-templ-file">Separate Templ file</h2>
+<p>The easiest way to satisfy this the <code>templ.Component</code> interface is to first define your Templ logic in a separate file. Then use the Temporary <code>bun run build</code> cli command. This invokes the <code>templ generate</code> command, which converts your Templ logic into Go functions - satifying this interface. Additionally, the Templ component should have a <code>{ children... }</code> expression that is passed into it for it wrap - which will be populated with a child page during rendering</p>
+<h3 id="example">Example</h3>
+<p>Structure your application directory as follows:</p>
+<pre><code>app                  (1)
+ ├─ index.templ       
+ ├─ index_templ.go (generated) 
+ └─ index.go          
+</code></pre>
+<p>Define your Templ logic in a <code>.templ</code> file:</p>
+<pre><code class="language-go">// index.templ       
+
+templ IndexTempl(){
+  &lt;!DOCTYPE html&gt;
+	&lt;html lang=&quot;en&quot;&gt;
+      &lt;body&gt;
+        /* Include shared UI here e.g. a header or sidebar */
+        &lt;main&gt;
+          { children... }
+        &lt;/main&gt;
+      &lt;/body&gt;
+  &lt;/html&gt;
+} 
+</code></pre>
+<p>The <code>templ generate</code> command will convert the above Templ into a Go function:</p>
+<pre><code class="language-go">// index_templ.go
+
+func IndexTempl() templ.Component {
+	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
+    ...
+		return templ_7745c5c3_Err
+	})
+}
+  
+</code></pre>
+<p>This <code>HelloWorld</code> function can subsequently be used within your pages:</p>
+<pre><code class="language-go">// index.go       
+
+package index
+
+import (
+	&quot;github.com/a-h/templ&quot;
+)
+
+func Index() templ.Component {
+	return IndexTempl()
+}
+</code></pre>
+</div>
