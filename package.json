@@ -4,7 +4,7 @@
   "description": "temporary website",
   "main": "index.ts",
   "scripts": {
-    "css-build": "bun run -i ./src/styles/app.css -o ./static/css/output.css",
+    "css-build": "cp -R ./src/styles/app.css ./static/css/output.css",
     "go-init": "go generate temporary/init/main.go",
     "go-build": "go run src/main.go build",
     "go-render": "go run src/main.go render",

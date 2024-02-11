@@ -22,23 +22,24 @@ import '@material/web/tabs/primary-tab.js';
 import '@material/web/tabs/tabs.js';
 import 'lit'
 
-import './src/components/client/temporary/t-link'
-import './src/components/client/temporary/t-link-2'
-import './src/components/client/temporary/t-header'
+import './src/components/temporary-components/htmx/t-htmx'
+import './src/components/temporary-components/msc/t-link'
+import './src/components/temporary-components/msc/t-link-2'
+import './src/components/temporary-components/msc/t-header'
 
-import './src/components/client/temporary/t-dropdown'
-import './src/components/client/temporary/t-dropdown-list'
-import './src/components/client/temporary/t-dropdown-list-item'
-import './src/components/client/temporary/t-dropdown-title'
+import './src/components/temporary-components/dropdown/t-dropdown'
+import './src/components/temporary-components/dropdown/t-dropdown-list'
+import './src/components/temporary-components/dropdown/t-dropdown-list-item'
+import './src/components/temporary-components/dropdown/t-dropdown-title'
 
-import './src/components/client/temporary/t-list-item'
+import './src/components/temporary-components/list/list_item/t-list-item'
 
-import './src/components/client/temporary/t-mobile-top-app-bar'
-import './src/components/client/temporary/t-mobile-navigation-drawer'
-import './src/components/client/temporary/t-mobile-navigation-rail'
-import './src/components/client/temporary/t-mobile-navigation'
+import './src/components/temporary-components/navigation/mobile/t-mobile-top-app-bar'
+import './src/components/temporary-components/navigation/mobile/t-mobile-navigation-drawer'
+import './src/components/temporary-components/navigation/mobile/t-mobile-navigation-rail'
+import './src/components/temporary-components/navigation/mobile/t-mobile-navigation'
 
-import './src/components/client/temporary/t-navigation'
-import './src/components/client/temporary/t-navigation-rail'
-import './src/components/client/temporary/t-navigation-drawer'
+import './src/components/temporary-components/navigation/t-navigation'
+import './src/components/temporary-components/navigation/t-navigation-rail'
+import './src/components/temporary-components/navigation/t-navigation-drawer'
 
