@@ -1,3 +1,6 @@
 [submodule "src/components/temporary-components"]
 	path = src/components/temporary-components
 	url = https://github.com/caleb-sideras/temporary-components.git
+[submodule "temporary"]
+	path = temporary
+	url = https://github.com/caleb-sideras/temporary.git
