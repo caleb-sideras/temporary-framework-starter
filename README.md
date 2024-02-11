@@ -10,7 +10,6 @@
 - update calebsideras.com
 
 1. DIFFCULT
-- (NOTE: wait till htmx 2.0 docs come out) Fix htmx issue with setting main opposed to default body for HX-Boost
 - fix issue of templ generate not working on INITIAl build becuase of .mod dependencies -> might be fixed due to sequential cli command calling in bun?
 
 - delete/create default files on BUILD - > html/css/js delete 

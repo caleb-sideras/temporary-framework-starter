@@ -1,6 +1,6 @@
 # hx-boost
 
-We recommend reading the [Pages and Indexs]() pages before continuing.
+We recommend reading the [Pages and Indexs](/docs/routing/pages-and-index) pages before continuing.
 
 By __default__ all navigation between pages that share the same index do not preserve state and fully re-render. But you can opt-in to preserve state on the client by only rendering the HTML required for navigation to that specific route. 
 

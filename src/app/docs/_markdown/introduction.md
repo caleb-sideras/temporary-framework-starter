@@ -5,7 +5,7 @@ Welcome to the Temporary Framework documentation!
 
 ## What is the Temporary Framework?
 
-Temporary is a [Go]() framework for building full-stack web applications using [Templ]() and [HTMX](). It tightly couples these technologies together and introduces other primitives to help you build web-applications easier and faster. Under the hood Temporary abstracts routing, building, serving and more. To better understand why Temporary was made, please read this [blog post]().
+Temporary is a [Go](https://go.dev/) framework for building full-stack web applications using [Templ](https://templ.guide/) and [HTMX](https://htmx.org/). It tightly couples these technologies together and introduces other primitives to help you build web-applications easier and faster. Under the hood Temporary abstracts routing, building, serving and more.
 
 
 ## Main Features

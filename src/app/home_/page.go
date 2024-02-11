@@ -89,12 +89,7 @@ func Page_() templ.Component {
 		{
 			Title:       "temporary-website",
 			Description: "The code for this current website is public.",
-			Href:        "",
-		},
-		{
-			Title:       "ME",
-			Description: "HMU on Twitter",
-			Href:        "",
+			Href:        "https://github.com/caleb-sideras/temporary-framework-website",
 		},
 	}
 
