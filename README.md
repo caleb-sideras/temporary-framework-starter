@@ -14,8 +14,13 @@
     - store files we saved so we can remove them?
     - give a warning to the user about storing files here? 
 
+- create code for the handlers instead of the definitions.go?
+    - could still have the same process but the routes would be stored in separate package?
+
 2. NORMAL
 - move all duplicated logic to separate repo
+    - temporary-components
+    - temporary-framework
 - Roadmap
 
 - fix highlighting of focused color
