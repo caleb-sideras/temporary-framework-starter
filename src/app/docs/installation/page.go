@@ -1,4 +1,4 @@
-package docs_introduction
+package docs_installation
 
 import (
 	"calebsideras.com/temporary/src/utils"
@@ -7,7 +7,7 @@ import (
 
 func Page_() templ.Component {
 
-	newTempl, err := utils.MdFileToTempl("src/app/docs/_markdown/introduction.md")
+	newTempl, err := utils.MdFileToTempl("src/app/docs/_markdown/installation.md")
 
 	if err != nil {
 		panic(err)

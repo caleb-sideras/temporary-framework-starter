@@ -2,10 +2,6 @@
 
 - Installation
 
-# TODO
-
-- update calebsideras.com
-
 1. DIFFCULT
 - fix issue of templ generate not working on INITIAl build becuase of .mod dependencies -> might be fixed due to sequential cli command calling in bun?
 
