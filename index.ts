@@ -26,6 +26,7 @@ import './src/components/temporary-components/htmx/t-htmx'
 import './src/components/temporary-components/msc/t-link'
 import './src/components/temporary-components/msc/t-link-2'
 import './src/components/temporary-components/msc/t-header'
+import './src/components/temporary-components/msc/t-mode-toggle'
 
 import './src/components/temporary-components/dropdown/t-dropdown'
 import './src/components/temporary-components/dropdown/t-dropdown-list'

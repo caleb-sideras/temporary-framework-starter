@@ -53,16 +53,6 @@ templ IndexTempl() {
 
 templ Navigation() {
 	<t-navigation>
-		<div slot="footer">
-			<temporary-list-item interactive type="link" href="https://github.com/caleb-sideras/">
-				github
-				<md-icon slot="end" class="material-symbols-filled-light">north_east</md-icon>
-			</temporary-list-item>
-			<temporary-list-item interactive type="link" href="https://www.linkedin.com/in/caleb-james-sideras-9555b0196/">
-				linkedin
-				<md-icon slot="end" class="material-symbols-filled-light">north_east</md-icon>
-			</temporary-list-item>
-		</div>
 		<t-navigation-rail slot="rail">
 			<temporary-list-item interactive type="link" href="/" regex="^/?$" hx-boost="true">
 				Home
@@ -172,13 +162,23 @@ templ Navigation() {
 				Static Render
 			</temporary-list-item>
 		</t-navigation-drawer>
+		<div slot="footer">
+			<t-mode-toggle></t-mode-toggle>
+			<temporary-list-item interactive type="link" href="https://github.com/caleb-sideras/">
+				github
+				<md-icon slot="end" class="material-symbols-filled-light">north_east</md-icon>
+			</temporary-list-item>
+			<temporary-list-item interactive type="link" href="https://www.linkedin.com/in/caleb-james-sideras-9555b0196/">
+				linkedin
+				<md-icon slot="end" class="material-symbols-filled-light">north_east</md-icon>
+			</temporary-list-item>
+		</div>
 	</t-navigation>
 }
 
 templ MobileNavigation() {
 	@MobileAppBar()
 	<t-mobile-navigation>
-
 		<t-mobile-navigation-rail slot="rail">
 			<temporary-list-item interactive type="link" href="/" regex="^/?$" hx-boost="true">
 				Home
@@ -199,7 +199,6 @@ templ MobileNavigation() {
 				<md-icon slot="start" class="material-symbols-filled">article</md-icon>
 			</temporary-list-item>
 		</t-mobile-navigation-rail>
-
 		<t-mobile-navigation-drawer slot="drawer">
 			<temporary-list-item interactive border type="link" href="/docs" hx-boost="true">
 				Introduction
@@ -277,7 +276,6 @@ templ MobileNavigation() {
 				</t-dropdown-list>
 			</t-dropdown>
 		</t-mobile-navigation-drawer>
-
 		<t-mobile-navigation-drawer slot="drawer">
 			<temporary-list-item interactive border type="link" href="/examples/todo" hx-boost="true">
 				Todo
@@ -292,7 +290,17 @@ templ MobileNavigation() {
 				Static Render
 			</temporary-list-item>
 		</t-mobile-navigation-drawer>
-
+		<div slot="footer">
+			<t-mode-toggle></t-mode-toggle>
+			<temporary-list-item interactive type="link" href="https://github.com/caleb-sideras/">
+				github
+				<md-icon slot="end" class="material-symbols-filled-light">north_east</md-icon>
+			</temporary-list-item>
+			<temporary-list-item interactive type="link" href="https://www.linkedin.com/in/caleb-james-sideras-9555b0196/">
+				linkedin
+				<md-icon slot="end" class="material-symbols-filled-light">north_east</md-icon>
+			</temporary-list-item>
+		</div>
 	</t-mobile-navigation>
 }
 

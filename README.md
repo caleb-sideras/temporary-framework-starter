@@ -4,9 +4,6 @@
 
 # TODO
 
-- dark/light toggle
-- "made by caleb..."
-- update links
 - update calebsideras.com
 
 1. DIFFCULT
