@@ -163,15 +163,7 @@ templ Navigation() {
 			</temporary-list-item>
 		</t-navigation-drawer>
 		<div slot="footer">
-			<t-mode-toggle></t-mode-toggle>
-			<temporary-list-item interactive type="link" href="https://github.com/caleb-sideras/">
-				github
-				<md-icon slot="end" class="material-symbols-filled-light">north_east</md-icon>
-			</temporary-list-item>
-			<temporary-list-item interactive type="link" href="https://www.linkedin.com/in/caleb-james-sideras-9555b0196/">
-				linkedin
-				<md-icon slot="end" class="material-symbols-filled-light">north_east</md-icon>
-			</temporary-list-item>
+			@NavFooter()
 		</div>
 	</t-navigation>
 }
@@ -291,15 +283,7 @@ templ MobileNavigation() {
 			</temporary-list-item>
 		</t-mobile-navigation-drawer>
 		<div slot="footer">
-			<t-mode-toggle></t-mode-toggle>
-			<temporary-list-item interactive type="link" href="https://github.com/caleb-sideras/">
-				github
-				<md-icon slot="end" class="material-symbols-filled-light">north_east</md-icon>
-			</temporary-list-item>
-			<temporary-list-item interactive type="link" href="https://www.linkedin.com/in/caleb-james-sideras-9555b0196/">
-				linkedin
-				<md-icon slot="end" class="material-symbols-filled-light">north_east</md-icon>
-			</temporary-list-item>
+			@NavFooter()
 		</div>
 	</t-mobile-navigation>
 }
@@ -308,4 +292,16 @@ templ MobileAppBar() {
 	<t-mobile-top-app-bar>
 		<md-icon slot="navigationIcon" class="material-symbols-filled">menu</md-icon>
 	</t-mobile-top-app-bar>
+}
+
+templ NavFooter() {
+	<t-mode-toggle></t-mode-toggle>
+	<temporary-list-item interactive type="link" href="https://github.com/caleb-sideras/">
+		github
+		<md-icon slot="end" class="material-symbols-filled-light">north_east</md-icon>
+	</temporary-list-item>
+	<temporary-list-item interactive type="link" href="https://www.linkedin.com/in/caleb-james-sideras-9555b0196/">
+		linkedin
+		<md-icon slot="end" class="material-symbols-filled-light">north_east</md-icon>
+	</temporary-list-item>
 }
