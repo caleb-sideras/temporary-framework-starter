@@ -1,10 +1,11 @@
 # DOCS
 
-- Installation
+- issue with example routes returning the whole page??
+    - navigating between dynamic routes and regular routes throws off temporary
+
+- issue with mobile navigation footer being hidden
 
 1. DIFFCULT
-- fix issue of templ generate not working on INITIAl build becuase of .mod dependencies -> might be fixed due to sequential cli command calling in bun?
-
 - delete/create default files on BUILD - > html/css/js delete 
     - so we dont want to just delete all the files in this dir - simply because users might add shit to this?
     - store files we saved so we can remove them?
