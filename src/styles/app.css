@@ -202,7 +202,9 @@
   --md-navigation-drawer-modal-modal-container-elevation: 5;
   --md-navigation-drawer-modal-container-color: var(--md-sys-color-secondary);
   --md-navigation-drawer-modal-container-width: 320px;
+  /**
   --md-navigation-drawer-modal-container-height: 100vh;
+  **/
 
   --md-list-container-color: var(--md-sys-color-secondary);
 
