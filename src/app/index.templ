@@ -66,10 +66,6 @@ templ Navigation() {
 				Docs
 				<md-icon slot="start" class="material-symbols-filled">developer_guide</md-icon>
 			</temporary-list-item>
-			<temporary-list-item interactive type="link" href="/blog" regex={ `^/?\/blog(\/?|\/.*)?$` } hx-boost="true">
-				Blog
-				<md-icon slot="start" class="material-symbols-filled">article</md-icon>
-			</temporary-list-item>
 		</t-navigation-rail>
 		<t-navigation-drawer slot="drawer">
 			<temporary-list-item interactive border type="link" href="/docs" hx-boost="true">
@@ -185,10 +181,6 @@ templ MobileNavigation() {
 				Docs
 				<md-icon slot="start" class="material-symbols-filled">developer_guide</md-icon>
 				<md-icon slot="end" class="material-symbols-filled">arrow_forward</md-icon>
-			</temporary-list-item>
-			<temporary-list-item interactive type="link" href="/blog" regex={ `^/?\/blog(\/?|\/.*)?$` } hx-boost="true">
-				Releases
-				<md-icon slot="start" class="material-symbols-filled">article</md-icon>
 			</temporary-list-item>
 		</t-mobile-navigation-rail>
 		<t-mobile-navigation-drawer slot="drawer">

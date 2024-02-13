@@ -8,6 +8,7 @@ Before you begin, ensure you have the following installed on your machine:
 
 - Bun: [Download and Install Bun](https://bun.sh/)
 - Go Programming Language: [Download and Install Go](https://golang.org/doc/install)
+- Templ: [Download and Install Templ](https://templ.guide/quick-start/installation)
 
 
 ## Installing
