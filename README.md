@@ -1,30 +1,57 @@
-# DOCS
+<p align="center">
+  <a href="https://temporary-framework.org">
+    <picture>
+      <img src="https://temporary-framework.org/static/assets/temporary.png" height="128">
+    </picture>
+    <h1 align="center">Temporary Starter</h1>
+  </a>
+</p>
 
-- issue with example routes returning the whole page??
-    - navigating between dynamic routes and regular routes throws off temporary
+# Installation
 
-- issue with mobile navigation footer being hidden
+These instructions will help you get a copy of the project up and running on your local machine for development and testing purposes.
 
-1. DIFFCULT
-- delete/create default files on BUILD - > html/css/js delete 
-    - so we dont want to just delete all the files in this dir - simply because users might add shit to this?
-    - store files we saved so we can remove them?
-    - give a warning to the user about storing files here? 
+## Prerequisites
 
-- create code for the handlers instead of the definitions.go?
-    - could still have the same process but the routes would be stored in separate package?
+Before you begin, ensure you have the following installed on your machine:
 
-2. NORMAL
-- Roadmap
-
-- fix highlighting of focused color
-- add transitions? not sure
+- Bun: [Download and Install Bun](https://bun.sh/)
+- Go Programming Language: [Download and Install Go](https://golang.org/doc/install)
+- Templ: [Download and Install Templ](https://templ.guide/quick-start/installation)
 
 
-# OTHER
+## Installing
 
-## REGEX double example
+1. Clone the repository to your local machine.
 
-```regex
-regex={`^\/projects\/gox-framework(?:$|\/.*)`}
-```
+   ```bash
+   git clone --recursive https://github.com/caleb-sideras/temporary-framework-starter.git
+   ```
+
+2. Navigate to the project's directory.
+
+   ```bash
+   cd temporary-framework-website
+   ```
+
+3. Install the project dependencies.
+
+   ```bash
+   bun install
+   ```
+
+## Building the Application
+
+Run the Temporary build process through Bun:
+
+  ```bash
+  bun run build
+  ```
+
+## Running the Application
+
+Run the Temporary start process through Bun:
+
+   ```bash
+   bun run start
+   `````

@@ -125,7 +125,7 @@ func Navigation() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item></t-navigation-rail><div slot=\"footer\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</md-icon></temporary-list-item></t-navigation-rail> <t-navigation-drawer slot=\"drawer\"></t-navigation-drawer><div slot=\"footer\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
