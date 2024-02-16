@@ -31,7 +31,7 @@ Before you begin, ensure you have the following installed on your machine:
 2. Navigate to the project's directory.
 
    ```bash
-   cd temporary-framework-website
+   cd temporary-framework-starter
    ```
 
 3. Install the project dependencies.
