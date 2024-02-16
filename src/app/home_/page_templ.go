@@ -10,7 +10,7 @@ import "context"
 import "io"
 import "bytes"
 
-func HomeTempl(links []TLink2Hx, links2 []TLink2Href) templ.Component {
+func HomeTempl(links []TLink2) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -23,11 +23,11 @@ func HomeTempl(links []TLink2Hx, links2 []TLink2Href) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"home_container\"><img class=\"home_image\" loading=\"lazy\" src=\"/static/assets/temporary.png\" alt=\"Caleb James Sideras Face\"> <img class=\"home_image\" loading=\"lazy\" src=\"/static/assets/temporary-2.png\" alt=\"Caleb James Sideras Face\"> <img class=\"home_image\" loading=\"lazy\" src=\"/static/assets/temporary-3.png\" alt=\"Caleb James Sideras Face\"><div class=\"home_subtitle\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"home_container\"><img class=\"home_image\" loading=\"lazy\" src=\"/static/assets/temporary.png\" alt=\"Temporary Logo\"><div class=\"home_subtitle\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var2 := `The HTMX and Templ Framework you are looking for`
+		templ_7745c5c3_Var2 := `Welcome!`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -37,49 +37,6 @@ func HomeTempl(links []TLink2Hx, links2 []TLink2Href) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		for _, link := range links {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<t-link-2 href=\"")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(link.HxGet))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" title=\"")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(link.Title))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" description=\"")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(link.Description))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-boost=\"true\"></t-link-2>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"home_subtitle\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Var3 := `Contribute`
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var3)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"home_grid\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		for _, link := range links2 {
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<t-link-2 href=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -104,7 +61,17 @@ func HomeTempl(links []TLink2Hx, links2 []TLink2Href) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></t-link-2>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if link.HxBoost {
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" hx-boost=\"true\"")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("></t-link-2>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

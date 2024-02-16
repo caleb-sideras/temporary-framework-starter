@@ -1,27 +1,26 @@
 package home
 
-templ HomeTempl(links []TLink2Hx, links2 []TLink2Href) {
+templ HomeTempl(links []TLink2) {
 	<div class="home_container">
-		<img class="home_image" loading="lazy" src="/static/assets/temporary.png" alt="Caleb James Sideras Face"/>
-		<img class="home_image" loading="lazy" src="/static/assets/temporary-2.png" alt="Caleb James Sideras Face"/>
-		<img class="home_image" loading="lazy" src="/static/assets/temporary-3.png" alt="Caleb James Sideras Face"/>
-		<div class="home_subtitle">The HTMX and Templ Framework you are looking for</div>
+		<img class="home_image" loading="lazy" src="/static/assets/temporary.png" alt="Temporary Logo"/>
+		<div class="home_subtitle">Welcome!</div>
 		<div class="home_grid">
 			for _, link := range links {
-				<t-link-2 href={ link.HxGet } title={ link.Title } description={ link.Description } hx-boost="true"></t-link-2>
+				<t-link-2
+ 					href={ link.Href }
+ 					title={ link.Title }
+ 					description={ link.Description }
+ 					if link.HxBoost {
+						hx-boost="true"
+					}
+				></t-link-2>
 			}
 		</div>
-		<div class="home_subtitle">Contribute</div>
-		<div class="home_grid">
-			for _, link := range links2 {
-				<t-link-2 href={ link.Href } title={ link.Title } description={ link.Description }></t-link-2>
-			}
-		</div>
-		<br></br>
-		<br></br>
-		<br></br>
-		<br></br>
-		<br></br>
-		<br></br>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
 	</div>
 }
